@@ -32,4 +32,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
+
+    Route::get('/admin/parameters', function () {
+        return view('admin.parameters');
+    })->name('admin.parameters');
 });
