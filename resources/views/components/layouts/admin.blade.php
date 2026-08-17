@@ -55,83 +55,81 @@
         </div>
 
         <!-- Sidebar Navigation Menu -->
-        <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto text-xs font-semibold">
+        <nav class="flex-1 px-3.5 py-5 space-y-6 overflow-y-auto text-xs">
             
-            <div class="px-3 pb-2 text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-bold">Main Operations</div>
+            <!-- Module Group 1: Payroll Operations -->
+            <div class="space-y-1">
+                <div class="px-3 pb-1 text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-bold">
+                    Payroll Operations
+                </div>
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.dashboard') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
+                    <i class="bx bxs-dashboard text-lg"></i>
+                    <span>Overview Dashboard</span>
+                </a>
+                <a href="{{ route('admin.payroll.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.payroll.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
+                    <i class="bx bx-calendar-check text-lg"></i>
+                    <span>Monthly Payroll Runs</span>
+                </a>
+            </div>
 
-            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.dashboard') ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
-                <i class="bx bxs-dashboard text-lg"></i>
-                <span>Payroll Dashboard</span>
-            </a>
+            <!-- Module Group 2: Workforce & HR -->
+            <div class="space-y-1">
+                <div class="px-3 pb-1 text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-bold">
+                    Workforce &amp; HR
+                </div>
+                <a href="{{ route('admin.employees.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.employees.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
+                    <i class="bx bx-group text-lg"></i>
+                    <span>Employee Registry</span>
+                </a>
+            </div>
 
-            <a href="{{ route('admin.payroll.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.payroll.*') ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
-                <i class="bx bx-calendar-check text-lg"></i>
-                <span>Monthly Payroll Runs</span>
-            </a>
+            <!-- Module Group 3: Banking & Compliance -->
+            <div class="space-y-1">
+                <div class="px-3 pb-1 text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-bold">
+                    Banking &amp; Compliance
+                </div>
+                <a href="{{ route('admin.banking.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.banking.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
+                    <i class="bx bxs-bank text-lg"></i>
+                    <span>Bank Autopay (M2E/CIMB)</span>
+                </a>
+                <a href="{{ route('admin.banking.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white">
+                    <i class="bx bx-export text-lg"></i>
+                    <span>Statutory Exporters</span>
+                    <span class="ml-auto px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">CP39/EIS</span>
+                </a>
+                <a href="{{ route('admin.tax-ea.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.tax-ea.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
+                    <i class="bx bxs-file-pdf text-lg"></i>
+                    <span>Tax Form EA Compiler</span>
+                </a>
+            </div>
 
-            <a href="{{ route('admin.employees.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.employees.*') ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
-                <i class="bx bx-group text-lg"></i>
-                <span>Employee Registry</span>
-            </a>
-
-            <div class="pt-5 px-3 pb-2 text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-bold">Statutory & Banking</div>
-
-            <a href="{{ route('admin.banking.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.banking.*') ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
-                <i class="bx bx-export text-lg"></i>
-                <span>Statutory Exporters</span>
-                <span class="ml-auto px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">CP39/EIS</span>
-            </a>
-
-            <a href="{{ route('admin.banking.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white">
-                <i class="bx bxs-bank text-lg"></i>
-                <span>Bank Autopay (M2E/CIMB)</span>
-            </a>
-
-            <a href="{{ route('admin.tax-ea.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.tax-ea.*') ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
-                <i class="bx bxs-file-pdf text-lg"></i>
-                <span>Tax Form EA Compiler</span>
-            </a>
-
-            <div class="pt-5 px-3 pb-2 text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-bold">System Configuration</div>
-
-            <a href="{{ route('admin.parameters') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.parameters') ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
-                <i class="bx bx-slider text-lg"></i>
-                <span>Statutory Parameters</span>
-            </a>
-
-            <a href="{{ route('admin.audit') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.audit') ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
-                <i class="bx bx-shield-quarter text-lg"></i>
-                <span>Audit Trails</span>
-            </a>
-
-            <a href="/demo" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white">
-                <i class="bx bx-cube-alt text-lg"></i>
-                <span>UI Components Kit</span>
-            </a>
+            <!-- Module Group 4: System Governance -->
+            <div class="space-y-1">
+                <div class="px-3 pb-1 text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-bold">
+                    System Governance
+                </div>
+                <a href="{{ route('admin.parameters') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.parameters') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
+                    <i class="bx bx-slider text-lg"></i>
+                    <span>Statutory Parameters</span>
+                </a>
+                <a href="{{ route('admin.audit') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.audit') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
+                    <i class="bx bx-shield-quarter text-lg"></i>
+                    <span>Audit Trails</span>
+                </a>
+                <a href="/demo" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white">
+                    <i class="bx bx-cube-alt text-lg"></i>
+                    <span>UI Components Kit</span>
+                </a>
+            </div>
         </nav>
 
-        <!-- Sidebar User Footer Profile -->
-        <div class="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 flex items-center justify-between">
-            <div class="flex items-center gap-3 overflow-hidden">
-                <div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs font-bold shrink-0 shadow-xs">
-                    {{ substr(Auth::user()->name ?? 'HR', 0, 2) }}
-                </div>
-                <div class="overflow-hidden">
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-xs font-bold text-slate-900 dark:text-white truncate">{{ Auth::user()->name ?? 'Payroll Officer' }}</span>
-                        @if(Auth::user()?->staff_id)
-                            <span class="px-1 py-0.2 rounded text-[9px] font-mono font-bold bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">{{ Auth::user()->staff_id }}</span>
-                        @endif
-                    </div>
-                    <div class="text-[10px] text-slate-400 dark:text-slate-500 font-mono truncate">{{ Auth::user()->email ?? 'admin@payroll.my' }}</div>
-                </div>
+        <!-- Sidebar Version Footer -->
+        <div class="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 flex items-center justify-between text-[11px] text-slate-400">
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span class="font-semibold text-slate-600 dark:text-slate-300">PayFlow Engine</span>
             </div>
-            <form method="POST" action="{{ route('logout') }}" class="inline">
-                @csrf
-                <button type="submit" class="text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 transition cursor-pointer p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" title="Sign Out">
-                    <i class="bx bx-log-out text-lg"></i>
-                </button>
-            </form>
+            <span class="font-mono text-[10px]">v2.4 (2026)</span>
         </div>
     </aside>
 
@@ -148,7 +146,7 @@
                 </button>
 
                 <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-                    <span class="font-medium text-slate-400 hidden sm:inline">Console</span>
+                    <span class="font-medium text-slate-400 hidden sm:inline">PayFlow Console</span>
                     <span class="hidden sm:inline text-slate-300 dark:text-slate-600">/</span>
                     <span class="font-bold text-slate-800 dark:text-white truncate">{{ $headerTitle }}</span>
                 </div>
@@ -168,65 +166,84 @@
                 <!-- Live Compliance Indicator Badge -->
                 <span class="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    Statutory 2026 Active
+                    Statutory 2026
                 </span>
 
                 <div class="h-6 w-px bg-slate-200 dark:bg-slate-800 mx-1 hidden sm:block"></div>
 
-                <!-- User Dropdown Menu -->
+                <!-- Modern User Profile Dropdown Menu -->
                 <div class="relative" id="user-dropdown-container">
                     <button 
                         type="button" 
                         id="user-dropdown-toggle"
                         onclick="toggleUserDropdown()"
-                        class="flex items-center gap-2.5 p-1 sm:p-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 transition cursor-pointer"
+                        class="flex items-center gap-2.5 pl-1.5 pr-2.5 py-1 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/90 hover:border-indigo-300 dark:hover:border-indigo-700 transition shadow-xs cursor-pointer group"
                     >
-                        <div class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs font-bold shrink-0">
+                        <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-indigo-600 to-indigo-500 text-white flex items-center justify-center text-xs font-extrabold shrink-0 shadow-xs">
                             {{ substr(Auth::user()->name ?? 'HR', 0, 2) }}
                         </div>
                         <div class="text-left hidden sm:block">
-                            <span class="text-xs font-bold text-slate-800 dark:text-white block leading-tight">{{ Auth::user()->name ?? 'Payroll Officer' }}</span>
+                            <span class="text-xs font-bold text-slate-800 dark:text-white block leading-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">{{ Auth::user()->name ?? 'Payroll Officer' }}</span>
                             <span class="text-[10px] text-slate-400 font-mono">{{ Auth::user()->staff_id ?? 'ADM-001' }}</span>
                         </div>
-                        <i class="bx bx-chevron-down text-slate-400 text-sm hidden sm:block"></i>
+                        <i class="bx bx-chevron-down text-slate-400 text-sm hidden sm:block group-hover:text-indigo-600 transition"></i>
                     </button>
 
-                    <!-- Dropdown Content Panel -->
+                    <!-- Dropdown Content Panel (Modern Card Design) -->
                     <div 
                         id="user-dropdown-menu"
-                        class="hidden absolute right-0 mt-2 w-60 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl py-2 z-50 text-xs text-slate-700 dark:text-slate-200"
+                        class="hidden absolute right-0 mt-2 w-72 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-150"
                     >
-                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-800">
-                            <span class="font-bold text-slate-900 dark:text-white block truncate">{{ Auth::user()->name ?? 'Payroll Officer' }}</span>
-                            <span class="text-[11px] text-slate-400 dark:text-slate-500 font-mono block truncate">{{ Auth::user()->email ?? 'admin@payroll.my' }}</span>
-                            @if(Auth::user()?->roles?->first())
-                                <span class="inline-block mt-1.5 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">
+                        <!-- Profile Card Header -->
+                        <div class="p-4 bg-gradient-to-br from-indigo-500/10 via-slate-50 to-transparent dark:from-indigo-950/40 dark:via-slate-900 dark:to-transparent border-b border-slate-100 dark:border-slate-800">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-sm font-black shadow-md shadow-indigo-500/20 shrink-0">
+                                    {{ substr(Auth::user()->name ?? 'HR', 0, 2) }}
+                                </div>
+                                <div class="overflow-hidden">
+                                    <h4 class="text-xs font-extrabold text-slate-900 dark:text-white truncate">{{ Auth::user()->name ?? 'Payroll Officer' }}</h4>
+                                    <p class="text-[11px] text-slate-400 dark:text-slate-500 font-mono truncate">{{ Auth::user()->email ?? 'admin@payroll.my' }}</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between mt-3 pt-2.5 border-t border-slate-200/50 dark:border-slate-800/80">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
                                     {{ Auth::user()->roles->first()->display_name ?? 'Payroll Officer' }}
                                 </span>
-                            @endif
+                                <span class="text-[10px] font-mono text-slate-400">ID: {{ Auth::user()->staff_id ?? 'ADM-001' }}</span>
+                            </div>
                         </div>
 
-                        <div class="py-1">
-                            <a href="{{ route('admin.parameters') }}" class="flex items-center gap-2.5 px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition text-slate-700 dark:text-slate-300">
+                        <!-- Menu Quick Actions -->
+                        <div class="p-2 space-y-0.5 text-xs text-slate-700 dark:text-slate-200 font-medium">
+                            <a href="{{ route('admin.employees.index') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
+                                <i class="bx bx-user text-base text-slate-400"></i>
+                                <span>My Organization</span>
+                            </a>
+                            <a href="{{ route('admin.parameters') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
                                 <i class="bx bx-slider text-base text-slate-400"></i>
                                 <span>Statutory Parameters</span>
                             </a>
-                            <a href="{{ route('admin.audit') }}" class="flex items-center gap-2.5 px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition text-slate-700 dark:text-slate-300">
+                            <a href="{{ route('admin.audit') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
                                 <i class="bx bx-shield-quarter text-base text-slate-400"></i>
-                                <span>Audit Trails</span>
+                                <span>Audit Trails &amp; Logs</span>
                             </a>
-                            <a href="/demo" class="flex items-center gap-2.5 px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition text-slate-700 dark:text-slate-300">
+                            <a href="/demo" class="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
                                 <i class="bx bx-cube-alt text-base text-slate-400"></i>
                                 <span>UI Components Kit</span>
                             </a>
                         </div>
 
-                        <div class="border-t border-slate-100 dark:border-slate-800 pt-1 mt-1">
+                        <!-- Logout Action -->
+                        <div class="p-2 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <button type="submit" class="w-full flex items-center gap-2.5 px-4 py-2 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition cursor-pointer font-semibold">
-                                    <i class="bx bx-log-out text-base"></i>
-                                    <span>Sign Out</span>
+                                <button type="submit" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition cursor-pointer">
+                                    <span class="flex items-center gap-2">
+                                        <i class="bx bx-log-out text-base"></i>
+                                        <span>Sign Out Session</span>
+                                    </span>
+                                    <i class="bx bx-chevron-right text-base text-rose-400"></i>
                                 </button>
                             </form>
                         </div>
