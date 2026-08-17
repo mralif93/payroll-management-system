@@ -152,52 +152,55 @@
                 </div>
             </div>
 
-            <!-- Top Header Right Actions with User Dropdown -->
-            <div class="flex items-center gap-2 sm:gap-3">
-                <!-- Theme Toggle Component -->
-                <x-theme-toggle id="admin-theme-toggle-btn" />
+            <!-- Top Header Right Actions with Standardized UI Kit Controls -->
+            <div class="flex items-center gap-3">
+                <!-- Theme Toggle -->
+                <div class="flex items-center">
+                    <x-theme-toggle id="admin-theme-toggle-btn" />
+                </div>
 
-                <!-- Notifications -->
-                <button type="button" class="relative p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition cursor-pointer">
-                    <i class="bx bx-bell text-lg"></i>
-                    <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500"></span>
+                <!-- Notifications Button -->
+                <button type="button" class="relative w-9 h-9 flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition cursor-pointer shadow-xs">
+                    <i class="bx bx-bell text-base"></i>
+                    <span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white dark:ring-slate-900"></span>
                 </button>
 
                 <!-- Live Compliance Indicator Badge -->
-                <span class="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                <div class="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/80 shadow-xs">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    Statutory 2026
-                </span>
+                    <span>Statutory 2026</span>
+                </div>
 
-                <div class="h-6 w-px bg-slate-200 dark:bg-slate-800 mx-1 hidden sm:block"></div>
+                <!-- Divider -->
+                <div class="h-5 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block"></div>
 
-                <!-- Modern User Profile Dropdown Menu -->
+                <!-- Modern Standardized User Profile Dropdown -->
                 <div class="relative" id="user-dropdown-container">
                     <button 
                         type="button" 
                         id="user-dropdown-toggle"
                         onclick="toggleUserDropdown()"
-                        class="flex items-center gap-2.5 pl-1.5 pr-2.5 py-1 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/90 hover:border-indigo-300 dark:hover:border-indigo-700 transition shadow-xs cursor-pointer group"
+                        class="flex items-center gap-2.5 pl-1.5 pr-3 py-1 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300 dark:hover:border-slate-700 transition shadow-xs cursor-pointer group"
                     >
-                        <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-indigo-600 to-indigo-500 text-white flex items-center justify-center text-xs font-extrabold shrink-0 shadow-xs">
+                        <div class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs font-bold shrink-0 shadow-xs">
                             {{ substr(Auth::user()->name ?? 'HR', 0, 2) }}
                         </div>
                         <div class="text-left hidden sm:block">
                             <span class="text-xs font-bold text-slate-800 dark:text-white block leading-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">{{ Auth::user()->name ?? 'Payroll Officer' }}</span>
                             <span class="text-[10px] text-slate-400 font-mono">{{ Auth::user()->staff_id ?? 'ADM-001' }}</span>
                         </div>
-                        <i class="bx bx-chevron-down text-slate-400 text-sm hidden sm:block group-hover:text-indigo-600 transition"></i>
+                        <i class="bx bx-chevron-down text-slate-400 text-sm hidden sm:block group-hover:text-slate-600 dark:group-hover:text-slate-200 transition"></i>
                     </button>
 
-                    <!-- Dropdown Content Panel (Modern Card Design) -->
+                    <!-- Dropdown Content Panel -->
                     <div 
                         id="user-dropdown-menu"
-                        class="hidden absolute right-0 mt-2 w-72 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-150"
+                        class="hidden absolute right-0 mt-2 w-72 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-150"
                     >
                         <!-- Profile Card Header -->
-                        <div class="p-4 bg-gradient-to-br from-indigo-500/10 via-slate-50 to-transparent dark:from-indigo-950/40 dark:via-slate-900 dark:to-transparent border-b border-slate-100 dark:border-slate-800">
+                        <div class="p-4 bg-slate-50/80 dark:bg-slate-850 border-b border-slate-100 dark:border-slate-800">
                             <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-sm font-black shadow-md shadow-indigo-500/20 shrink-0">
+                                <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-sm font-black shadow-sm shrink-0">
                                     {{ substr(Auth::user()->name ?? 'HR', 0, 2) }}
                                 </div>
                                 <div class="overflow-hidden">
@@ -206,8 +209,8 @@
                                 </div>
                             </div>
 
-                            <div class="flex items-center justify-between mt-3 pt-2.5 border-t border-slate-200/50 dark:border-slate-800/80">
-                                <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+                            <div class="flex items-center justify-between mt-3 pt-2.5 border-t border-slate-200/60 dark:border-slate-800">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
                                     {{ Auth::user()->roles->first()->display_name ?? 'Payroll Officer' }}
                                 </span>
                                 <span class="text-[10px] font-mono text-slate-400">ID: {{ Auth::user()->staff_id ?? 'ADM-001' }}</span>
@@ -216,19 +219,19 @@
 
                         <!-- Menu Quick Actions -->
                         <div class="p-2 space-y-0.5 text-xs text-slate-700 dark:text-slate-200 font-medium">
-                            <a href="{{ route('admin.employees.index') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
+                            <a href="{{ route('admin.employees.index') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
                                 <i class="bx bx-user text-base text-slate-400"></i>
                                 <span>My Organization</span>
                             </a>
-                            <a href="{{ route('admin.parameters') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
+                            <a href="{{ route('admin.parameters') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
                                 <i class="bx bx-slider text-base text-slate-400"></i>
                                 <span>Statutory Parameters</span>
                             </a>
-                            <a href="{{ route('admin.audit') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
+                            <a href="{{ route('admin.audit') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
                                 <i class="bx bx-shield-quarter text-base text-slate-400"></i>
                                 <span>Audit Trails &amp; Logs</span>
                             </a>
-                            <a href="/demo" class="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
+                            <a href="/demo" class="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
                                 <i class="bx bx-cube-alt text-base text-slate-400"></i>
                                 <span>UI Components Kit</span>
                             </a>
