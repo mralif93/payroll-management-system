@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ExportAndBankingController;
 use App\Http\Controllers\Admin\PayrollRunController;
 use App\Http\Controllers\Admin\StatutoryParameterController;
 use App\Http\Controllers\Admin\TaxFormEaController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -55,12 +56,13 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/tax-ea', [TaxFormEaController::class, 'index'])->name('tax-ea.index');
     Route::post('/tax-ea/compile', [TaxFormEaController::class, 'compileAnnual'])->name('tax-ea.compile');
 
-    // 6. Statutory Parameters Engine
+    // 7. System Governance & Audit
     Route::get('/parameters', [StatutoryParameterController::class, 'index'])->name('parameters');
     Route::post('/parameters', [StatutoryParameterController::class, 'store'])->name('parameters.store');
-
-    // 7. Audit Trails & Governance
     Route::get('/audit', [AuditTrailController::class, 'index'])->name('audit');
+
+    // 8. User Access & Role Identity Management
+    Route::resource('users', UserController::class)->only(['index', 'store', 'update', 'destroy']);
 });
 
 // Authentication Logout Route

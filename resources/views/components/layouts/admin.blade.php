@@ -108,6 +108,10 @@
                 <div class="px-3 pb-1 text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-bold">
                     System Governance
                 </div>
+                <a href="{{ route('admin.users.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.users.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
+                    <i class="bx bx-user-pin text-lg"></i>
+                    <span>User &amp; Access Roles</span>
+                </a>
                 <a href="{{ route('admin.parameters') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.parameters') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
                     <i class="bx bx-slider text-lg"></i>
                     <span>Statutory Parameters</span>
@@ -219,6 +223,10 @@
 
                         <!-- Menu Quick Actions -->
                         <div class="p-2 space-y-0.5 text-xs text-slate-700 dark:text-slate-200 font-medium">
+                            <a href="{{ route('admin.users.index') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
+                                <i class="bx bx-user-pin text-base text-slate-400"></i>
+                                <span>User &amp; Role Management</span>
+                            </a>
                             <a href="{{ route('admin.employees.index') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
                                 <i class="bx bx-user text-base text-slate-400"></i>
                                 <span>My Organization</span>
