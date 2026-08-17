@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AuditTrail;
+use App\Models\Company;
+use App\Models\Department;
 use App\Models\StatutoryParameter;
 use App\Services\Payroll\StatutoryParameterResolver;
 use Illuminate\Http\Request;
@@ -15,13 +17,15 @@ class StatutoryParameterController extends Controller
     ) {}
 
     /**
-     * Display current active statutory parameters and gazette versions.
+     * Display current active statutory parameters, company profile, and departments roster.
      */
     public function index()
     {
         $parameters = StatutoryParameter::latest('effective_from')->get()->groupBy('category');
+        $company = Company::first();
+        $departments = Department::withCount('employees')->orderBy('name')->get();
 
-        return view('admin.parameters', compact('parameters'));
+        return view('admin.parameters', compact('parameters', 'company', 'departments'));
     }
 
     /**
@@ -42,15 +46,110 @@ class StatutoryParameterController extends Controller
         $parameter = StatutoryParameter::create($validated);
         $this->parameterResolver->flushCache();
 
-        AuditTrail::log(
-            module: 'statutory',
-            event: 'statutory.parameter_created',
-            description: "Statutory parameter [{$parameter->category}] {$parameter->name} updated for effective date {$parameter->effective_from->toDateString()}.",
-            auditable: $parameter,
-            newValues: $validated,
-            severity: 'warning'
-        );
+        AuditTrail::create([
+            'auditable_type' => StatutoryParameter::class,
+            'auditable_id' => $parameter->id,
+            'user_id' => auth()->id(),
+            'module' => 'parameters',
+            'event' => 'parameter_created',
+            'description' => "Statutory parameter [{$parameter->category}] {$parameter->name} updated for effective date {$parameter->effective_from->toDateString()}.",
+            'old_values' => null,
+            'new_values' => $validated,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'severity' => 'warning',
+        ]);
 
-        return redirect()->back()->with('status', 'Statutory parameter policy updated.');
+        return redirect()->back()->with('success', 'Statutory parameter policy updated.');
+    }
+
+    /**
+     * Store a newly created corporate department.
+     */
+    public function storeDepartment(Request $request)
+    {
+        $validated = $request->validate([
+            'company_id' => ['required', 'exists:companies,id'],
+            'name' => ['required', 'string', 'max:100'],
+            'code' => ['nullable', 'string', 'max:50'],
+        ]);
+
+        $department = Department::create($validated);
+
+        AuditTrail::create([
+            'auditable_type' => Department::class,
+            'auditable_id' => $department->id,
+            'user_id' => auth()->id(),
+            'module' => 'parameters',
+            'event' => 'department_created',
+            'description' => "Created organizational department '{$department->name}' ({$department->code})",
+            'old_values' => null,
+            'new_values' => $validated,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'severity' => 'info',
+        ]);
+
+        return redirect()->route('admin.parameters')->with('success', "Department '{$department->name}' added successfully.");
+    }
+
+    /**
+     * Update department details.
+     */
+    public function updateDepartment(Request $request, Department $department)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:100'],
+            'code' => ['nullable', 'string', 'max:50'],
+        ]);
+
+        $oldValues = $department->only(['name', 'code']);
+        $department->update($validated);
+
+        AuditTrail::create([
+            'auditable_type' => Department::class,
+            'auditable_id' => $department->id,
+            'user_id' => auth()->id(),
+            'module' => 'parameters',
+            'event' => 'department_updated',
+            'description' => "Updated department '{$department->name}'",
+            'old_values' => $oldValues,
+            'new_values' => $validated,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'severity' => 'info',
+        ]);
+
+        return redirect()->route('admin.parameters')->with('success', "Department '{$department->name}' updated successfully.");
+    }
+
+    /**
+     * Delete a department if no employees are assigned.
+     */
+    public function destroyDepartment(Request $request, Department $department)
+    {
+        if ($department->employees()->count() > 0) {
+            return redirect()->route('admin.parameters')
+                ->with('error', "Cannot delete department '{$department->name}' because {$department->employees()->count()} active employees are assigned to it.");
+        }
+
+        $oldName = $department->name;
+        $department->delete();
+
+        AuditTrail::create([
+            'auditable_type' => Department::class,
+            'auditable_id' => $department->id,
+            'user_id' => auth()->id(),
+            'module' => 'parameters',
+            'event' => 'department_deleted',
+            'description' => "Deleted department '{$oldName}'",
+            'old_values' => ['name' => $oldName],
+            'new_values' => null,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'severity' => 'warning',
+        ]);
+
+        return redirect()->route('admin.parameters')->with('success', "Department '{$oldName}' deleted successfully.");
     }
 }

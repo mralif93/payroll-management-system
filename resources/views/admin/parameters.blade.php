@@ -1,28 +1,147 @@
-<x-layouts.admin title="Statutory Parameters & Compliance Rules">
+<x-layouts.admin title="System Parameters & Governance">
 
     <div class="space-y-8">
+
+        <!-- Flash Messages -->
+        @if(session('success'))
+            <x-alert type="success" dismissible="true">
+                {{ session('success') }}
+            </x-alert>
+        @endif
+
+        @if(session('error'))
+            <x-alert type="danger" dismissible="true">
+                {{ session('error') }}
+            </x-alert>
+        @endif
         
         <!-- Header Banner & Action -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
                 <div class="flex items-center gap-2">
-                    <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Statutory Parameters &amp; Tax Tables</h1>
+                    <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">System Parameters &amp; Organization</h1>
                     <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                         Effective 2026
                     </span>
                 </div>
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                    Centralized effective-dated Malaysian statutory schedules (KWSP, PERKESO, SKBBK 2026, EIS, LHDN PCB &amp; HRD Corp).
+                    Centralized effective-dated Malaysian statutory schedules, company profile, and organizational department units.
                 </p>
             </div>
 
             <div class="flex items-center gap-2">
-                <x-button variant="secondary" size="sm" icon="bx-history">
-                    Audit Version Log
+                <x-button variant="primary" size="sm" icon="bx-buildings" onclick="openModal('add-department-modal')">
+                    Add Department
                 </x-button>
-                <x-button variant="primary" size="sm" icon="bx-plus" onclick="alert('Statutory parameters can be modified by authorized Super-Admins.')">
-                    Add New Policy Gazette
+            </div>
+        </div>
+
+        <!-- Metric Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <x-stat-card 
+                title="Active Departments"
+                value="{{ $departments->count() }}"
+                change="Organizational Structure"
+                changeType="positive"
+                icon="bx-buildings"
+                color="indigo"
+            />
+            <x-stat-card 
+                title="EPF Statutory Rule"
+                value="Act 1991 (11%/13%)"
+                change="Third Schedule"
+                changeType="positive"
+                icon="bx-shield-quarter"
+                color="emerald"
+            />
+            <x-stat-card 
+                title="PERKESO Scheme"
+                value="SKBBK 2026"
+                change="Lindung 24 Jam Active"
+                changeType="positive"
+                icon="bx-check-shield"
+                color="purple"
+            />
+            <x-stat-card 
+                title="EIS Ceiling"
+                value="RM 6,000.00"
+                change="Act 800 (0.2% + 0.2%)"
+                changeType="neutral"
+                icon="bx-briefcase"
+                color="blue"
+            />
+        </div>
+
+        <!-- SECTION: ORGANIZATIONAL DEPARTMENTS MANAGEMENT -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
+            <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-base shadow-xs">
+                        <i class="bx bx-sitemap"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-sm font-bold text-slate-900 dark:text-white">Corporate Departments Roster</h2>
+                        <span class="text-[10px] text-slate-400">Used for employee division assignment and department payroll summaries</span>
+                    </div>
+                </div>
+                <x-button variant="secondary" size="xs" icon="bx-plus" onclick="openModal('add-department-modal')">
+                    New Department
                 </x-button>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                        <tr>
+                            <th class="p-3.5">Department Name</th>
+                            <th class="p-3.5">Code / Acronym</th>
+                            <th class="p-3.5">Assigned Staff</th>
+                            <th class="p-3.5">Created Date</th>
+                            <th class="p-3.5 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-sans">
+                        @forelse($departments as $dept)
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
+                                <td class="p-3.5 font-bold text-slate-900 dark:text-white">
+                                    {{ $dept->name }}
+                                </td>
+                                <td class="p-3.5 font-mono text-indigo-600 dark:text-indigo-400 font-bold">
+                                    {{ $dept->code ?? '—' }}
+                                </td>
+                                <td class="p-3.5 font-mono">
+                                    <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                                        {{ $dept->employees_count }} staff
+                                    </span>
+                                </td>
+                                <td class="p-3.5 text-slate-400">
+                                    {{ $dept->created_at ? $dept->created_at->format('d M Y') : '—' }}
+                                </td>
+                                <td class="p-3.5 text-right">
+                                    <div class="flex items-center justify-end gap-1.5 flex-wrap">
+                                        <!-- Edit Action (Pencil) -->
+                                        <x-action-button variant="purple" icon="bx-pencil" title="Edit Department" onclick="openEditDepartmentModal({{ json_encode($dept) }})">
+                                            Edit
+                                        </x-action-button>
+
+                                        <!-- Delete Action with Guard -->
+                                        @if($dept->employees_count === 0)
+                                            <x-action-button variant="rose" icon="bx-trash" title="Delete Department" onclick="confirmDeleteDepartment({{ $dept->id }}, '{{ addslashes($dept->name) }}')">
+                                                Delete
+                                            </x-action-button>
+                                        @endif
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="p-8 text-center text-slate-400">
+                                    No organizational departments found. Click "Add Department" to create units.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -98,44 +217,6 @@
                         <span class="text-[10px] text-slate-400">Employment Injury Only</span>
                     </div>
                 </div>
-
-                <!-- Sample Bracket Preview Table -->
-                <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
-                    <table class="w-full text-left text-xs">
-                        <thead class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold uppercase tracking-wider text-[10px]">
-                            <tr>
-                                <th class="p-3">Monthly Wage Bracket</th>
-                                <th class="p-3">Employer Share</th>
-                                <th class="p-3">Act 4 Employee</th>
-                                <th class="p-3">SKBBK Employee</th>
-                                <th class="p-3">Total Employee Cut</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-200 dark:divide-slate-700 text-slate-700 dark:text-slate-300 font-mono">
-                            <tr>
-                                <td class="p-3 font-sans font-semibold">RM 1,900.01 – RM 2,000.00</td>
-                                <td class="p-3 text-slate-900 dark:text-white font-bold">RM 34.15</td>
-                                <td class="p-3">RM 9.90</td>
-                                <td class="p-3 text-purple-600 dark:text-purple-400 font-bold">RM 14.50</td>
-                                <td class="p-3 text-rose-600 dark:text-rose-400 font-bold">RM 24.40</td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 font-sans font-semibold">RM 2,000.01 – RM 2,100.00</td>
-                                <td class="p-3 text-slate-900 dark:text-white font-bold">RM 35.85</td>
-                                <td class="p-3">RM 10.40</td>
-                                <td class="p-3 text-purple-600 dark:text-purple-400 font-bold">RM 15.20</td>
-                                <td class="p-3 text-rose-600 dark:text-rose-400 font-bold">RM 25.60</td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 font-sans font-semibold">RM 5,900.01 – RM 6,000.00 (Ceiling)</td>
-                                <td class="p-3 text-slate-900 dark:text-white font-bold">RM 104.15</td>
-                                <td class="p-3">RM 29.90</td>
-                                <td class="p-3 text-purple-600 dark:text-purple-400 font-bold">RM 43.50</td>
-                                <td class="p-3 text-rose-600 dark:text-rose-400 font-bold">RM 73.40</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </div>
 
@@ -201,5 +282,76 @@
         </div>
 
     </div>
+
+    <!-- 1. ADD DEPARTMENT MODAL -->
+    <x-modal id="add-department-modal" title="Add Organizational Department" subtitle="Create a new corporate department for employee assignments" icon="bx-buildings" size="md">
+        <form method="POST" action="{{ route('admin.parameters.departments.store') }}" class="space-y-4 text-left">
+            @csrf
+            <input type="hidden" name="company_id" value="{{ $company->id ?? 1 }}">
+
+            <x-input label="Department Name" name="name" required placeholder="e.g. Quality Assurance & Testing" />
+            <x-input label="Department Code / Acronym" name="code" placeholder="e.g. QAT" />
+
+            <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <x-button variant="secondary" size="sm" type="button" onclick="closeModal('add-department-modal')">
+                    Cancel
+                </x-button>
+                <x-button variant="primary" size="sm" type="submit">
+                    Create Department
+                </x-button>
+            </div>
+        </form>
+    </x-modal>
+
+    <!-- 2. EDIT DEPARTMENT MODAL -->
+    <x-modal id="edit-department-modal" title="Edit Department" subtitle="Update department name or organizational code" icon="bx-pencil" size="md">
+        <form id="edit-department-form" method="POST" action="" class="space-y-4 text-left">
+            @csrf
+            @method('PUT')
+
+            <x-input label="Department Name" name="name" id="edit-dept-name" required />
+            <x-input label="Department Code / Acronym" name="code" id="edit-dept-code" />
+
+            <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <x-button variant="secondary" size="sm" type="button" onclick="closeModal('edit-department-modal')">
+                    Cancel
+                </x-button>
+                <x-button variant="primary" size="sm" type="submit">
+                    Save Changes
+                </x-button>
+            </div>
+        </form>
+    </x-modal>
+
+    <!-- 3. CONFIRM DELETE DEPARTMENT MODAL -->
+    <x-confirm-modal 
+        id="delete-department-confirm-modal"
+        title="Delete Department"
+        message="Are you sure you want to delete this organizational department? This action cannot be undone."
+        confirmText="Yes, Delete Department"
+        confirmVariant="danger"
+    />
+
+    <x-slot name="scripts">
+        <script>
+            function openEditDepartmentModal(dept) {
+                const form = document.getElementById('edit-department-form');
+                form.action = `/admin/parameters/departments/${dept.id}`;
+
+                document.getElementById('edit-dept-name').value = dept.name || '';
+                document.getElementById('edit-dept-code').value = dept.code || '';
+
+                openModal('edit-department-modal');
+            }
+
+            function confirmDeleteDepartment(deptId, deptName) {
+                const form = document.getElementById('delete-department-confirm-modal-form');
+                form.action = `/admin/parameters/departments/${deptId}`;
+                document.getElementById('delete-department-confirm-modal-method').value = 'DELETE';
+                document.getElementById('delete-department-confirm-modal-message').textContent = `Are you sure you want to delete department "${deptName}"?`;
+                openModal('delete-department-confirm-modal');
+            }
+        </script>
+    </x-slot>
 
 </x-layouts.admin>
