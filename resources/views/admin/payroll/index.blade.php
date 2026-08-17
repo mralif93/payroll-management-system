@@ -1,11 +1,11 @@
-<x-layouts.admin title="Monthly Payroll Runs & Batch Batches">
+<x-layouts.admin title="Monthly Payroll Runs &amp; Batches">
 
-    <div class="space-y-8">
+    <div class="space-y-6">
 
         <!-- Header Banner & Batch Creator Action -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2.5">
                     <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Monthly Payroll Runs</h1>
                     <x-badge variant="purple" dot="true">
                         Active 2026 Statutory Rules
@@ -17,7 +17,7 @@
             </div>
 
             <div class="flex items-center gap-2">
-                <x-button variant="primary" size="sm" icon="bx-plus" onclick="document.getElementById('payroll-run-modal').showModal()">
+                <x-button variant="primary" size="md" icon="bx-plus" onclick="openModal('payroll-run-modal')">
                     New Payroll Run
                 </x-button>
             </div>
@@ -26,45 +26,53 @@
         <!-- Metric Highlights via UI Kit -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <x-stat-card 
-                title="Current Net Pool"
-                value="RM 148,250.00"
-                change="48 Employees included"
+                title="Total Net Disbursed"
+                value="RM {{ number_format($totalNetPool, 2) }}"
+                change="{{ $payrollRuns->total() }} Total Batches"
                 changeType="positive"
                 icon="bx-wallet-alt"
                 color="indigo"
             />
             <x-stat-card 
-                title="KWSP / EPF Pool"
-                value="RM 38,420.00"
-                change="EE + ER Total"
+                title="Active Roster Included"
+                value="{{ $activeEmployeesCount }} Staff"
+                change="Ready for payroll calculation"
                 changeType="neutral"
-                icon="bx-shield-quarter"
+                icon="bx-group"
                 color="blue"
             />
             <x-stat-card 
-                title="PERKESO & SKBBK"
-                value="RM 4,115.60"
-                change="Lindung 24 Jam integrated"
+                title="Statutory EE Deductions"
+                value="RM {{ number_format($totalEmployeeStatutory, 2) }}"
+                change="KWSP + PERKESO + EIS + PCB"
                 changeType="neutral"
-                icon="bx-plus-medical"
+                icon="bx-shield-quarter"
                 color="purple"
             />
             <x-stat-card 
-                title="LHDN PCB Tax MTD"
-                value="RM 16,890.45"
-                change="CP39 Batch Ready"
+                title="Employer Contributions"
+                value="RM {{ number_format($totalEmployerStatutory, 2) }}"
+                change="Company statutory cost"
                 changeType="positive"
-                icon="bx-receipt"
-                color="rose"
+                icon="bx-buildings"
+                color="emerald"
             />
         </div>
 
         <!-- Payroll Runs Batch History Table -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
             <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                    <i class="bx bx-calendar-check text-indigo-600 dark:text-indigo-400 text-lg"></i>
-                    <h2 class="text-sm font-bold text-slate-900 dark:text-white">Historical Payroll Batches</h2>
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-base">
+                        <i class="bx bx-calendar-check"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-sm font-bold text-slate-900 dark:text-white">Historical Payroll Batches</h2>
+                        <p class="text-[11px] text-slate-400">All calculated and approved monthly salary cycles</p>
+                    </div>
+                </div>
+                <div>
+                    <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400">{{ $payrollRuns->total() }} recorded</span>
                 </div>
             </div>
 
@@ -86,21 +94,30 @@
                         @forelse($payrollRuns as $run)
                             <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
                                 <td class="p-3.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">
-                                    {{ $run->batch_no }}
+                                    <div class="flex items-center gap-2">
+                                        <i class="bx bx-receipt text-base"></i>
+                                        <span>{{ $run->batch_no }}</span>
+                                    </div>
                                 </td>
-                                <td class="p-3.5 font-medium text-slate-800 dark:text-slate-200">
+                                <td class="p-3.5 font-semibold text-slate-900 dark:text-white">
                                     {{ date("F Y", mktime(0, 0, 0, (int)$run->period_month, 1, (int)$run->period_year)) }}
+                                    <span class="block text-[11px] font-normal text-slate-400 font-mono">Disburse: {{ \Carbon\Carbon::parse($run->payment_date)->format('d M Y') }}</span>
                                 </td>
                                 <td class="p-3.5 font-mono">
-                                    {{ $run->total_headcount }} Staff
+                                    <span class="inline-flex items-center gap-1 font-semibold text-slate-800 dark:text-slate-200">
+                                        <i class="bx bx-user text-xs text-slate-400"></i>
+                                        {{ $run->total_headcount }} Staff
+                                    </span>
                                 </td>
-                                <td class="p-3.5 font-mono">
+                                <td class="p-3.5 font-mono font-medium text-slate-800 dark:text-slate-200">
                                     RM {{ number_format($run->total_gross_amount, 2) }}
                                 </td>
-                                <td class="p-3.5 font-mono">
-                                    RM {{ number_format($run->total_statutory_employee, 2) }} / RM {{ number_format($run->total_statutory_employer, 2) }}
+                                <td class="p-3.5 font-mono text-[11px]">
+                                    <span class="text-rose-600 dark:text-rose-400 font-bold">RM {{ number_format($run->total_statutory_employee, 2) }}</span>
+                                    <span class="text-slate-400"> / </span>
+                                    <span class="text-indigo-600 dark:text-indigo-400 font-bold">RM {{ number_format($run->total_statutory_employer, 2) }}</span>
                                 </td>
-                                <td class="p-3.5 font-mono font-bold text-slate-900 dark:text-white">
+                                <td class="p-3.5 font-mono font-extrabold text-slate-900 dark:text-white text-sm">
                                     RM {{ number_format($run->total_net_disbursement, 2) }}
                                 </td>
                                 <td class="p-3.5">
@@ -113,44 +130,124 @@
                                     @endif
                                 </td>
                                 <td class="p-3.5 text-right">
-                                    <x-action-button variant="indigo" icon="bx-show" href="{{ route('admin.payroll.show', $run) }}">
-                                        View Batch
-                                    </x-action-button>
+                                    <div class="flex items-center justify-end gap-1.5">
+                                        <a href="{{ route('admin.payroll.show', $run) }}" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-indigo-50 hover:text-indigo-600 dark:hover:bg-indigo-950 dark:hover:text-indigo-300 flex items-center justify-center transition cursor-pointer" title="View Batch Calculation Details">
+                                            <i class="bx bx-show text-base"></i>
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="p-8 text-center text-slate-400">
-                                    No payroll batches found. Click "New Payroll Run" to initiate the monthly run.
+                                <td colspan="8" class="p-12 text-center text-slate-400">
+                                    <div class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center mx-auto mb-3 text-2xl">
+                                        <i class="bx bx-calendar-x"></i>
+                                    </div>
+                                    <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">No payroll batches executed yet</p>
+                                    <p class="text-xs text-slate-400 mt-1 max-w-sm mx-auto">Click "New Payroll Run" above to calculate monthly salaries for all active employees.</p>
                                 </td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
+
+            @if($payrollRuns->hasPages())
+                <div class="p-4 border-t border-slate-100 dark:border-slate-800">
+                    {{ $payrollRuns->links() }}
+                </div>
+            @endif
         </div>
 
     </div>
 
-    <!-- New Payroll Run Modal -->
-    <x-modal id="payroll-run-modal" title="Initiate New Payroll Processing Batch" size="md">
-        <form method="POST" action="{{ route('admin.payroll.store') }}" class="space-y-4 text-left">
+    <!-- 1. INITIATE NEW PAYROLL RUN MODAL (2xl Spacious 2-Column Numbered Sections) -->
+    <x-modal id="payroll-run-modal" title="Initiate New Payroll Processing Batch" subtitle="Calculate Gross wages, EPF, SOCSO Act 4, SKBBK, EIS, and PCB for active employees" icon="bx-calculator" size="2xl">
+        <form method="POST" action="{{ route('admin.payroll.store') }}" class="space-y-6 text-left">
             @csrf
-            <input type="hidden" name="company_id" value="1">
 
-            <div class="grid grid-cols-2 gap-4">
-                <x-input label="Period Year" name="period_year" type="number" value="{{ date('Y') }}" required />
-                <x-input label="Period Month" name="period_month" type="text" value="{{ date('m') }}" required placeholder="08" />
+            <!-- Section 1: Target Entity & Payroll Period -->
+            <div class="space-y-3">
+                <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
+                    <span class="w-6 h-6 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xs font-bold">1</span>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Target Company &amp; Payroll Period</h4>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Employer / Company</label>
+                        <div class="relative">
+                            <select name="company_id" required class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
+                                @foreach($companies as $company)
+                                    <option value="{{ $company->id }}">{{ $company->name }} (Reg: {{ $company->registration_no ?? 'N/A' }})</option>
+                                @endforeach
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+                                <i class="bx bx-chevron-down text-base"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Payroll Year</label>
+                        <div class="relative">
+                            <select name="period_year" required class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8 font-mono">
+                                @for($y = (int)date('Y') + 1; $y >= 2024; $y--)
+                                    <option value="{{ $y }}" {{ $y == (int)date('Y') ? 'selected' : '' }}>{{ $y }}</option>
+                                @endfor
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+                                <i class="bx bx-chevron-down text-base"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Payroll Month</label>
+                        <div class="relative">
+                            <select name="period_month" required class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8 font-mono">
+                                @foreach(range(1, 12) as $m)
+                                    @php $paddedMonth = str_pad($m, 2, '0', STR_PAD_LEFT); @endphp
+                                    <option value="{{ $paddedMonth }}" {{ $paddedMonth == date('m') ? 'selected' : '' }}>
+                                        {{ $paddedMonth }} - {{ date('F', mktime(0, 0, 0, $m, 1)) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+                                <i class="bx bx-chevron-down text-base"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <x-input label="Cut-Off Date" name="cutoff_date" type="date" value="{{ date('Y-m-25') }}" required />
-            <x-input label="Payment Disbursement Date" name="payment_date" type="date" value="{{ date('Y-m-28') }}" required />
+            <!-- Section 2: Key Operational Dates -->
+            <div class="space-y-3">
+                <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
+                    <span class="w-6 h-6 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs font-bold">2</span>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Execution &amp; Disbursement Dates</h4>
+                </div>
 
-            <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
-                <x-button variant="secondary" size="sm" type="button" onclick="document.getElementById('payroll-run-modal').close()">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <x-input label="Attendance &amp; Claim Cut-Off Date" name="cutoff_date" type="date" value="{{ date('Y-m-25') }}" required icon="bx-calendar" helper="Last day for claims and overtime calculation" />
+                    <x-input label="Salary Disbursement / Payment Date" name="payment_date" type="date" value="{{ date('Y-m-28') }}" required icon="bx-calendar-check" helper="Date banks will disburse funds to staff" />
+                </div>
+            </div>
+
+            <!-- Pre-Execution Notice -->
+            <div class="p-3.5 rounded-xl bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-200/60 dark:border-indigo-900/60 text-xs text-indigo-900 dark:text-indigo-200 flex items-start gap-3">
+                <i class="bx bx-info-circle text-lg text-indigo-600 shrink-0 mt-0.5"></i>
+                <div class="space-y-0.5">
+                    <span class="font-bold block">Automated Statutory Calculation:</span>
+                    <span>This run will automatically process all <strong>{{ $activeEmployeesCount }} active employees</strong> under the statutory rates for EPF (11%/12%/13%), SOCSO Act 4, June 2026 SKBBK, EIS, and PCB.</span>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-2.5 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <x-button variant="secondary" size="md" type="button" onclick="closeModal('payroll-run-modal')">
                     Cancel
                 </x-button>
-                <x-button variant="primary" size="sm" type="submit">
+                <x-button variant="primary" size="md" type="submit" icon="bx-calculator">
                     Calculate &amp; Run Batch
                 </x-button>
             </div>
@@ -158,3 +255,4 @@
     </x-modal>
 
 </x-layouts.admin>
+

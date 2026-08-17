@@ -28,7 +28,26 @@ class PayrollRunController extends Controller
             ->latest('period_month')
             ->paginate(12);
 
-        return view('admin.payroll.index', compact('payrollRuns'));
+        $companies = Company::all();
+        $activeEmployeesCount = Employee::where('employment_status', 'active')->count();
+
+        // Real-time calculated stat card aggregations
+        $latestRun = $payrollRuns->first();
+        $totalNetPool = $payrollRuns->sum('total_net_disbursement');
+        $totalGrossPool = $payrollRuns->sum('total_gross_amount');
+        $totalEmployeeStatutory = $payrollRuns->sum('total_statutory_employee');
+        $totalEmployerStatutory = $payrollRuns->sum('total_statutory_employer');
+
+        return view('admin.payroll.index', compact(
+            'payrollRuns',
+            'companies',
+            'activeEmployeesCount',
+            'latestRun',
+            'totalNetPool',
+            'totalGrossPool',
+            'totalEmployeeStatutory',
+            'totalEmployerStatutory'
+        ));
     }
 
     /**
