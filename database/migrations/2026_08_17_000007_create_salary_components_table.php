@@ -11,7 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // 1. Salary Components Master Definition
         Schema::create('salary_components', function (Blueprint $table) {
             $table->id();
             $table->string('code', 50)->unique(); // BASIC, ATT_ALLOW, OT_15, BONUS, UNPAID_LEAVE, COMM
@@ -28,21 +27,6 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
-
-        // 2. Employee Assigned Salary Components (Recurring or Fixed Additions/Deductions)
-        Schema::create('employee_salary_components', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('employee_id')->constrained('employees')->cascadeOnDelete();
-            $table->foreignId('salary_component_id')->constrained('salary_components')->cascadeOnDelete();
-            $table->decimal('amount', 12, 2)->default(0.00);
-            $table->date('effective_from');
-            $table->date('effective_to')->default('9999-12-31');
-            $table->boolean('is_recurring')->default(true);
-            $table->text('notes')->nullable();
-            $table->timestamps();
-
-            $table->index(['employee_id', 'salary_component_id', 'effective_from', 'effective_to'], 'emp_comp_lookup_idx');
-        });
     }
 
     /**
@@ -50,7 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('employee_salary_components');
         Schema::dropIfExists('salary_components');
     }
 };

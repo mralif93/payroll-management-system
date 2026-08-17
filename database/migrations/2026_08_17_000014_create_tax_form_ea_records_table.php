@@ -11,7 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // 1. Year-End Tax EA Forms (Borang EA / C.P.8A under Section 83(1A) Income Tax Act 1967)
         Schema::create('tax_form_ea_records', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id')->constrained('employees')->cascadeOnDelete();
@@ -51,22 +50,6 @@ return new class extends Migration
 
             $table->unique(['employee_id', 'tax_year']);
         });
-
-        // 2. Audit Trail & Payroll Activity Logs
-        Schema::create('payroll_audit_logs', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->string('action_type', 50); // payroll_approved, rate_modified, payslip_downloaded, salary_adjusted
-            $table->string('auditable_type')->nullable(); // App\Models\PayrollRun, App\Models\Employee
-            $table->unsignedBigInteger('auditable_id')->nullable();
-            $table->json('old_values')->nullable();
-            $table->json('new_values')->nullable();
-            $table->string('ip_address', 45)->nullable();
-            $table->text('user_agent')->nullable();
-            $table->timestamps();
-
-            $table->index(['auditable_type', 'auditable_id']);
-        });
     }
 
     /**
@@ -74,7 +57,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payroll_audit_logs');
         Schema::dropIfExists('tax_form_ea_records');
     }
 };

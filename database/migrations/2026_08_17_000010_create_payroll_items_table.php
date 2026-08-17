@@ -11,33 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // 1. Monthly Payroll Runs (Batches)
-        Schema::create('payroll_runs', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('company_id')->constrained('companies')->cascadeOnDelete();
-            $table->string('batch_no')->unique(); // RUN-2026-08-01
-            $table->string('period_year', 4);    // 2026
-            $table->string('period_month', 2);   // 08
-            $table->date('cutoff_date');         // 2026-08-25
-            $table->date('payment_date');        // 2026-08-28
-            $table->enum('status', ['draft', 'reviewed', 'approved', 'paid', 'locked'])->default('draft');
-            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
-            $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();
-            $table->datetime('approved_at')->nullable();
-            
-            // High-Level Batch Summaries
-            $table->integer('total_headcount')->default(0);
-            $table->decimal('total_gross_amount', 14, 2)->default(0.00);
-            $table->decimal('total_statutory_employee', 14, 2)->default(0.00);
-            $table->decimal('total_statutory_employer', 14, 2)->default(0.00);
-            $table->decimal('total_net_disbursement', 14, 2)->default(0.00);
-            $table->text('remarks')->nullable();
-            $table->timestamps();
-
-            $table->index(['company_id', 'period_year', 'period_month']);
-        });
-
-        // 2. Payroll Items (Per-Employee Monthly Payslip Calculations)
         Schema::create('payroll_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('payroll_run_id')->constrained('payroll_runs')->cascadeOnDelete();
@@ -82,17 +55,6 @@ return new class extends Migration
 
             $table->unique(['payroll_run_id', 'employee_id']);
         });
-
-        // 3. Payroll Item Breakdowns (Detailed line items for Payslip & Form EA)
-        Schema::create('payroll_item_breakdowns', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('payroll_item_id')->constrained('payroll_items')->cascadeOnDelete();
-            $table->foreignId('salary_component_id')->nullable()->constrained('salary_components')->nullOnDelete();
-            $table->string('name'); // e.g. "Overtime 1.5x (4 hours)", "Mobile Allowance"
-            $table->enum('type', ['earning', 'deduction', 'allowance', 'reimbursement'])->default('earning');
-            $table->decimal('amount', 12, 2)->default(0.00);
-            $table->timestamps();
-        });
     }
 
     /**
@@ -100,8 +62,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payroll_item_breakdowns');
         Schema::dropIfExists('payroll_items');
-        Schema::dropIfExists('payroll_runs');
     }
 };

@@ -19,21 +19,13 @@ return new class extends Migration
             $table->string('socso_no')->nullable();      // Employer SOCSO No (e.g. A123456789)
             $table->string('tax_no')->nullable();        // Employer E No (e.g. E 9876543200)
             $table->string('hrd_no')->nullable();        // HRD Corp Registration
-            $table->string('bank_name')->nullable();     // Primary bank (Maybank/CIMB/Public Bank)
+            $table->string('bank_name')->nullable();     // Maybank / CIMB
             $table->string('bank_account_no')->nullable();
             $table->string('contact_person')->nullable();
             $table->string('contact_email')->nullable();
             $table->string('contact_phone')->nullable();
             $table->text('address')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->timestamps();
-        });
-
-        Schema::create('departments', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('company_id')->constrained('companies')->cascadeOnDelete();
-            $table->string('name');
-            $table->string('code', 50)->nullable();
             $table->timestamps();
         });
     }
@@ -43,7 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('departments');
         Schema::dropIfExists('companies');
     }
 };
