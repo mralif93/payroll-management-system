@@ -260,118 +260,211 @@
 
     </div>
 
-    <!-- 1. REGISTER EMPLOYEE MODAL -->
-    <x-modal id="register-employee-modal" title="Register New Employee" subtitle="Create master staff record with default Malaysian statutory profile" icon="bx-user-plus" size="lg">
-        <form method="POST" action="{{ route('admin.employees.store') }}" class="space-y-4 text-left">
+    <!-- 1. REGISTER EMPLOYEE MODAL (User Friendly Tabbed / Sectioned Design) -->
+    <x-modal id="register-employee-modal" title="Register New Employee" subtitle="Create master staff record with default Malaysian statutory profile" icon="bx-user-plus" size="2xl">
+        <form method="POST" action="{{ route('admin.employees.store') }}" class="space-y-6 text-left">
             @csrf
             <input type="hidden" name="company_id" value="1">
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <x-input label="Full Legal Name" name="full_name" required placeholder="e.g. Ahmad bin Mustaffa" />
-                <x-input label="Staff Employee ID" name="employee_no" required placeholder="e.g. EMP-00105" />
-                <x-input label="NRIC / Passport No." name="nric_passport" required placeholder="880415-14-5531" />
-                <x-input label="Designation / Position" name="designation" placeholder="e.g. Senior Software Engineer" />
-                
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Department</label>
-                    <select name="department_id" class="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-2.5 text-slate-900 dark:text-white">
-                        <option value="">Select Department...</option>
-                        @foreach($departments as $dept)
-                            <option value="{{ $dept->id }}">{{ $dept->name }}</option>
-                        @endforeach
-                    </select>
+            <!-- Section 1: Personal & Identity Information -->
+            <div class="space-y-3">
+                <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
+                    <span class="w-6 h-6 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xs font-bold">1</span>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Personal &amp; Identity Details</h4>
                 </div>
 
-                <x-input label="Monthly Basic Salary (RM)" name="basic_salary" type="number" step="0.01" required placeholder="6500.00" />
-                <x-input label="Date of Birth" name="birth_date" type="date" required />
-                <x-input label="Joined Date" name="joined_date" type="date" required />
-                
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Citizenship</label>
-                    <select name="citizenship" class="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-2.5 text-slate-900 dark:text-white">
-                        <option value="malaysian">Malaysian Citizen (Warganegara)</option>
-                        <option value="permanent_resident">Permanent Resident (PR)</option>
-                        <option value="foreign_worker">Foreign Expatriate / Worker</option>
-                    </select>
-                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div class="sm:col-span-2">
+                        <x-input label="Full Legal Name" name="full_name" required placeholder="e.g. Ahmad bin Mustaffa" icon="bx-user" />
+                    </div>
+                    <x-input label="Staff ID" name="employee_no" required placeholder="e.g. EMP-00105" icon="bx-id-card" />
+                    <x-input label="NRIC / Passport No." name="nric_passport" required placeholder="880415-14-5531" icon="bx-card" />
+                    <x-input label="Date of Birth" name="birth_date" type="date" required icon="bx-calendar" />
+                    
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Gender</label>
+                        <div class="relative">
+                            <select name="gender" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
+                                <option value="male">Male (Lelaki)</option>
+                                <option value="female">Female (Perempuan)</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+                                <i class="bx bx-chevron-down text-base"></i>
+                            </div>
+                        </div>
+                    </div>
 
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Gender</label>
-                    <select name="gender" class="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-2.5 text-slate-900 dark:text-white">
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                    </select>
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Citizenship &amp; Tax Status</label>
+                        <div class="relative">
+                            <select name="citizenship" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
+                                <option value="malaysian">Malaysian Citizen (Warganegara)</option>
+                                <option value="permanent_resident">Permanent Resident (PR)</option>
+                                <option value="foreign_worker">Foreign Expatriate / Worker</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+                                <i class="bx bx-chevron-down text-base"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-                <x-input label="Bank Name" name="bank_name" placeholder="Maybank, CIMB, Public Bank..." />
-                <x-input label="Bank Account Number" name="bank_account_no" placeholder="514012345678" />
             </div>
 
-            <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
-                <x-button variant="secondary" size="sm" type="button" onclick="closeModal('register-employee-modal')">
+            <!-- Section 2: Employment & Salary Package -->
+            <div class="space-y-3">
+                <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
+                    <span class="w-6 h-6 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs font-bold">2</span>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Employment &amp; Compensation</h4>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Department</label>
+                        <div class="relative">
+                            <select name="department_id" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
+                                <option value="">Select Department...</option>
+                                @foreach($departments as $dept)
+                                    <option value="{{ $dept->id }}">{{ $dept->name }} ({{ $dept->code ?? 'N/A' }})</option>
+                                @endforeach
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+                                <i class="bx bx-chevron-down text-base"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <x-input label="Designation / Position" name="designation" placeholder="e.g. Senior Software Engineer" icon="bx-briefcase-alt" />
+                    
+                    <x-input label="Monthly Basic Salary (RM)" name="basic_salary" type="number" step="0.01" required placeholder="6500.00" icon="bx-money" />
+                    
+                    <x-input label="Joined Date" name="joined_date" type="date" required icon="bx-calendar-check" />
+                </div>
+            </div>
+
+            <!-- Section 3: Banking & Statutory Autopay -->
+            <div class="space-y-3">
+                <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
+                    <span class="w-6 h-6 rounded-lg bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xs font-bold">3</span>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Disbursement &amp; Banking Details</h4>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <x-input label="Disbursement Bank" name="bank_name" placeholder="Maybank, CIMB, Public Bank, RHB..." icon="bx-buildings" />
+                    <x-input label="Bank Account Number" name="bank_account_no" placeholder="e.g. 514012345678" icon="bx-credit-card" />
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-2.5 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <x-button variant="secondary" size="md" type="button" onclick="closeModal('register-employee-modal')">
                     Cancel
                 </x-button>
-                <x-button variant="primary" size="sm" type="submit">
+                <x-button variant="primary" size="md" type="submit" icon="bx-check">
                     Register Employee
                 </x-button>
             </div>
         </form>
     </x-modal>
 
-    <!-- 2. EDIT EMPLOYEE MODAL -->
-    <x-modal id="edit-employee-modal" title="Edit Employee Profile" subtitle="Update designation, compensation, contact, and employment status" icon="bx-pencil" size="lg">
-        <form id="edit-employee-form" method="POST" action="" class="space-y-4 text-left">
+    <!-- 2. EDIT EMPLOYEE MODAL (Sectioned & User-Friendly) -->
+    <x-modal id="edit-employee-modal" title="Edit Employee Profile" subtitle="Update designation, compensation, contact, and employment status" icon="bx-pencil" size="2xl">
+        <form id="edit-employee-form" method="POST" action="" class="space-y-6 text-left">
             @csrf
             @method('PUT')
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <x-input label="Full Name" name="full_name" id="edit-emp-name" required />
-                <x-input label="Designation / Role" name="designation" id="edit-emp-designation" />
-                
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Department</label>
-                    <select name="department_id" id="edit-emp-dept" class="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-2.5 text-slate-900 dark:text-white">
-                        <option value="">Select Department...</option>
-                        @foreach($departments as $dept)
-                            <option value="{{ $dept->id }}">{{ $dept->name }}</option>
-                        @endforeach
-                    </select>
+            <!-- Section 1: Identity & Contact -->
+            <div class="space-y-3">
+                <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
+                    <span class="w-6 h-6 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xs font-bold">1</span>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Employee Information</h4>
                 </div>
 
-                <x-input label="Monthly Basic Salary (RM)" name="basic_salary" id="edit-emp-salary" type="number" step="0.01" required />
-                
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Employment Status</label>
-                    <select name="employment_status" id="edit-emp-status" class="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-2.5 text-slate-900 dark:text-white">
-                        <option value="active">Active</option>
-                        <option value="probation">Probation</option>
-                        <option value="confirmed">Confirmed</option>
-                        <option value="resigned">Resigned / Inactive</option>
-                    </select>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div class="sm:col-span-2">
+                        <x-input label="Full Name" name="full_name" id="edit-emp-name" required icon="bx-user" />
+                    </div>
+                    <x-input label="Email Address" name="email" id="edit-emp-email" type="email" icon="bx-envelope" />
+                    <x-input label="Contact Phone" name="phone_number" id="edit-emp-phone" icon="bx-phone" />
                 </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Employment Type</label>
-                    <select name="employment_type" id="edit-emp-type" class="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-2.5 text-slate-900 dark:text-white">
-                        <option value="permanent">Permanent</option>
-                        <option value="contract">Contract</option>
-                        <option value="intern">Intern</option>
-                        <option value="part_time">Part Time</option>
-                    </select>
-                </div>
-
-                <x-input label="Bank Name" name="bank_name" id="edit-emp-bank-name" />
-                <x-input label="Bank Account No." name="bank_account_no" id="edit-emp-bank-acc" />
-                <x-input label="Email Address" name="email" id="edit-emp-email" type="email" />
-                <x-input label="Contact Phone" name="phone_number" id="edit-emp-phone" />
             </div>
 
-            <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
-                <x-button variant="secondary" size="sm" type="button" onclick="closeModal('edit-employee-modal')">
+            <!-- Section 2: Position, Compensation & Status -->
+            <div class="space-y-3">
+                <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
+                    <span class="w-6 h-6 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs font-bold">2</span>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Position &amp; Status</h4>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Department</label>
+                        <div class="relative">
+                            <select name="department_id" id="edit-emp-dept" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
+                                <option value="">Select Department...</option>
+                                @foreach($departments as $dept)
+                                    <option value="{{ $dept->id }}">{{ $dept->name }} ({{ $dept->code ?? 'N/A' }})</option>
+                                @endforeach
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+                                <i class="bx bx-chevron-down text-base"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <x-input label="Designation / Role" name="designation" id="edit-emp-designation" icon="bx-briefcase-alt" />
+                    
+                    <x-input label="Monthly Basic Salary (RM)" name="basic_salary" id="edit-emp-salary" type="number" step="0.01" required icon="bx-money" />
+                    
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Employment Status</label>
+                        <div class="relative">
+                            <select name="employment_status" id="edit-emp-status" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
+                                <option value="active">Active (On Payroll)</option>
+                                <option value="probation">Probation</option>
+                                <option value="confirmed">Confirmed</option>
+                                <option value="resigned">Resigned / Inactive</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+                                <i class="bx bx-chevron-down text-base"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Employment Type</label>
+                        <div class="relative">
+                            <select name="employment_type" id="edit-emp-type" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
+                                <option value="permanent">Permanent</option>
+                                <option value="contract">Contract</option>
+                                <option value="intern">Intern</option>
+                                <option value="part_time">Part Time</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+                                <i class="bx bx-chevron-down text-base"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Bank Disbursement -->
+            <div class="space-y-3">
+                <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
+                    <span class="w-6 h-6 rounded-lg bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xs font-bold">3</span>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Disbursement Details</h4>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <x-input label="Bank Name" name="bank_name" id="edit-emp-bank-name" icon="bx-buildings" />
+                    <x-input label="Bank Account No." name="bank_account_no" id="edit-emp-bank-acc" icon="bx-credit-card" />
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-2.5 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <x-button variant="secondary" size="md" type="button" onclick="closeModal('edit-employee-modal')">
                     Cancel
                 </x-button>
-                <x-button variant="primary" size="sm" type="submit">
-                    Save Employee Changes
+                <x-button variant="primary" size="md" type="submit" icon="bx-save">
+                    Save Changes
                 </x-button>
             </div>
         </form>
