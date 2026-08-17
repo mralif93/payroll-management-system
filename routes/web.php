@@ -40,7 +40,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     // 2. Employee Directory & Profiles
-    Route::resource('employees', EmployeeController::class)->only(['index', 'store', 'show', 'update']);
+    Route::resource('employees', EmployeeController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+    Route::post('employees/{employee}/toggle-status', [EmployeeController::class, 'toggleStatus'])->name('employees.toggle-status');
 
     // 3. Monthly Payroll Runs
     Route::get('/payroll', [PayrollRunController::class, 'index'])->name('payroll.index');

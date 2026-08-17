@@ -71,23 +71,38 @@ class EmployeeController extends Controller
             'is_tax_resident' => true,
         ]);
 
-        AuditTrail::log(
-            module: 'employees',
-            event: 'employee.registered',
-            description: "New employee {$employee->full_name} ({$employee->employee_no}) registered.",
-            auditable: $employee,
-            newValues: $validated
-        );
+        AuditTrail::create([
+            'auditable_type' => Employee::class,
+            'auditable_id' => $employee->id,
+            'user_id' => auth()->id(),
+            'module' => 'employees',
+            'event' => 'employee_registered',
+            'description' => "Registered new employee {$employee->full_name} ({$employee->employee_no})",
+            'old_values' => null,
+            'new_values' => $validated,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'severity' => 'info',
+        ]);
 
-        return redirect()->route('admin.employees.index')->with('status', "Employee {$employee->full_name} successfully added.");
+        return redirect()->route('admin.employees.index')->with('success', "Employee {$employee->full_name} successfully registered.");
     }
 
     /**
      * Display the specified employee profile details.
      */
-    public function show(Employee $employee)
+    public function show(Request $request, Employee $employee)
     {
-        $employee->load(['department', 'statutoryProfile', 'dependents', 'salaryComponents.salaryComponent', 'payrollItems']);
+        $employee->load(['department', 'statutoryProfile', 'dependents', 'salaryComponents.salaryComponent', 'payrollItems', 'company']);
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'employee' => $employee,
+                'statutory' => $employee->statutoryProfile,
+                'department_name' => $employee->department?->name ?? 'General',
+                'company_name' => $employee->company?->name ?? 'Enterprise Inc',
+            ]);
+        }
 
         return view('admin.employees.show', compact('employee'));
     }
@@ -98,23 +113,98 @@ class EmployeeController extends Controller
     public function update(Request $request, Employee $employee)
     {
         $validated = $request->validate([
+            'full_name' => ['required', 'string', 'max:255'],
+            'department_id' => ['nullable', 'exists:departments,id'],
+            'designation' => ['nullable', 'string', 'max:255'],
             'basic_salary' => ['required', 'numeric', 'min:0'],
-            'designation' => ['nullable', 'string'],
             'employment_status' => ['required', 'in:active,probation,confirmed,resigned'],
+            'employment_type' => ['required', 'in:permanent,contract,intern,part_time'],
+            'bank_name' => ['nullable', 'string'],
+            'bank_account_no' => ['nullable', 'string'],
+            'email' => ['nullable', 'email'],
+            'phone_number' => ['nullable', 'string'],
         ]);
 
-        $oldValues = $employee->only(['basic_salary', 'designation', 'employment_status']);
+        $oldValues = $employee->only(array_keys($validated));
         $employee->update($validated);
 
-        AuditTrail::log(
-            module: 'employees',
-            event: 'employee.updated',
-            description: "Employee {$employee->full_name} profile updated.",
-            auditable: $employee,
-            oldValues: $oldValues,
-            newValues: $validated
-        );
+        AuditTrail::create([
+            'auditable_type' => Employee::class,
+            'auditable_id' => $employee->id,
+            'user_id' => auth()->id(),
+            'module' => 'employees',
+            'event' => 'employee_updated',
+            'description' => "Updated employee profile for {$employee->full_name} ({$employee->employee_no})",
+            'old_values' => $oldValues,
+            'new_values' => $validated,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'severity' => 'info',
+        ]);
 
-        return redirect()->back()->with('status', 'Employee profile updated successfully.');
+        return redirect()->route('admin.employees.index')->with('success', "Employee {$employee->full_name} updated successfully.");
+    }
+
+    /**
+     * Delete an employee record with audit trail.
+     */
+    public function destroy(Request $request, Employee $employee)
+    {
+        $oldName = $employee->full_name;
+        $oldNo = $employee->employee_no;
+
+        $employee->statutoryProfile()->delete();
+        $employee->delete();
+
+        AuditTrail::create([
+            'auditable_type' => Employee::class,
+            'auditable_id' => $employee->id,
+            'user_id' => auth()->id(),
+            'module' => 'employees',
+            'event' => 'employee_deleted',
+            'description' => "Removed employee {$oldName} ({$oldNo}) from roster",
+            'old_values' => ['name' => $oldName, 'employee_no' => $oldNo],
+            'new_values' => null,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'severity' => 'warning',
+        ]);
+
+        return redirect()->route('admin.employees.index')->with('success', "Employee {$oldName} removed successfully.");
+    }
+
+    /**
+     * Toggle employment status between active and resigned/suspended.
+     */
+    public function toggleStatus(Request $request, Employee $employee)
+    {
+        $oldStatus = $employee->employment_status;
+        $newStatus = $oldStatus === 'active' ? 'resigned' : 'active';
+
+        $employee->employment_status = $newStatus;
+        if ($newStatus === 'resigned') {
+            $employee->resigned_date = now();
+        } else {
+            $employee->resigned_date = null;
+        }
+        $employee->save();
+
+        $actionText = $newStatus === 'resigned' ? 'marked as Resigned / Inactive' : 'Reactivated';
+
+        AuditTrail::create([
+            'auditable_type' => Employee::class,
+            'auditable_id' => $employee->id,
+            'user_id' => auth()->id(),
+            'module' => 'employees',
+            'event' => $newStatus === 'resigned' ? 'employee_resigned' : 'employee_reactivated',
+            'description' => "Employee {$employee->full_name} ({$employee->employee_no}) {$actionText}",
+            'old_values' => ['employment_status' => $oldStatus],
+            'new_values' => ['employment_status' => $newStatus],
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'severity' => 'info',
+        ]);
+
+        return redirect()->route('admin.employees.index')->with('success', "Employee {$employee->full_name} has been {$actionText}.");
     }
 }
