@@ -57,14 +57,14 @@
                 <span>Payroll Dashboard</span>
             </a>
 
-            <a href="/admin/payroll-runs" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition">
-                <i class="bx bx-calendar-check text-lg"></i>
-                <span>Monthly Payroll Runs</span>
-            </a>
-
             <a href="/admin/employees" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition">
                 <i class="bx bx-group text-lg"></i>
                 <span>Employee Registry</span>
+            </a>
+
+            <a href="/admin/payroll-runs" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition">
+                <i class="bx bx-calendar-check text-lg"></i>
+                <span>Monthly Payroll Runs</span>
             </a>
 
             <div class="pt-5 px-3 pb-2 text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-bold">Statutory & Banking</div>
