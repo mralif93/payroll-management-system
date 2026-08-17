@@ -314,53 +314,62 @@
         </form>
     </x-modal>
 
-    <!-- 3. SHOW / VIEW USER DETAILS MODAL -->
-    <x-modal id="show-user-modal" title="User Profile & Security Scope" subtitle="Detailed identity, role permissions, and access status" icon="bx-user-check" size="lg">
-        <div class="space-y-5 text-left text-xs">
+    <!-- 3. SHOW / VIEW USER DETAILS MODAL (Label | Value Design) -->
+    <x-modal id="show-user-modal" title="User Account Details" subtitle="System identity, authorization scope, and login records" icon="bx-user-check" size="lg">
+        <div class="space-y-4 text-left text-xs">
             
-            <!-- User Banner Card -->
-            <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-center gap-4">
-                <div class="w-12 h-12 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-base font-extrabold shadow-sm" id="show-avatar">
+            <!-- User Top Profile Header -->
+            <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-800 flex items-center gap-3.5">
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-500 text-white flex items-center justify-center text-sm font-extrabold shadow-sm shrink-0" id="show-avatar">
                     US
                 </div>
-                <div>
-                    <h3 class="text-sm font-extrabold text-slate-900 dark:text-white" id="show-name">User Name</h3>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 font-mono" id="show-email">email@payroll.my</p>
+                <div class="min-w-0 flex-1">
+                    <h3 class="text-sm font-extrabold text-slate-900 dark:text-white truncate" id="show-name">User Name</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-mono truncate" id="show-email">email@payroll.my</p>
                 </div>
-                <div class="ml-auto" id="show-status-badge">
+                <div id="show-status-badge" class="shrink-0">
                     <x-badge variant="emerald" dot="true">Active</x-badge>
                 </div>
             </div>
 
-            <!-- Details Key-Value Grid -->
-            <div class="grid grid-cols-2 gap-4">
-                <div class="p-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900">
-                    <span class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Staff ID</span>
-                    <span class="font-mono font-bold text-slate-800 dark:text-white" id="show-staff-id">ADM-001</span>
+            <!-- Structured Label | Value Rows Table -->
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden bg-white dark:bg-slate-900 divide-y divide-slate-100 dark:divide-slate-800">
+                
+                <!-- Row: Staff ID -->
+                <div class="grid grid-cols-3 sm:grid-cols-4 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition">
+                    <div class="font-bold text-slate-500 dark:text-slate-400">Staff Employee ID</div>
+                    <div class="col-span-2 sm:col-span-3 font-mono font-bold text-slate-900 dark:text-white" id="show-staff-id">ADM-001</div>
                 </div>
-                <div class="p-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900">
-                    <span class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Contact Phone</span>
-                    <span class="font-mono text-slate-800 dark:text-white" id="show-phone">+6012-3456789</span>
+
+                <!-- Row: Phone Number -->
+                <div class="grid grid-cols-3 sm:grid-cols-4 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition">
+                    <div class="font-bold text-slate-500 dark:text-slate-400">Contact Number</div>
+                    <div class="col-span-2 sm:col-span-3 font-mono text-slate-800 dark:text-slate-200" id="show-phone">+6012-3456789</div>
                 </div>
-                <div class="p-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900">
-                    <span class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Last Login</span>
-                    <span class="text-slate-800 dark:text-white" id="show-last-login">Never</span>
+
+                <!-- Row: Roles -->
+                <div class="grid grid-cols-3 sm:grid-cols-4 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
+                    <div class="font-bold text-slate-500 dark:text-slate-400">Access Roles</div>
+                    <div class="col-span-2 sm:col-span-3 flex items-center gap-1.5 flex-wrap" id="show-roles-container">
+                        <x-badge variant="indigo" size="sm">Super Administrator</x-badge>
+                    </div>
                 </div>
-                <div class="p-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900">
-                    <span class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Account Created</span>
-                    <span class="text-slate-800 dark:text-white" id="show-created-at">—</span>
+
+                <!-- Row: Last Login -->
+                <div class="grid grid-cols-3 sm:grid-cols-4 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition">
+                    <div class="font-bold text-slate-500 dark:text-slate-400">Last Login Activity</div>
+                    <div class="col-span-2 sm:col-span-3 text-slate-800 dark:text-slate-200" id="show-last-login">Never logged in</div>
                 </div>
+
+                <!-- Row: Registered Date -->
+                <div class="grid grid-cols-3 sm:grid-cols-4 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition">
+                    <div class="font-bold text-slate-500 dark:text-slate-400">Account Created</div>
+                    <div class="col-span-2 sm:col-span-3 text-slate-800 dark:text-slate-200" id="show-created-at">17 Aug 2026</div>
+                </div>
+
             </div>
 
-            <!-- Assigned Roles Section -->
-            <div>
-                <span class="text-[10px] uppercase font-bold text-slate-400 block mb-2">Granted Access Roles</span>
-                <div class="flex items-center gap-2 flex-wrap" id="show-roles-container">
-                    <x-badge variant="indigo">Super Administrator</x-badge>
-                </div>
-            </div>
-
-            <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
+            <div class="flex justify-end gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
                 <x-button variant="secondary" size="sm" type="button" onclick="closeModal('show-user-modal')">
                     Close Details
                 </x-button>
