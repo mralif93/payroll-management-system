@@ -57,6 +57,9 @@ class EmployeeController extends Controller
             'designation' => ['nullable', 'string'],
             'bank_name' => ['nullable', 'string'],
             'bank_account_no' => ['nullable', 'string'],
+            'email' => ['nullable', 'email'],
+            'phone_number' => ['nullable', 'string'],
+            'employment_type' => ['nullable', 'in:permanent,contract,intern,part_time'],
         ]);
 
         $employee = Employee::create($validated);

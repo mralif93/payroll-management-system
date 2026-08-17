@@ -277,6 +277,8 @@
                     <div class="sm:col-span-2">
                         <x-input label="Full Legal Name" name="full_name" required placeholder="e.g. Ahmad bin Mustaffa" icon="bx-user" />
                     </div>
+                    <x-input label="Email Address" name="email" type="email" placeholder="ahmad@company.com" icon="bx-envelope" />
+                    <x-input label="Phone Number" name="phone_number" placeholder="+60123456789" icon="bx-phone" />
                     <x-input label="Staff ID" name="employee_no" required placeholder="e.g. EMP-00105" icon="bx-id-card" />
                     <x-input label="NRIC / Passport No." name="nric_passport" required placeholder="880415-14-5531" icon="bx-card" />
                     <x-input label="Date of Birth" name="birth_date" type="date" required icon="bx-calendar" />
@@ -338,6 +340,21 @@
                     <x-input label="Monthly Basic Salary (RM)" name="basic_salary" type="number" step="0.01" required placeholder="6500.00" icon="bx-money" />
                     
                     <x-input label="Joined Date" name="joined_date" type="date" required icon="bx-calendar-check" />
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Employment Type</label>
+                        <div class="relative">
+                            <select name="employment_type" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
+                                <option value="permanent">Permanent Staff</option>
+                                <option value="contract">Contract</option>
+                                <option value="intern">Intern</option>
+                                <option value="part_time">Part Time</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+                                <i class="bx bx-chevron-down text-base"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -470,8 +487,8 @@
         </form>
     </x-modal>
 
-    <!-- 3. SHOW EMPLOYEE MODAL (Label | Value Design) -->
-    <x-modal id="show-employee-modal" title="Employee Master Profile" subtitle="Complete staff identity, statutory tags, and compensation" icon="bx-user" size="lg">
+    <!-- 3. SHOW EMPLOYEE MODAL (Label | Value Design with Full Field Parity) -->
+    <x-modal id="show-employee-modal" title="Employee Master Profile" subtitle="Complete staff identity, contact, statutory tags, and compensation" icon="bx-user" size="lg">
         <div class="space-y-4 text-left text-xs">
             
             <!-- Identity Banner -->
@@ -497,8 +514,23 @@
                 </div>
 
                 <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
+                    <div class="font-bold text-slate-500 dark:text-slate-400">Email Address</div>
+                    <div class="text-right font-mono text-slate-800 dark:text-slate-200" id="show-emp-email">—</div>
+                </div>
+
+                <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
+                    <div class="font-bold text-slate-500 dark:text-slate-400">Contact Number</div>
+                    <div class="text-right font-mono text-slate-800 dark:text-slate-200" id="show-emp-phone">—</div>
+                </div>
+
+                <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
                     <div class="font-bold text-slate-500 dark:text-slate-400">Department</div>
                     <div class="text-right font-medium text-slate-800 dark:text-slate-200" id="show-emp-dept">Technology</div>
+                </div>
+
+                <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
+                    <div class="font-bold text-slate-500 dark:text-slate-400">Employment Type</div>
+                    <div class="text-right font-medium text-slate-800 dark:text-slate-200 uppercase font-mono text-[11px]" id="show-emp-type">Permanent</div>
                 </div>
 
                 <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
@@ -567,7 +599,10 @@
                 document.getElementById('show-emp-name').textContent = emp.full_name || '—';
                 document.getElementById('show-emp-designation').textContent = (emp.designation || 'Staff') + ' • ' + deptName;
                 document.getElementById('show-emp-no').textContent = emp.employee_no || '—';
+                document.getElementById('show-emp-email').textContent = emp.email || '—';
+                document.getElementById('show-emp-phone').textContent = emp.phone_number || '—';
                 document.getElementById('show-emp-dept').textContent = deptName;
+                document.getElementById('show-emp-type').textContent = (emp.employment_type || 'permanent').toUpperCase();
                 document.getElementById('show-emp-salary').textContent = 'RM ' + parseFloat(emp.basic_salary || 0).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 document.getElementById('show-emp-citizenship').textContent = (emp.citizenship || 'malaysian').replace('_', ' ');
                 document.getElementById('show-emp-bank').textContent = (emp.bank_name || 'Bank') + ' (' + (emp.bank_account_no || 'Not set') + ')';
