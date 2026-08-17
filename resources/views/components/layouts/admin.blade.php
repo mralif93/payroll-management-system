@@ -109,16 +109,19 @@
         <div class="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 flex items-center justify-between">
             <div class="flex items-center gap-3 overflow-hidden">
                 <div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs font-bold shrink-0">
-                    HR
+                    {{ substr(Auth::user()->name ?? 'HR', 0, 2) }}
                 </div>
                 <div class="overflow-hidden">
-                    <div class="text-xs font-bold text-slate-900 dark:text-white truncate">Payroll Officer</div>
-                    <div class="text-[10px] text-slate-400 dark:text-slate-500 font-mono truncate">admin@company.com.my</div>
+                    <div class="text-xs font-bold text-slate-900 dark:text-white truncate">{{ Auth::user()->name ?? 'Payroll Officer' }}</div>
+                    <div class="text-[10px] text-slate-400 dark:text-slate-500 font-mono truncate">{{ Auth::user()->email ?? 'admin@payroll.my' }}</div>
                 </div>
             </div>
-            <a href="/" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" title="Exit to Public Site">
-                <i class="bx bx-log-out text-lg"></i>
-            </a>
+            <form method="POST" action="{{ route('logout') }}" class="inline">
+                @csrf
+                <button type="submit" class="text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 transition cursor-pointer" title="Sign Out">
+                    <i class="bx bx-log-out text-lg"></i>
+                </button>
+            </form>
         </div>
     </aside>
 
