@@ -57,36 +57,48 @@
         <!-- Sidebar Navigation Menu -->
         <nav class="flex-1 px-3.5 py-5 space-y-6 overflow-y-auto text-xs">
             
-            <!-- Module Group 1: Payroll Operations -->
+            <!-- Group 1: Core Navigation -->
             <div class="space-y-1">
-                <div class="px-3 pb-1 text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-bold">
-                    Payroll Operations
-                </div>
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.dashboard') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
                     <i class="bx bxs-dashboard text-lg"></i>
-                    <span>Overview Dashboard</span>
-                </a>
-                <a href="{{ route('admin.payroll.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.payroll.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
-                    <i class="bx bx-calendar-check text-lg"></i>
-                    <span>Monthly Payroll Runs</span>
+                    <span>Dashboard</span>
                 </a>
             </div>
 
-            <!-- Module Group 2: Workforce & HR -->
+            <!-- Group 2: User Access & Identity -->
             <div class="space-y-1">
                 <div class="px-3 pb-1 text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-bold">
-                    Workforce &amp; HR
+                    User &amp; Access Control
                 </div>
+                <a href="{{ route('admin.users.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.users.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
+                    <i class="bx bx-user text-lg"></i>
+                    <span>Users</span>
+                </a>
+                <a href="{{ route('admin.roles.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.roles.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
+                    <i class="bx bx-shield-quarter text-lg"></i>
+                    <span>Access Roles</span>
+                </a>
+            </div>
+
+            <!-- Group 3: Payroll Operations -->
+            <div class="space-y-1">
+                <div class="px-3 pb-1 text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-bold">
+                    Payroll &amp; HR Management
+                </div>
+                <a href="{{ route('admin.payroll.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.payroll.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
+                    <i class="bx bx-calendar-check text-lg"></i>
+                    <span>Payroll Runs</span>
+                </a>
                 <a href="{{ route('admin.employees.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.employees.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
                     <i class="bx bx-group text-lg"></i>
                     <span>Employee Registry</span>
                 </a>
             </div>
 
-            <!-- Module Group 3: Banking & Compliance -->
+            <!-- Group 4: Banking & Exporters -->
             <div class="space-y-1">
                 <div class="px-3 pb-1 text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-bold">
-                    Banking &amp; Compliance
+                    Banking &amp; Exporters
                 </div>
                 <a href="{{ route('admin.banking.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.banking.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
                     <i class="bx bxs-bank text-lg"></i>
@@ -103,15 +115,11 @@
                 </a>
             </div>
 
-            <!-- Module Group 4: System Governance -->
+            <!-- Group 5: Configuration & Audit -->
             <div class="space-y-1">
                 <div class="px-3 pb-1 text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-bold">
                     System Governance
                 </div>
-                <a href="{{ route('admin.users.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.users.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
-                    <i class="bx bx-user-pin text-lg"></i>
-                    <span>User &amp; Access Roles</span>
-                </a>
                 <a href="{{ route('admin.parameters') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.parameters') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
                     <i class="bx bx-slider text-lg"></i>
                     <span>Statutory Parameters</span>

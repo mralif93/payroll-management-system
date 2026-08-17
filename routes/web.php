@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\ExportAndBankingController;
 use App\Http\Controllers\Admin\PayrollRunController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\StatutoryParameterController;
 use App\Http\Controllers\Admin\TaxFormEaController;
 use App\Http\Controllers\Admin\UserController;
@@ -63,6 +64,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 
     // 8. User Access & Role Identity Management
     Route::resource('users', UserController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::resource('roles', RoleController::class)->only(['index', 'store', 'update', 'destroy']);
 });
 
 // Authentication Logout Route
