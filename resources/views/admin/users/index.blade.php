@@ -181,18 +181,34 @@
                                 <td class="p-3.5 text-right">
                                     <div class="flex items-center justify-end gap-1.5 flex-wrap">
                                         <!-- View / Show Profile Action -->
-                                        <x-action-button variant="indigo" icon="bx-show" onclick="openShowModal({{ json_encode($user) }}, {{ json_encode($user->roles) }})">
+                                        <x-action-button variant="indigo" icon="bx-show" title="View Profile" onclick="openShowModal({{ json_encode($user) }}, {{ json_encode($user->roles) }})">
                                             View
                                         </x-action-button>
                                         
                                         <!-- Edit Action -->
-                                        <x-action-button variant="purple" icon="bx-edit" onclick="openEditModal({{ json_encode($user) }}, {{ json_encode($user->roles->pluck('id')) }})">
+                                        <x-action-button variant="purple" icon="bx-edit" title="Edit User" onclick="openEditModal({{ json_encode($user) }}, {{ json_encode($user->roles->pluck('id')) }})">
                                             Edit
                                         </x-action-button>
 
-                                        <!-- Delete Guard Trigger via UI Kit Confirm Modal -->
+                                        <!-- Reset / Change Password Action -->
+                                        <x-action-button variant="amber" icon="bx-key" title="Reset / Change Password" onclick="openResetPasswordModal({{ $user->id }}, '{{ addslashes($user->name) }}', '{{ addslashes($user->email) }}')">
+                                            Reset Password
+                                        </x-action-button>
+
+                                        <!-- Block / Unblock Access Action -->
                                         @if($user->id !== auth()->id())
-                                            <x-action-button variant="rose" icon="bx-trash" onclick="confirmDeleteUser({{ $user->id }}, '{{ addslashes($user->name) }}')">
+                                            @if($user->status === 'active')
+                                                <x-action-button variant="warning" icon="bx-lock-alt" title="Block / Suspend Access" onclick="confirmToggleStatus({{ $user->id }}, '{{ addslashes($user->name) }}', 'block')">
+                                                    Block
+                                                </x-action-button>
+                                            @else
+                                                <x-action-button variant="emerald" icon="bx-lock-open-alt" title="Unblock / Activate Access" onclick="confirmToggleStatus({{ $user->id }}, '{{ addslashes($user->name) }}', 'unblock')">
+                                                    Unblock
+                                                </x-action-button>
+                                            @endif
+
+                                            <!-- Delete Guard Trigger via UI Kit Confirm Modal -->
+                                            <x-action-button variant="rose" icon="bx-trash" title="Delete User" onclick="confirmDeleteUser({{ $user->id }}, '{{ addslashes($user->name) }}')">
                                                 Delete
                                             </x-action-button>
                                         @endif
@@ -377,7 +393,43 @@
         </div>
     </x-modal>
 
-    <!-- 4. STANDARDIZED UI KIT CONFIRM DELETE MODAL -->
+    <!-- 4. RESET / CHANGE PASSWORD MODAL -->
+    <x-modal id="reset-password-modal" title="Reset User Password" subtitle="Assign a new secure password for this administrator" icon="bx-key" iconBg="bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400" size="md">
+        <form id="reset-password-form" method="POST" action="" class="space-y-4 text-left">
+            @csrf
+
+            <div class="p-3 rounded-xl bg-amber-50/50 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-900/60 text-xs">
+                <span class="font-bold text-amber-800 dark:text-amber-300 block mb-0.5">Resetting Password For:</span>
+                <span class="text-slate-800 dark:text-white font-medium" id="reset-password-user-name">User Name</span>
+                <span class="text-slate-400 font-mono text-[11px] block" id="reset-password-user-email">email@payroll.my</span>
+            </div>
+
+            <x-input label="New Password" name="password" type="password" required placeholder="Minimum 8 characters" />
+            <x-input label="Confirm New Password" name="password_confirmation" type="password" required placeholder="Repeat new password" />
+
+            <div class="flex justify-end gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+                <x-button variant="secondary" size="sm" type="button" onclick="closeModal('reset-password-modal')">
+                    Cancel
+                </x-button>
+                <x-button variant="warning" size="sm" type="submit">
+                    Update Password
+                </x-button>
+            </div>
+        </form>
+    </x-modal>
+
+    <!-- 5. STANDARDIZED UI KIT CONFIRM BLOCK / UNBLOCK MODAL -->
+    <x-confirm-modal 
+        id="toggle-status-confirm-modal"
+        title="Change Account Status"
+        message="Are you sure you want to change this user's portal access status?"
+        confirmText="Confirm Status Change"
+        confirmVariant="warning"
+        icon="bx-lock-alt"
+        iconBg="bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400"
+    />
+
+    <!-- 6. STANDARDIZED UI KIT CONFIRM DELETE MODAL -->
     <x-confirm-modal 
         id="delete-user-confirm-modal"
         title="Delete User Account"
@@ -388,6 +440,32 @@
 
     <x-slot name="scripts">
         <script>
+            function openResetPasswordModal(userId, userName, userEmail) {
+                const form = document.getElementById('reset-password-form');
+                form.action = `/admin/users/${userId}/reset-password`;
+                document.getElementById('reset-password-user-name').textContent = userName;
+                document.getElementById('reset-password-user-email').textContent = userEmail;
+                openModal('reset-password-modal');
+            }
+
+            function confirmToggleStatus(userId, userName, action) {
+                const form = document.getElementById('toggle-status-confirm-modal-form');
+                form.action = `/admin/users/${userId}/toggle-status`;
+                document.getElementById('toggle-status-confirm-modal-method').value = 'POST';
+
+                if (action === 'block') {
+                    document.getElementById('toggle-status-confirm-modal-title').textContent = 'Block / Suspend User';
+                    document.getElementById('toggle-status-confirm-modal-message').textContent = `Are you sure you want to BLOCK "${userName}"? They will be immediately prevented from logging into the system.`;
+                    document.getElementById('toggle-status-confirm-modal-btn').textContent = 'Yes, Block User';
+                } else {
+                    document.getElementById('toggle-status-confirm-modal-title').textContent = 'Unblock / Activate User';
+                    document.getElementById('toggle-status-confirm-modal-message').textContent = `Are you sure you want to UNBLOCK "${userName}"? Their active access will be restored immediately.`;
+                    document.getElementById('toggle-status-confirm-modal-btn').textContent = 'Yes, Restore Access';
+                }
+
+                openModal('toggle-status-confirm-modal');
+            }
+
             function confirmDeleteUser(userId, userName) {
                 const form = document.getElementById('delete-user-confirm-modal-form');
                 form.action = `/admin/users/${userId}`;

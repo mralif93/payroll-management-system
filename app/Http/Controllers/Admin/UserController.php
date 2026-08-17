@@ -189,4 +189,66 @@ class UserController extends Controller
         return redirect()->route('admin.users.index')
             ->with('success', "User {$oldName} deleted successfully.");
     }
+
+    /**
+     * Direct password reset / change for an administrative user.
+     */
+    public function resetPassword(Request $request, User $user): RedirectResponse
+    {
+        $validated = $request->validate([
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user->password = Hash::make($validated['password']);
+        $user->save();
+
+        AuditTrail::create([
+            'auditable_type' => User::class,
+            'auditable_id' => $user->id,
+            'user_id' => auth()->id(),
+            'event' => 'password_reset_by_admin',
+            'old_values' => null,
+            'new_values' => ['user_id' => $user->id, 'email' => $user->email],
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'severity' => 'warning',
+        ]);
+
+        return redirect()->route('admin.users.index')
+            ->with('success', "Password for user {$user->name} has been successfully reset.");
+    }
+
+    /**
+     * Block, suspend, or unblock user access.
+     */
+    public function toggleStatus(Request $request, User $user): RedirectResponse
+    {
+        if ($user->id === auth()->id()) {
+            return redirect()->route('admin.users.index')
+                ->with('error', 'You cannot block your own logged-in administrator account.');
+        }
+
+        $oldStatus = $user->status;
+        $newStatus = $oldStatus === 'active' ? 'suspended' : 'active';
+
+        $user->status = $newStatus;
+        $user->save();
+
+        $actionText = $newStatus === 'suspended' ? 'blocked / suspended' : 'unblocked / activated';
+
+        AuditTrail::create([
+            'auditable_type' => User::class,
+            'auditable_id' => $user->id,
+            'user_id' => auth()->id(),
+            'event' => $newStatus === 'suspended' ? 'user_blocked' : 'user_unblocked',
+            'old_values' => ['status' => $oldStatus],
+            'new_values' => ['status' => $newStatus],
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'severity' => $newStatus === 'suspended' ? 'warning' : 'info',
+        ]);
+
+        return redirect()->route('admin.users.index')
+            ->with('success', "User account {$user->name} has been {$actionText}.");
+    }
 }
