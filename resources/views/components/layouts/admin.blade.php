@@ -328,6 +328,22 @@
             menu.classList.toggle('hidden');
         }
 
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            if (modal) {
+                modal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+            }
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            if (modal) {
+                modal.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }
+        }
+
         // Close dropdown when clicking outside
         document.addEventListener('click', function(event) {
             const container = document.getElementById('user-dropdown-container');

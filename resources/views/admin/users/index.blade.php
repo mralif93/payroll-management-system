@@ -1,4 +1,4 @@
-<x-layouts.admin title="User Management & Role Identity">
+<x-layouts.admin title="User Management & Access Control">
 
     <div class="space-y-8">
 
@@ -25,12 +25,12 @@
                     </x-badge>
                 </div>
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                    Manage administrative accounts, role-based access controls (RBAC), and security statuses.
+                    Manage administrative user identities, security statuses, and role-based access permissions.
                 </p>
             </div>
 
             <div class="flex items-center gap-2">
-                <x-button variant="primary" size="sm" icon="bx-user-plus" onclick="document.getElementById('create-user-modal').showModal()">
+                <x-button variant="primary" size="sm" icon="bx-user-plus" onclick="openModal('create-user-modal')">
                     Add New User
                 </x-button>
             </div>
@@ -180,11 +180,19 @@
                                 </td>
                                 <td class="p-3.5 text-right">
                                     <div class="flex items-center justify-end gap-1.5">
-                                        <x-button variant="secondary" size="xs" onclick="openEditModal({{ json_encode($user) }}, {{ json_encode($user->roles->pluck('id')) }})">
+                                        <!-- Show Modal Trigger -->
+                                        <x-button variant="secondary" size="xs" icon="bx-show" onclick="openShowModal({{ json_encode($user) }}, {{ json_encode($user->roles) }})">
+                                            View
+                                        </x-button>
+                                        
+                                        <!-- Edit Modal Trigger -->
+                                        <x-button variant="secondary" size="xs" icon="bx-edit" onclick="openEditModal({{ json_encode($user) }}, {{ json_encode($user->roles->pluck('id')) }})">
                                             Edit
                                         </x-button>
+
+                                        <!-- Delete Guard Trigger -->
                                         @if($user->id !== auth()->id())
-                                            <form method="POST" action="{{ route('admin.users.destroy', $user) }}" onsubmit="return confirm('Are you sure you want to remove this user account?');" class="inline">
+                                            <form method="POST" action="{{ route('admin.users.destroy', $user) }}" onsubmit="return confirm('Are you sure you want to remove user {{ $user->name }}?');" class="inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <x-button variant="ghost" size="xs" type="submit" class="text-rose-600 hover:text-rose-700 dark:text-rose-400">
@@ -215,33 +223,36 @@
 
     </div>
 
-    <!-- Create User Modal -->
-    <x-modal id="create-user-modal" title="Add New Administrative User" size="md">
+    <!-- 1. CREATE USER MODAL -->
+    <x-modal id="create-user-modal" title="Add New Administrative User" subtitle="Create credentials and assign security permissions" icon="bx-user-plus" size="lg">
         <form method="POST" action="{{ route('admin.users.store') }}" class="space-y-4 text-left">
             @csrf
 
-            <x-input label="Full Name" name="name" required placeholder="e.g. Siti Nurhaliza" />
-            <x-input label="Email Address" name="email" type="email" required placeholder="siti@company.com" />
-            <x-input label="Staff ID" name="staff_id" placeholder="e.g. ADM-003" />
-            <x-input label="Phone Number" name="phone_number" placeholder="+60123456789" />
-            <x-input label="Temporary Password" name="password" type="password" required placeholder="Minimum 8 characters" />
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <x-input label="Full Name" name="name" required placeholder="e.g. Siti Nurhaliza" />
+                <x-input label="Email Address" name="email" type="email" required placeholder="siti@company.com" />
+                <x-input label="Staff Employee ID" name="staff_id" placeholder="e.g. ADM-003" />
+                <x-input label="Phone Number" name="phone_number" placeholder="+60123456789" />
+            </div>
+
+            <x-input label="Initial Temporary Password" name="password" type="password" required placeholder="Minimum 8 characters" />
 
             <div>
                 <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Account Status</label>
                 <select name="status" class="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-2.5 text-slate-900 dark:text-white">
-                    <option value="active">Active (Access Granted)</option>
-                    <option value="inactive">Inactive</option>
-                    <option value="suspended">Suspended (Access Revoked)</option>
+                    <option value="active">Active (Full Portal Access)</option>
+                    <option value="inactive">Inactive (Suspended Temporarily)</option>
+                    <option value="suspended">Suspended (Access Terminated)</option>
                 </select>
             </div>
 
             <div>
-                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Assign Roles</label>
-                <div class="space-y-2 max-h-36 overflow-y-auto p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900">
+                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Assign Access Roles</label>
+                <div class="space-y-2 max-h-36 overflow-y-auto p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900">
                     @foreach($roles as $role)
                         <label class="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
                             <input type="checkbox" name="role_ids[]" value="{{ $role->id }}" class="rounded text-indigo-600 focus:ring-indigo-500">
-                            <span>{{ $role->display_name }}</span>
+                            <span class="font-bold text-slate-900 dark:text-white">{{ $role->display_name }}</span>
                             <span class="text-[10px] text-slate-400">({{ $role->name }})</span>
                         </label>
                     @endforeach
@@ -249,7 +260,7 @@
             </div>
 
             <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
-                <x-button variant="secondary" size="sm" type="button" onclick="document.getElementById('create-user-modal').close()">
+                <x-button variant="secondary" size="sm" type="button" onclick="closeModal('create-user-modal')">
                     Cancel
                 </x-button>
                 <x-button variant="primary" size="sm" type="submit">
@@ -259,17 +270,20 @@
         </form>
     </x-modal>
 
-    <!-- Edit User Modal -->
-    <x-modal id="edit-user-modal" title="Edit User Account & Roles" size="md">
+    <!-- 2. EDIT USER MODAL -->
+    <x-modal id="edit-user-modal" title="Edit Administrative User" subtitle="Update personal details, credentials, and role assignments" icon="bx-edit" size="lg">
         <form id="edit-user-form" method="POST" action="" class="space-y-4 text-left">
             @csrf
             @method('PUT')
 
-            <x-input label="Full Name" name="name" id="edit-name" required />
-            <x-input label="Email Address" name="email" id="edit-email" type="email" required />
-            <x-input label="Staff ID" name="staff_id" id="edit-staff-id" />
-            <x-input label="Phone Number" name="phone_number" id="edit-phone" />
-            <x-input label="Change Password (leave blank to keep current)" name="password" type="password" placeholder="Leave empty to retain password" />
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <x-input label="Full Name" name="name" id="edit-name" required />
+                <x-input label="Email Address" name="email" id="edit-email" type="email" required />
+                <x-input label="Staff ID" name="staff_id" id="edit-staff-id" />
+                <x-input label="Phone Number" name="phone_number" id="edit-phone" />
+            </div>
+
+            <x-input label="Change Password (leave empty to retain current)" name="password" type="password" placeholder="Leave empty to retain existing password" />
 
             <div>
                 <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Account Status</label>
@@ -281,12 +295,12 @@
             </div>
 
             <div>
-                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Assign Roles</label>
-                <div class="space-y-2 max-h-36 overflow-y-auto p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900" id="edit-roles-container">
+                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Assigned Roles</label>
+                <div class="space-y-2 max-h-36 overflow-y-auto p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900" id="edit-roles-container">
                     @foreach($roles as $role)
                         <label class="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
                             <input type="checkbox" name="role_ids[]" value="{{ $role->id }}" class="edit-role-checkbox rounded text-indigo-600 focus:ring-indigo-500">
-                            <span>{{ $role->display_name }}</span>
+                            <span class="font-bold text-slate-900 dark:text-white">{{ $role->display_name }}</span>
                             <span class="text-[10px] text-slate-400">({{ $role->name }})</span>
                         </label>
                     @endforeach
@@ -294,7 +308,7 @@
             </div>
 
             <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
-                <x-button variant="secondary" size="sm" type="button" onclick="document.getElementById('edit-user-modal').close()">
+                <x-button variant="secondary" size="sm" type="button" onclick="closeModal('edit-user-modal')">
                     Cancel
                 </x-button>
                 <x-button variant="primary" size="sm" type="submit">
@@ -302,6 +316,60 @@
                 </x-button>
             </div>
         </form>
+    </x-modal>
+
+    <!-- 3. SHOW / VIEW USER DETAILS MODAL -->
+    <x-modal id="show-user-modal" title="User Profile & Security Scope" subtitle="Detailed identity, role permissions, and access status" icon="bx-user-check" size="lg">
+        <div class="space-y-5 text-left text-xs">
+            
+            <!-- User Banner Card -->
+            <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-base font-extrabold shadow-sm" id="show-avatar">
+                    US
+                </div>
+                <div>
+                    <h3 class="text-sm font-extrabold text-slate-900 dark:text-white" id="show-name">User Name</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-mono" id="show-email">email@payroll.my</p>
+                </div>
+                <div class="ml-auto" id="show-status-badge">
+                    <x-badge variant="emerald" dot="true">Active</x-badge>
+                </div>
+            </div>
+
+            <!-- Details Key-Value Grid -->
+            <div class="grid grid-cols-2 gap-4">
+                <div class="p-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900">
+                    <span class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Staff ID</span>
+                    <span class="font-mono font-bold text-slate-800 dark:text-white" id="show-staff-id">ADM-001</span>
+                </div>
+                <div class="p-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900">
+                    <span class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Contact Phone</span>
+                    <span class="font-mono text-slate-800 dark:text-white" id="show-phone">+6012-3456789</span>
+                </div>
+                <div class="p-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900">
+                    <span class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Last Login</span>
+                    <span class="text-slate-800 dark:text-white" id="show-last-login">Never</span>
+                </div>
+                <div class="p-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900">
+                    <span class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Account Created</span>
+                    <span class="text-slate-800 dark:text-white" id="show-created-at">—</span>
+                </div>
+            </div>
+
+            <!-- Assigned Roles Section -->
+            <div>
+                <span class="text-[10px] uppercase font-bold text-slate-400 block mb-2">Granted Access Roles</span>
+                <div class="flex items-center gap-2 flex-wrap" id="show-roles-container">
+                    <x-badge variant="indigo">Super Administrator</x-badge>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <x-button variant="secondary" size="sm" type="button" onclick="closeModal('show-user-modal')">
+                    Close Details
+                </x-button>
+            </div>
+        </div>
     </x-modal>
 
     <x-slot name="scripts">
@@ -322,7 +390,43 @@
                     cb.checked = roleIds.includes(parseInt(cb.value));
                 });
 
-                document.getElementById('edit-user-modal').showModal();
+                openModal('edit-user-modal');
+            }
+
+            function openShowModal(user, roles) {
+                document.getElementById('show-avatar').textContent = (user.name || 'US').substring(0, 2).toUpperCase();
+                document.getElementById('show-name').textContent = user.name || '—';
+                document.getElementById('show-email').textContent = user.email || '—';
+                document.getElementById('show-staff-id').textContent = user.staff_id || 'Not Assigned';
+                document.getElementById('show-phone').textContent = user.phone_number || 'Not Provided';
+                document.getElementById('show-last-login').textContent = user.last_login_at ? new Date(user.last_login_at).toLocaleString() : 'Never logged in';
+                document.getElementById('show-created-at').textContent = user.created_at ? new Date(user.created_at).toLocaleDateString() : '—';
+
+                // Status Badge
+                const statusContainer = document.getElementById('show-status-badge');
+                if (user.status === 'active') {
+                    statusContainer.innerHTML = '<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Active</span>';
+                } else if (user.status === 'inactive') {
+                    statusContainer.innerHTML = '<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>Inactive</span>';
+                } else {
+                    statusContainer.innerHTML = '<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>Suspended</span>';
+                }
+
+                // Roles Badges
+                const rolesContainer = document.getElementById('show-roles-container');
+                rolesContainer.innerHTML = '';
+                if (roles && roles.length > 0) {
+                    roles.forEach(role => {
+                        const span = document.createElement('span');
+                        span.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800';
+                        span.textContent = role.display_name;
+                        rolesContainer.appendChild(span);
+                    });
+                } else {
+                    rolesContainer.innerHTML = '<span class="text-xs text-slate-400 italic">No access roles assigned.</span>';
+                }
+
+                openModal('show-user-modal');
             }
         </script>
     </x-slot>
