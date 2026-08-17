@@ -148,7 +148,7 @@
                 <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
                     <span class="font-medium text-slate-400 hidden sm:inline">PayFlow Console</span>
                     <span class="hidden sm:inline text-slate-300 dark:text-slate-600">/</span>
-                    <span class="font-bold text-slate-800 dark:text-white truncate">{{ $headerTitle }}</span>
+                    <span class="font-bold text-slate-800 dark:text-white truncate">{{ $title ?? 'Admin Console' }}</span>
                 </div>
             </div>
 
@@ -259,18 +259,21 @@
         <!-- Scrollable Dashboard Page Body -->
         <main class="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6">
             
-            <!-- Page Header Title Card -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
-                <div>
-                    <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">{{ $headerTitle }}</h1>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ $headerSubtitle }}</p>
-                </div>
-                @if(isset($headerActions))
-                    <div class="flex items-center gap-2.5">
+            @if(isset($headerActions))
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
+                    @if(isset($headerTitle))
+                        <div>
+                            <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">{{ $headerTitle }}</h1>
+                            @if(isset($headerSubtitle))
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ $headerSubtitle }}</p>
+                            @endif
+                        </div>
+                    @endif
+                    <div class="flex items-center gap-2.5 ml-auto">
                         {{ $headerActions }}
                     </div>
-                @endif
-            </div>
+                </div>
+            @endif
 
             <!-- Injected View Content -->
             {{ $slot }}
