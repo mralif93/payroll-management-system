@@ -1,37 +1,41 @@
-<x-layouts.admin :title="'Payroll Run Details — ' . $payrollRun->batch_no">
+<x-layouts.admin :title="'Payroll Batch Details — ' . $payrollRun->batch_no">
 
     <div class="space-y-6">
 
-        <!-- Top Navigation / Breadcrumb & Actions -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div class="space-y-1">
-                <div class="flex items-center gap-2">
-                    <a href="{{ route('admin.payroll.index') }}" class="w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-indigo-600 flex items-center justify-center transition">
-                        <i class="bx bx-arrow-back text-sm"></i>
-                    </a>
-                    <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight font-mono">
-                        {{ $payrollRun->batch_no }}
-                    </h1>
-                    @if($payrollRun->status === 'approved')
-                        <x-badge variant="emerald" dot="true">Approved</x-badge>
-                    @elseif($payrollRun->status === 'paid')
-                        <x-badge variant="blue" dot="true">Disbursed</x-badge>
-                    @else
-                        <x-badge variant="amber" dot="true">Draft Review</x-badge>
-                    @endif
+        <!-- Top Header & Actions Bar -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
+            <div class="flex items-center gap-3.5">
+                <a href="{{ route('admin.payroll.index') }}" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-indigo-50 hover:text-indigo-600 dark:hover:bg-indigo-950 dark:hover:text-indigo-400 flex items-center justify-center transition shrink-0" title="Back to Batches">
+                    <i class="bx bx-arrow-back text-lg"></i>
+                </a>
+                <div class="min-w-0">
+                    <div class="flex items-center gap-2.5 flex-wrap">
+                        <h1 class="text-xl font-extrabold text-slate-900 dark:text-white font-mono tracking-tight">
+                            {{ $payrollRun->batch_no }}
+                        </h1>
+                        @if($payrollRun->status === 'approved')
+                            <x-badge variant="emerald" dot="true">Approved &amp; Locked</x-badge>
+                        @elseif($payrollRun->status === 'paid')
+                            <x-badge variant="blue" dot="true">Disbursed</x-badge>
+                        @else
+                            <x-badge variant="amber" dot="true">Draft Review</x-badge>
+                        @endif
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 flex items-center gap-2 flex-wrap">
+                        <span>Period: <strong class="text-slate-800 dark:text-slate-200 font-semibold">{{ date("F Y", mktime(0, 0, 0, (int)$payrollRun->period_month, 1, (int)$payrollRun->period_year)) }}</strong></span>
+                        <span>•</span>
+                        <span>Payment Date: <span class="font-mono font-medium text-slate-700 dark:text-slate-300">{{ \Carbon\Carbon::parse($payrollRun->payment_date)->format('d M Y') }}</span></span>
+                        <span>•</span>
+                        <span>Employer: <strong class="text-slate-700 dark:text-slate-300">{{ $payrollRun->company?->name ?? 'Enterprise Inc' }}</strong></span>
+                    </p>
                 </div>
-                <p class="text-xs text-slate-500 dark:text-slate-400">
-                    Cycle Period: <strong class="text-slate-700 dark:text-slate-200">{{ date("F Y", mktime(0, 0, 0, (int)$payrollRun->period_month, 1, (int)$payrollRun->period_year)) }}</strong>
-                    • Payment Due: <span class="font-mono">{{ \Carbon\Carbon::parse($payrollRun->payment_date)->format('d M Y') }}</span>
-                    • {{ $payrollRun->company?->name ?? 'Enterprise Inc' }}
-                </p>
             </div>
 
-            <!-- Contextual Action Buttons -->
-            <div class="flex items-center gap-2.5 flex-wrap">
-                <a href="{{ route('admin.payroll.index') }}" class="px-3.5 py-2 text-xs font-semibold rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition flex items-center gap-1.5">
-                    <i class="bx bx-arrow-back"></i>
-                    <span>Back to Batches</span>
+            <!-- Contextual Batch Action Buttons -->
+            <div class="flex items-center gap-2.5 shrink-0 flex-wrap">
+                <a href="{{ route('admin.payroll.index') }}" class="px-3.5 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition flex items-center gap-1.5">
+                    <i class="bx bx-arrow-back text-sm"></i>
+                    <span>Batches Roster</span>
                 </a>
 
                 @if($payrollRun->status === 'draft')
@@ -42,9 +46,9 @@
                         </x-button>
                     </form>
                 @else
-                    <a href="{{ route('admin.banking.index') }}" class="px-3.5 py-2 text-xs font-bold rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm flex items-center gap-1.5 transition">
-                        <i class="bx bxs-bank"></i>
-                        <span>Generate Bank Autopay File</span>
+                    <a href="{{ route('admin.banking.index') }}" class="px-4 py-2 text-xs font-bold rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:from-emerald-700 hover:to-teal-700 shadow-sm flex items-center gap-1.5 transition">
+                        <i class="bx bxs-bank text-sm"></i>
+                        <span>Generate Autopay Exporters</span>
                     </a>
                 @endif
             </div>
@@ -53,9 +57,9 @@
         <!-- Summary Metric Cards (UI Kit) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <x-stat-card 
-                title="Gross Earnings Pool"
+                title="Gross Wages Pool"
                 value="RM {{ number_format($payrollRun->total_gross_amount, 2) }}"
-                change="{{ $payrollRun->total_headcount }} Employees computed"
+                change="{{ $payrollRun->total_headcount }} Staff Computed"
                 changeType="neutral"
                 icon="bx-money"
                 color="indigo"
@@ -71,102 +75,150 @@
             <x-stat-card 
                 title="Employer Contributions"
                 value="RM {{ number_format($payrollRun->total_statutory_employer, 2) }}"
-                change="Company statutory cost"
+                change="Company Statutory Cost"
                 changeType="neutral"
                 icon="bx-buildings"
                 color="purple"
             />
             <x-stat-card 
-                title="Net Take-Home Disbursed"
+                title="Net Disbursement"
                 value="RM {{ number_format($payrollRun->total_net_disbursement, 2) }}"
-                change="To Bank Accounts"
+                change="Total Bank Payout"
                 changeType="positive"
                 icon="bx-wallet"
                 color="emerald"
             />
         </div>
 
-        <!-- Line Item Breakdown Table -->
+        <!-- Line Item Breakdown Table & Search -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
-            <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            
+            <!-- Table Header Toolbar -->
+            <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div class="flex items-center gap-2.5">
                     <div class="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-base">
                         <i class="bx bx-list-ul"></i>
                     </div>
                     <div>
                         <h2 class="text-sm font-bold text-slate-900 dark:text-white">Individual Employee Payslip Calculations</h2>
-                        <p class="text-[11px] text-slate-400">Detailed line item breakdown per statutory regulation Act 4 / Act 800</p>
+                        <p class="text-[11px] text-slate-400">Detailed statutory compliance itemized by Act 4, Act 800, and MTD</p>
                     </div>
                 </div>
-                <div>
-                    <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400">{{ $payrollRun->items->count() }} Staff Records</span>
+
+                <div class="flex items-center gap-2">
+                    <div class="relative">
+                        <i class="bx bx-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                        <input 
+                            type="text" 
+                            id="search-table-input" 
+                            placeholder="Filter employee or ID..." 
+                            onkeyup="filterPayrollTable()" 
+                            class="w-56 text-xs pl-8 pr-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                        />
+                    </div>
+                    <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                        {{ $payrollRun->items->count() }} Records
+                    </span>
                 </div>
             </div>
 
+            <!-- Responsive Table View -->
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs">
+                <table class="w-full text-left text-xs" id="payroll-items-table">
                     <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]">
                         <tr>
-                            <th class="p-3.5">Employee Name &amp; Staff ID</th>
+                            <th class="p-3.5">Employee Name &amp; ID</th>
                             <th class="p-3.5">Basic Salary</th>
                             <th class="p-3.5">Gross Pay</th>
                             <th class="p-3.5">EPF (EE / ER)</th>
                             <th class="p-3.5">SOCSO &amp; SKBBK</th>
                             <th class="p-3.5">EIS</th>
                             <th class="p-3.5">PCB Tax</th>
-                            <th class="p-3.5">Net Pay</th>
+                            <th class="p-3.5 font-bold text-slate-900 dark:text-white">Net Take-Home</th>
                             <th class="p-3.5 text-right">Payslip</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-sans">
                         @forelse($payrollRun->items as $item)
-                            <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition table-row-item">
+                                <!-- Col 1: Employee Name & ID -->
                                 <td class="p-3.5">
                                     <div class="flex items-center gap-2.5">
-                                        <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-indigo-600 to-indigo-500 text-white flex items-center justify-center text-xs font-extrabold shadow-xs shrink-0">
-                                            {{ substr($item->employee?->full_name ?? 'EM', 0, 2) }}
+                                        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-500 text-white flex items-center justify-center text-xs font-extrabold shadow-xs shrink-0">
+                                            {{ strtoupper(substr($item->employee?->full_name ?? 'EM', 0, 2)) }}
                                         </div>
                                         <div class="min-w-0">
-                                            <span class="font-bold text-slate-900 dark:text-white block truncate">{{ $item->employee?->full_name ?? 'Unknown Staff' }}</span>
-                                            <span class="text-[11px] font-mono text-slate-400">{{ $item->employee?->employee_no ?? '—' }} • {{ $item->employee?->designation ?? 'Staff' }}</span>
+                                            <span class="font-bold text-slate-900 dark:text-white block truncate employee-name">{{ $item->employee?->full_name ?? 'Staff Member' }}</span>
+                                            <span class="text-[11px] font-mono text-slate-400 employee-no">{{ $item->employee?->employee_no ?? '—' }} • {{ $item->employee?->designation ?? 'Employee' }}</span>
                                         </div>
                                     </div>
                                 </td>
+
+                                <!-- Col 2: Basic Salary -->
                                 <td class="p-3.5 font-mono text-slate-600 dark:text-slate-400">
                                     RM {{ number_format($item->basic_salary, 2) }}
                                 </td>
-                                <td class="p-3.5 font-mono font-semibold text-slate-900 dark:text-white">
+
+                                <!-- Col 3: Gross Pay -->
+                                <td class="p-3.5 font-mono font-bold text-slate-900 dark:text-white">
                                     RM {{ number_format($item->gross_salary, 2) }}
                                 </td>
+
+                                <!-- Col 4: EPF (EE / ER) -->
                                 <td class="p-3.5 font-mono text-[11px]">
-                                    <span class="text-rose-600 dark:text-rose-400 font-bold">RM {{ number_format($item->epf_employee, 2) }}</span>
-                                    <span class="text-slate-400"> / </span>
-                                    <span class="text-indigo-600 dark:text-indigo-400 font-bold">RM {{ number_format($item->epf_employer, 2) }}</span>
+                                    <span class="font-bold text-rose-600 dark:text-rose-400">RM {{ number_format($item->epf_employee, 2) }}</span>
+                                    <span class="text-slate-400 font-normal"> / </span>
+                                    <span class="font-semibold text-indigo-600 dark:text-indigo-400">RM {{ number_format($item->epf_employer, 2) }}</span>
                                 </td>
+
+                                <!-- Col 5: SOCSO & SKBBK (EE / ER) -->
                                 <td class="p-3.5 font-mono text-[11px]">
-                                    <span class="text-rose-600 dark:text-rose-400 font-bold">RM {{ number_format($item->socso_employee + $item->skbbk_employee, 2) }}</span>
-                                    <span class="text-slate-400"> / </span>
-                                    <span class="text-indigo-600 dark:text-indigo-400 font-bold">RM {{ number_format($item->socso_employer, 2) }}</span>
+                                    <span class="font-bold text-rose-600 dark:text-rose-400">RM {{ number_format($item->socso_employee + $item->skbbk_employee, 2) }}</span>
+                                    <span class="text-slate-400 font-normal"> / </span>
+                                    <span class="font-semibold text-indigo-600 dark:text-indigo-400">RM {{ number_format($item->socso_employer, 2) }}</span>
                                 </td>
+
+                                <!-- Col 6: EIS (EE) -->
+                                <td class="p-3.5 font-mono text-[11px] font-bold text-rose-600 dark:text-rose-400">
+                                    RM {{ number_format($item->eis_employee, 2) }}
+                                </td>
+
+                                <!-- Col 7: PCB Tax -->
                                 <td class="p-3.5 font-mono text-[11px]">
-                                    <span class="text-rose-600 dark:text-rose-400 font-bold">RM {{ number_format($item->eis_employee, 2) }}</span>
+                                    @if($item->pcb_amount > 0)
+                                        <span class="font-bold text-rose-600 dark:text-rose-400">RM {{ number_format($item->pcb_amount, 2) }}</span>
+                                    @else
+                                        <span class="text-slate-400">RM 0.00</span>
+                                    @endif
                                 </td>
-                                <td class="p-3.5 font-mono text-[11px]">
-                                    <span class="text-rose-600 dark:text-rose-400 font-bold">RM {{ number_format($item->pcb_amount, 2) }}</span>
-                                </td>
+
+                                <!-- Col 8: Net Pay -->
                                 <td class="p-3.5 font-mono font-extrabold text-emerald-600 dark:text-emerald-400 text-sm">
                                     RM {{ number_format($item->net_salary, 2) }}
                                 </td>
+
+                                <!-- Col 9: Circular Action Button -->
                                 <td class="p-3.5 text-right">
-                                    <button type="button" onclick="openPayslipModal({{ json_encode($item) }}, {{ json_encode($item->employee) }}, '{{ $payrollRun->batch_no }}', '{{ date("F Y", mktime(0, 0, 0, (int)$payrollRun->period_month, 1, (int)$payrollRun->period_year)) }}')" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-indigo-50 hover:text-indigo-600 dark:hover:bg-indigo-950 dark:hover:text-indigo-300 flex items-center justify-center transition cursor-pointer" title="View Detailed Payslip">
-                                        <i class="bx bx-receipt text-base"></i>
-                                    </button>
+                                    <div class="flex items-center justify-end">
+                                        <button 
+                                            type="button" 
+                                            onclick="openPayslipModal({{ json_encode($item) }}, {{ json_encode($item->employee) }}, '{{ $payrollRun->batch_no }}', '{{ date("F Y", mktime(0, 0, 0, (int)$payrollRun->period_month, 1, (int)$payrollRun->period_year)) }}')" 
+                                            class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-indigo-50 hover:text-indigo-600 dark:hover:bg-indigo-950 dark:hover:text-indigo-300 flex items-center justify-center transition cursor-pointer" 
+                                            title="View Detailed Payslip"
+                                        >
+                                            <i class="bx bx-receipt text-base"></i>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="9" class="p-8 text-center text-slate-400">
-                                    No employee items found for this payroll batch.
+                                <td colspan="9" class="p-12 text-center text-slate-400">
+                                    <div class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center mx-auto mb-3 text-2xl">
+                                        <i class="bx bx-receipt"></i>
+                                    </div>
+                                    <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">No calculation records found</p>
+                                    <p class="text-xs text-slate-400 mt-1">This payroll batch does not have computed employee line items.</p>
                                 </td>
                             </tr>
                         @endforelse
@@ -177,15 +229,20 @@
 
     </div>
 
-    <!-- INDIVIDUAL PAYSLIP MODAL (Label | Value Right-Aligned Structure) -->
+    <!-- INDIVIDUAL PAYSLIP MODAL (Structured 2-Column Right-Aligned Label | Value) -->
     <x-modal id="payslip-modal" title="Digital Payslip Statement" subtitle="Monthly Malaysian Statutory &amp; Net Disbursement Breakdown" icon="bx-receipt" size="lg">
         <div class="space-y-4 text-left text-xs">
             
-            <!-- Employee Header Banner -->
-            <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-800 flex items-center justify-between gap-3.5">
-                <div class="min-w-0">
-                    <h3 class="text-sm font-extrabold text-slate-900 dark:text-white truncate" id="ps-emp-name">Employee Name</h3>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 font-mono truncate" id="ps-emp-no">EMP-00101 • Designation</p>
+            <!-- Employee Header Card Banner -->
+            <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-800 flex items-center justify-between gap-3.5">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-500 text-white flex items-center justify-center text-sm font-extrabold shadow-sm shrink-0" id="ps-emp-avatar">
+                        EM
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="text-sm font-extrabold text-slate-900 dark:text-white truncate" id="ps-emp-name">Employee Name</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-mono truncate" id="ps-emp-no">EMP-00101 • Designation</p>
+                    </div>
                 </div>
                 <div class="text-right shrink-0">
                     <span class="text-[10px] font-bold text-slate-400 block uppercase tracking-wider">Payroll Period</span>
@@ -193,7 +250,7 @@
                 </div>
             </div>
 
-            <!-- Structured Label | Value Rows Table -->
+            <!-- Structured Label | Value Rows Table (Values strictly Right-Aligned) -->
             <div class="rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden bg-white dark:bg-slate-900 divide-y divide-slate-100 dark:divide-slate-800">
                 
                 <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
@@ -206,9 +263,9 @@
                     <div class="text-right font-mono text-slate-800 dark:text-slate-200" id="ps-allowances">RM 0.00</div>
                 </div>
 
-                <div class="grid grid-cols-2 p-3 bg-slate-50/40 dark:bg-slate-800/20 hover:bg-slate-50/60 transition items-center">
-                    <div class="font-bold text-slate-900 dark:text-white">Gross Salary Wages</div>
-                    <div class="text-right font-mono font-extrabold text-slate-900 dark:text-white" id="ps-gross">RM 0.00</div>
+                <div class="grid grid-cols-2 p-3 bg-slate-50/50 dark:bg-slate-800/30 hover:bg-slate-50/70 transition items-center">
+                    <div class="font-bold text-slate-900 dark:text-white">Gross Wages Computed</div>
+                    <div class="text-right font-mono font-extrabold text-slate-900 dark:text-white text-sm" id="ps-gross">RM 0.00</div>
                 </div>
 
                 <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
@@ -231,15 +288,16 @@
                     <div class="text-right font-mono font-bold text-rose-600 dark:text-rose-400" id="ps-pcb">- RM 0.00</div>
                 </div>
 
-                <div class="grid grid-cols-2 p-3.5 bg-emerald-50/50 dark:bg-emerald-950/30 hover:bg-emerald-50/80 transition items-center border-t border-emerald-200 dark:border-emerald-800">
+                <!-- Net Take-Home Highlight -->
+                <div class="grid grid-cols-2 p-3.5 bg-emerald-50/60 dark:bg-emerald-950/40 hover:bg-emerald-50/90 transition items-center border-t border-emerald-200 dark:border-emerald-800">
                     <div class="font-extrabold text-emerald-900 dark:text-emerald-300 text-sm">Net Take-Home Pay</div>
                     <div class="text-right font-mono font-extrabold text-emerald-600 dark:text-emerald-400 text-base" id="ps-net">RM 0.00</div>
                 </div>
 
-                <!-- Employer Statutory (Informational) -->
-                <div class="grid grid-cols-2 p-3 bg-slate-50/20 text-slate-400 dark:text-slate-500 text-[11px] items-center">
+                <!-- Employer Statutory (Company Cost) -->
+                <div class="grid grid-cols-2 p-3 bg-slate-50/30 dark:bg-slate-800/20 text-slate-400 dark:text-slate-500 text-[11px] items-center">
                     <div>Employer EPF / SOCSO / EIS</div>
-                    <div class="text-right font-mono" id="ps-employer-total">RM 0.00</div>
+                    <div class="text-right font-mono font-medium" id="ps-employer-total">RM 0.00</div>
                 </div>
 
             </div>
@@ -254,9 +312,26 @@
 
     <x-slot name="scripts">
         <script>
+            function filterPayrollTable() {
+                const query = document.getElementById('search-table-input').value.toLowerCase();
+                const rows = document.querySelectorAll('.table-row-item');
+                
+                rows.forEach(row => {
+                    const name = row.querySelector('.employee-name')?.textContent.toLowerCase() || '';
+                    const no = row.querySelector('.employee-no')?.textContent.toLowerCase() || '';
+                    if (name.includes(query) || no.includes(query)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+
             function openPayslipModal(item, employee, batchNo, periodText) {
-                document.getElementById('ps-emp-name').textContent = employee.full_name || 'Staff';
-                document.getElementById('ps-emp-no').textContent = (employee.employee_no || '—') + ' • ' + (employee.designation || 'Staff');
+                const fullName = employee?.full_name || 'Staff';
+                document.getElementById('ps-emp-avatar').textContent = fullName.substring(0, 2).toUpperCase();
+                document.getElementById('ps-emp-name').textContent = fullName;
+                document.getElementById('ps-emp-no').textContent = (employee?.employee_no || '—') + ' • ' + (employee?.designation || 'Staff');
                 document.getElementById('ps-period').textContent = periodText;
 
                 document.getElementById('ps-basic').textContent = 'RM ' + parseFloat(item.basic_salary || 0).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
