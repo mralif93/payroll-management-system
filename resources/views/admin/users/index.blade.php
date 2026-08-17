@@ -290,95 +290,137 @@
 
     </div>
 
-    <!-- 1. CREATE USER MODAL -->
-    <x-modal id="create-user-modal" title="Add New Administrative User" subtitle="Create credentials and assign security permissions" icon="bx-user-plus" size="lg">
-        <form method="POST" action="{{ route('admin.users.store') }}" class="space-y-4 text-left">
+    <!-- 1. CREATE USER MODAL (Spacious & Sectioned Design) -->
+    <x-modal id="create-user-modal" title="Add New Administrative User" subtitle="Create credentials and assign security permissions" icon="bx-user-plus" size="2xl">
+        <form method="POST" action="{{ route('admin.users.store') }}" class="space-y-6 text-left">
             @csrf
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <x-input label="Full Name" name="name" required placeholder="e.g. Siti Nurhaliza" />
-                <x-input label="Email Address" name="email" type="email" required placeholder="siti@company.com" />
-                <x-input label="Staff Employee ID" name="staff_id" placeholder="e.g. ADM-003" />
-                <x-input label="Phone Number" name="phone_number" placeholder="+60123456789" />
+            <!-- Section 1: User Identity & Profile -->
+            <div class="space-y-3">
+                <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
+                    <span class="w-6 h-6 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xs font-bold">1</span>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Account Credentials &amp; Identity</h4>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div class="sm:col-span-2">
+                        <x-input label="Full Name" name="name" required placeholder="e.g. Siti Nurhaliza binti Tarudin" icon="bx-user" />
+                    </div>
+                    <x-input label="Email Address" name="email" type="email" required placeholder="siti@payroll.my" icon="bx-envelope" />
+                    <x-input label="Staff ID" name="staff_id" placeholder="e.g. ADM-003" icon="bx-id-card" />
+                    <x-input label="Phone Number" name="phone_number" placeholder="+60123456789" icon="bx-phone" />
+                    <x-input label="Temporary Password" name="password" type="password" required placeholder="Minimum 8 characters" icon="bx-lock-alt" />
+                    
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Account Status</label>
+                        <div class="relative">
+                            <select name="status" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
+                                <option value="active">Active (Full Portal Access Granted)</option>
+                                <option value="inactive">Inactive (Suspended Temporarily)</option>
+                                <option value="suspended">Suspended (Access Terminated)</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+                                <i class="bx bx-chevron-down text-base"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <x-input label="Initial Temporary Password" name="password" type="password" required placeholder="Minimum 8 characters" />
+            <!-- Section 2: Security Role Assignment -->
+            <div class="space-y-3">
+                <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
+                    <span class="w-6 h-6 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs font-bold">2</span>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Access Roles &amp; Permissions</h4>
+                </div>
 
-            <div>
-                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Account Status</label>
-                <select name="status" class="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-2.5 text-slate-900 dark:text-white">
-                    <option value="active">Active (Full Portal Access)</option>
-                    <option value="inactive">Inactive (Suspended Temporarily)</option>
-                    <option value="suspended">Suspended (Access Terminated)</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Assign Access Roles</label>
-                <div class="space-y-2 max-h-36 overflow-y-auto p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     @foreach($roles as $role)
-                        <label class="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
-                            <input type="checkbox" name="role_ids[]" value="{{ $role->id }}" class="rounded text-indigo-600 focus:ring-indigo-500">
-                            <span class="font-bold text-slate-900 dark:text-white">{{ $role->display_name }}</span>
-                            <span class="text-[10px] text-slate-400">({{ $role->name }})</span>
+                        <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-indigo-50/30 dark:hover:bg-indigo-950/20 hover:border-indigo-200 dark:hover:border-indigo-800 transition cursor-pointer">
+                            <input type="checkbox" name="role_ids[]" value="{{ $role->id }}" class="mt-0.5 rounded text-indigo-600 focus:ring-indigo-500">
+                            <div>
+                                <span class="text-xs font-bold text-slate-900 dark:text-white block">{{ $role->display_name }}</span>
+                                <span class="text-[11px] text-slate-400 dark:text-slate-500 block leading-tight mt-0.5">{{ $role->description ?? 'Standard system permissions' }}</span>
+                            </div>
                         </label>
                     @endforeach
                 </div>
             </div>
 
-            <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
-                <x-button variant="secondary" size="sm" type="button" onclick="closeModal('create-user-modal')">
+            <div class="flex items-center justify-end gap-2.5 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <x-button variant="secondary" size="md" type="button" onclick="closeModal('create-user-modal')">
                     Cancel
                 </x-button>
-                <x-button variant="primary" size="sm" type="submit">
+                <x-button variant="primary" size="md" type="submit" icon="bx-check">
                     Create User Account
                 </x-button>
             </div>
         </form>
     </x-modal>
 
-    <!-- 2. EDIT USER MODAL -->
-    <x-modal id="edit-user-modal" title="Edit Administrative User" subtitle="Update personal details, credentials, and role assignments" icon="bx-pencil" size="lg">
-        <form id="edit-user-form" method="POST" action="" class="space-y-4 text-left">
+    <!-- 2. EDIT USER MODAL (Spacious & Sectioned Design) -->
+    <x-modal id="edit-user-modal" title="Edit Administrative User" subtitle="Update personal details, credentials, and role assignments" icon="bx-pencil" size="2xl">
+        <form id="edit-user-form" method="POST" action="" class="space-y-6 text-left">
             @csrf
             @method('PUT')
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <x-input label="Full Name" name="name" id="edit-name" required />
-                <x-input label="Email Address" name="email" id="edit-email" type="email" required />
-                <x-input label="Staff ID" name="staff_id" id="edit-staff-id" />
-                <x-input label="Phone Number" name="phone_number" id="edit-phone" />
+            <!-- Section 1: User Identity & Profile -->
+            <div class="space-y-3">
+                <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
+                    <span class="w-6 h-6 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xs font-bold">1</span>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Account Information</h4>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div class="sm:col-span-2">
+                        <x-input label="Full Name" name="name" id="edit-name" required icon="bx-user" />
+                    </div>
+                    <x-input label="Email Address" name="email" id="edit-email" type="email" required icon="bx-envelope" />
+                    <x-input label="Staff ID" name="staff_id" id="edit-staff-id" icon="bx-id-card" />
+                    <x-input label="Phone Number" name="phone_number" id="edit-phone" icon="bx-phone" />
+                    <x-input label="Change Password (Optional)" name="password" type="password" placeholder="Leave empty to retain current" icon="bx-lock-alt" />
+                    
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Account Status</label>
+                        <div class="relative">
+                            <select name="status" id="edit-status" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
+                                <option value="active">Active (Access Granted)</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="suspended">Suspended (Access Revoked)</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+                                <i class="bx bx-chevron-down text-base"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <x-input label="Change Password (leave empty to retain current)" name="password" type="password" placeholder="Leave empty to retain existing password" />
+            <!-- Section 2: Security Role Assignment -->
+            <div class="space-y-3">
+                <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
+                    <span class="w-6 h-6 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs font-bold">2</span>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Assigned Roles</h4>
+                </div>
 
-            <div>
-                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Account Status</label>
-                <select name="status" id="edit-status" class="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-2.5 text-slate-900 dark:text-white">
-                    <option value="active">Active (Access Granted)</option>
-                    <option value="inactive">Inactive</option>
-                    <option value="suspended">Suspended (Access Revoked)</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Assigned Roles</label>
-                <div class="space-y-2 max-h-36 overflow-y-auto p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900" id="edit-roles-container">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="edit-roles-container">
                     @foreach($roles as $role)
-                        <label class="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
-                            <input type="checkbox" name="role_ids[]" value="{{ $role->id }}" class="edit-role-checkbox rounded text-indigo-600 focus:ring-indigo-500">
-                            <span class="font-bold text-slate-900 dark:text-white">{{ $role->display_name }}</span>
-                            <span class="text-[10px] text-slate-400">({{ $role->name }})</span>
+                        <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-indigo-50/30 dark:hover:bg-indigo-950/20 hover:border-indigo-200 dark:hover:border-indigo-800 transition cursor-pointer">
+                            <input type="checkbox" name="role_ids[]" value="{{ $role->id }}" class="edit-role-checkbox mt-0.5 rounded text-indigo-600 focus:ring-indigo-500">
+                            <div>
+                                <span class="text-xs font-bold text-slate-900 dark:text-white block">{{ $role->display_name }}</span>
+                                <span class="text-[11px] text-slate-400 dark:text-slate-500 block leading-tight mt-0.5">{{ $role->description ?? 'Standard system permissions' }}</span>
+                            </div>
                         </label>
                     @endforeach
                 </div>
             </div>
 
-            <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
-                <x-button variant="secondary" size="sm" type="button" onclick="closeModal('edit-user-modal')">
+            <div class="flex items-center justify-end gap-2.5 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <x-button variant="secondary" size="md" type="button" onclick="closeModal('edit-user-modal')">
                     Cancel
                 </x-button>
-                <x-button variant="primary" size="sm" type="submit">
+                <x-button variant="primary" size="md" type="submit" icon="bx-save">
                     Save Changes
                 </x-button>
             </div>
@@ -448,25 +490,25 @@
         </div>
     </x-modal>
 
-    <!-- 4. RESET / CHANGE PASSWORD MODAL -->
+    <!-- 4. RESET / CHANGE PASSWORD MODAL (Enhanced Design) -->
     <x-modal id="reset-password-modal" title="Reset User Password" subtitle="Assign a new secure password for this administrator" icon="bx-key" iconBg="bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400" size="md">
         <form id="reset-password-form" method="POST" action="" class="space-y-4 text-left">
             @csrf
 
-            <div class="p-3 rounded-xl bg-amber-50/50 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-900/60 text-xs">
-                <span class="font-bold text-amber-800 dark:text-amber-300 block mb-0.5">Resetting Password For:</span>
-                <span class="text-slate-800 dark:text-white font-medium" id="reset-password-user-name">User Name</span>
-                <span class="text-slate-400 font-mono text-[11px] block" id="reset-password-user-email">email@payroll.my</span>
+            <div class="p-3.5 rounded-xl bg-amber-50/50 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-900/60 text-xs">
+                <span class="font-bold text-amber-800 dark:text-amber-300 block mb-0.5">Resetting Credentials For:</span>
+                <span class="text-slate-800 dark:text-white font-bold" id="reset-password-user-name">User Name</span>
+                <span class="text-slate-400 font-mono text-[11px] block mt-0.5" id="reset-password-user-email">email@payroll.my</span>
             </div>
 
-            <x-input label="New Password" name="password" type="password" required placeholder="Minimum 8 characters" />
-            <x-input label="Confirm New Password" name="password_confirmation" type="password" required placeholder="Repeat new password" />
+            <x-input label="New Password" name="password" type="password" required placeholder="Minimum 8 characters" icon="bx-lock-alt" />
+            <x-input label="Confirm New Password" name="password_confirmation" type="password" required placeholder="Repeat new password" icon="bx-lock-open-alt" />
 
-            <div class="flex justify-end gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
-                <x-button variant="secondary" size="sm" type="button" onclick="closeModal('reset-password-modal')">
+            <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+                <x-button variant="secondary" size="md" type="button" onclick="closeModal('reset-password-modal')">
                     Cancel
                 </x-button>
-                <x-button variant="warning" size="sm" type="submit">
+                <x-button variant="warning" size="md" type="submit" icon="bx-check-shield">
                     Update Password
                 </x-button>
             </div>
