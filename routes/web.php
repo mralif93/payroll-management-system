@@ -51,6 +51,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 
     // 4. Banking Autopay & Statutory Exporters
     Route::get('/banking', [ExportAndBankingController::class, 'index'])->name('banking.index');
+    Route::get('/exports', [ExportAndBankingController::class, 'index'])->name('exports.index');
     Route::post('/banking/{payrollRun}/bank-file', [ExportAndBankingController::class, 'generateBankFile'])->name('banking.bank-file');
     Route::post('/banking/{payrollRun}/statutory-file', [ExportAndBankingController::class, 'generateStatutoryFile'])->name('banking.statutory-file');
 

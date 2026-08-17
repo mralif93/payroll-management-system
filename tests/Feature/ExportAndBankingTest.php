@@ -83,9 +83,16 @@ class ExportAndBankingTest extends TestCase
     {
         $response = $this->actingAs($this->admin)->get(route('admin.banking.index'));
         $response->assertStatus(200);
-        $response->assertSee('Banking & Statutory Exporters');
+        $response->assertSee('Bank Autopay & Disbursement');
         $response->assertSee('Maybank2e Multi-Pay');
         $response->assertSee('CIMB BizChannel');
+
+        // Verify Statutory tab
+        $exportsResponse = $this->actingAs($this->admin)->get(route('admin.exports.index'));
+        $exportsResponse->assertStatus(200);
+        $exportsResponse->assertSee('Statutory Agency Exporters');
+        $exportsResponse->assertSee('KWSP EPF i-Akaun');
+        $exportsResponse->assertSee('PERKESO ASSIST Portal');
     }
 
     public function test_can_generate_and_download_maybank2e_autopay_file(): void

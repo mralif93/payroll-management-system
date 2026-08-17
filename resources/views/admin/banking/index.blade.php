@@ -1,22 +1,30 @@
-<x-layouts.admin title="Banking Autopay &amp; Statutory Exporters">
+@php
+    $isExportsTab = request()->routeIs('admin.exports.*') || request()->get('tab') === 'statutory';
+@endphp
+
+<x-layouts.admin :title="$isExportsTab ? 'Statutory Portals & Monthly Exporters' : 'Banking Autopay & Corporate Disbursement'">
 
     <div class="space-y-6">
 
-        <!-- Header Banner -->
+        <!-- Header Banner & Dynamic Title -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
                 <div class="flex items-center gap-2.5">
-                    <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Banking &amp; Statutory Exporters</h1>
-                    <x-badge variant="emerald" dot="true">
-                        Bank Autopay Ready
-                    </x-badge>
+                    <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                        {{ $isExportsTab ? 'Statutory Agency Exporters' : 'Bank Autopay & Disbursement' }}
+                    </h1>
+                    @if($isExportsTab)
+                        <x-badge variant="purple" dot="true">2026 Statutory Compliance</x-badge>
+                    @else
+                        <x-badge variant="emerald" dot="true">Bank Autopay Ready</x-badge>
+                    @endif
                 </div>
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                    Generate corporate electronic bulk payment files (Maybank2e, CIMB BizChannel) and statutory agency files (EPF, SOCSO ASSIST, LHDN CP39).
+                    {{ $isExportsTab ? 'Export official monthly submission files for KWSP EPF i-Akaun, PERKESO ASSIST (Act 4 + SKBBK), and LHDN e-CP39.' : 'Generate corporate electronic bulk salary payment files for Maybank2e, CIMB BizChannel, and Interbank DuitNow/IBG.' }}
                 </p>
             </div>
 
-            <!-- Active Batch Selector Form -->
+            <!-- Active Batch Selector Badge -->
             @if($latestPayrollRun)
                 <div class="flex items-center gap-2 bg-white dark:bg-slate-900 p-2 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
                     <span class="text-xs font-bold text-slate-500 dark:text-slate-400 pl-2">Active Cycle:</span>
@@ -25,6 +33,19 @@
                     </span>
                 </div>
             @endif
+        </div>
+
+        <!-- Navigation Tabs (Bank Autopay vs Statutory Exporters) -->
+        <div class="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
+            <a href="{{ route('admin.banking.index') }}" class="px-4 py-2 text-xs font-bold rounded-xl transition flex items-center gap-2 {{ !$isExportsTab ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-500/20' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700' }}">
+                <i class="bx bxs-bank text-sm"></i>
+                <span>Bank Autopay Formats (M2E / CIMB)</span>
+            </a>
+            <a href="{{ route('admin.exports.index') }}" class="px-4 py-2 text-xs font-bold rounded-xl transition flex items-center gap-2 {{ $isExportsTab ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-500/20' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700' }}">
+                <i class="bx bx-export text-sm"></i>
+                <span>Statutory Agency Portals (KWSP / PERKESO / CP39)</span>
+                <span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold {{ $isExportsTab ? 'bg-indigo-700 text-indigo-100' : 'bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300' }}">2026</span>
+            </a>
         </div>
 
         <!-- Metric Highlights via UI Kit -->
@@ -63,11 +84,11 @@
             />
         </div>
 
-        <!-- 1. Corporate Bank Autopay Formats -->
-        <div class="space-y-3">
+        <!-- 1. Corporate Bank Autopay Formats (Visible on Banking Tab) -->
+        <div class="{{ $isExportsTab ? 'hidden' : 'space-y-3' }}">
             <div class="flex items-center gap-2">
                 <div class="w-6 h-6 rounded-lg bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xs font-bold">1</div>
-                <h2 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Corporate Bank Bulk Autopay</h2>
+                <h2 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Corporate Bank Bulk Autopay Formats</h2>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -172,11 +193,11 @@
             </div>
         </div>
 
-        <!-- 2. Malaysian Statutory Portals Exporters -->
-        <div class="space-y-3">
+        <!-- 2. Malaysian Statutory Portals Exporters (Visible on Statutory Tab) -->
+        <div class="{{ !$isExportsTab ? 'hidden' : 'space-y-3' }}">
             <div class="flex items-center gap-2">
-                <div class="w-6 h-6 rounded-lg bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xs font-bold">2</div>
-                <h2 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Statutory Agency Monthly Uploads</h2>
+                <div class="w-6 h-6 rounded-lg bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xs font-bold">1</div>
+                <h2 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Statutory Agency Monthly Upload Formats</h2>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
