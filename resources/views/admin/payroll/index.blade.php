@@ -113,9 +113,9 @@
                                     @endif
                                 </td>
                                 <td class="p-3.5 text-right">
-                                    <x-button variant="secondary" size="xs" href="{{ route('admin.payroll.show', $run) }}">
+                                    <x-action-button variant="indigo" icon="bx-show" href="{{ route('admin.payroll.show', $run) }}">
                                         View Batch
-                                    </x-button>
+                                    </x-action-button>
                                 </td>
                             </tr>
                         @empty

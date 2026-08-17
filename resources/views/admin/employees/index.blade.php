@@ -138,9 +138,9 @@
                                     <x-badge variant="emerald" dot="true">Active</x-badge>
                                 </td>
                                 <td class="p-3.5 text-right">
-                                    <x-button variant="secondary" size="xs">
+                                    <x-action-button variant="indigo" icon="bx-user" href="{{ route('admin.employees.show', $emp) }}">
                                         View Profile
-                                    </x-button>
+                                    </x-action-button>
                                 </td>
                             </tr>
                         @empty

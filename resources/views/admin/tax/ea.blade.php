@@ -99,9 +99,9 @@
                                     RM {{ number_format($record->total_socso_employee, 2) }}
                                 </td>
                                 <td class="p-3.5 text-right">
-                                    <x-button variant="secondary" size="xs" icon="bx-download">
+                                    <x-action-button variant="rose" icon="bx-download">
                                         Download PDF
-                                    </x-button>
+                                    </x-action-button>
                                 </td>
                             </tr>
                         @empty

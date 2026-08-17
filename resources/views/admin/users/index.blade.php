@@ -179,26 +179,22 @@
                                     @endif
                                 </td>
                                 <td class="p-3.5 text-right">
-                                    <div class="flex items-center justify-end gap-1.5">
-                                        <!-- Show Modal Trigger -->
-                                        <x-button variant="secondary" size="xs" icon="bx-show" onclick="openShowModal({{ json_encode($user) }}, {{ json_encode($user->roles) }})">
+                                    <div class="flex items-center justify-end gap-1.5 flex-wrap">
+                                        <!-- View / Show Profile Action -->
+                                        <x-action-button variant="indigo" icon="bx-show" onclick="openShowModal({{ json_encode($user) }}, {{ json_encode($user->roles) }})">
                                             View
-                                        </x-button>
+                                        </x-action-button>
                                         
-                                        <!-- Edit Modal Trigger -->
-                                        <x-button variant="secondary" size="xs" icon="bx-edit" onclick="openEditModal({{ json_encode($user) }}, {{ json_encode($user->roles->pluck('id')) }})">
+                                        <!-- Edit Action -->
+                                        <x-action-button variant="purple" icon="bx-edit" onclick="openEditModal({{ json_encode($user) }}, {{ json_encode($user->roles->pluck('id')) }})">
                                             Edit
-                                        </x-button>
+                                        </x-action-button>
 
-                                        <!-- Delete Guard Trigger -->
+                                        <!-- Delete Guard Trigger via UI Kit Confirm Modal -->
                                         @if($user->id !== auth()->id())
-                                            <form method="POST" action="{{ route('admin.users.destroy', $user) }}" onsubmit="return confirm('Are you sure you want to remove user {{ $user->name }}?');" class="inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <x-button variant="ghost" size="xs" type="submit" class="text-rose-600 hover:text-rose-700 dark:text-rose-400">
-                                                    <i class="bx bx-trash"></i>
-                                                </x-button>
-                                            </form>
+                                            <x-action-button variant="rose" icon="bx-trash" onclick="confirmDeleteUser({{ $user->id }}, '{{ addslashes($user->name) }}')">
+                                                Delete
+                                            </x-action-button>
                                         @endif
                                     </div>
                                 </td>
@@ -372,8 +368,25 @@
         </div>
     </x-modal>
 
+    <!-- 4. STANDARDIZED UI KIT CONFIRM DELETE MODAL -->
+    <x-confirm-modal 
+        id="delete-user-confirm-modal"
+        title="Delete User Account"
+        message="Are you sure you want to permanently delete this user account? Their administrative access will be revoked immediately."
+        confirmText="Yes, Delete User"
+        confirmVariant="danger"
+    />
+
     <x-slot name="scripts">
         <script>
+            function confirmDeleteUser(userId, userName) {
+                const form = document.getElementById('delete-user-confirm-modal-form');
+                form.action = `/admin/users/${userId}`;
+                document.getElementById('delete-user-confirm-modal-method').value = 'DELETE';
+                document.getElementById('delete-user-confirm-modal-message').textContent = `Are you sure you want to delete user "${userName}"? This action will revoke all portal access.`;
+                openModal('delete-user-confirm-modal');
+            }
+
             function openEditModal(user, roleIds) {
                 const form = document.getElementById('edit-user-form');
                 form.action = `/admin/users/${user.id}`;

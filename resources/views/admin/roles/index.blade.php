@@ -124,18 +124,14 @@
                                     @endif
                                 </td>
                                 <td class="p-3.5 text-right">
-                                    <div class="flex items-center justify-end gap-1.5">
-                                        <x-button variant="secondary" size="xs" onclick="openEditRoleModal({{ json_encode($role) }}, {{ json_encode($role->permissions->pluck('id')) }})">
+                                    <div class="flex items-center justify-end gap-1.5 flex-wrap">
+                                        <x-action-button variant="purple" icon="bx-shield" onclick="openEditRoleModal({{ json_encode($role) }}, {{ json_encode($role->permissions->pluck('id')) }})">
                                             Edit Scope
-                                        </x-button>
+                                        </x-action-button>
                                         @if(!$role->is_system && $role->users->count() === 0)
-                                            <form method="POST" action="{{ route('admin.roles.destroy', $role) }}" onsubmit="return confirm('Are you sure you want to delete this role?');" class="inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <x-button variant="ghost" size="xs" type="submit" class="text-rose-600 hover:text-rose-700 dark:text-rose-400">
-                                                    <i class="bx bx-trash"></i>
-                                                </x-button>
-                                            </form>
+                                            <x-action-button variant="rose" icon="bx-trash" onclick="confirmDeleteRole({{ $role->id }}, '{{ addslashes($role->display_name) }}')">
+                                                Delete
+                                            </x-action-button>
                                         @endif
                                     </div>
                                 </td>
@@ -229,7 +225,7 @@
             </div>
 
             <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
-                <x-button variant="secondary" size="sm" type="button" onclick="document.getElementById('edit-role-modal').close()">
+                <x-button variant="secondary" size="sm" type="button" onclick="closeModal('edit-role-modal')">
                     Cancel
                 </x-button>
                 <x-button variant="primary" size="sm" type="submit">
@@ -239,8 +235,25 @@
         </form>
     </x-modal>
 
+    <!-- UI KIT CONFIRM DELETE ROLE MODAL -->
+    <x-confirm-modal 
+        id="delete-role-confirm-modal"
+        title="Delete Access Role"
+        message="Are you sure you want to permanently delete this custom access role? This operation cannot be undone."
+        confirmText="Yes, Delete Role"
+        confirmVariant="danger"
+    />
+
     <x-slot name="scripts">
         <script>
+            function confirmDeleteRole(roleId, roleName) {
+                const form = document.getElementById('delete-role-confirm-modal-form');
+                form.action = `/admin/roles/${roleId}`;
+                document.getElementById('delete-role-confirm-modal-method').value = 'DELETE';
+                document.getElementById('delete-role-confirm-modal-message').textContent = `Are you sure you want to delete role "${roleName}"?`;
+                openModal('delete-role-confirm-modal');
+            }
+
             function openEditRoleModal(role, permIds) {
                 const form = document.getElementById('edit-role-form');
                 form.action = `/admin/roles/${role.id}`;
@@ -253,7 +266,7 @@
                     cb.checked = permIds.includes(parseInt(cb.value));
                 });
 
-                document.getElementById('edit-role-modal').showModal();
+                openModal('edit-role-modal');
             }
         </script>
     </x-slot>
