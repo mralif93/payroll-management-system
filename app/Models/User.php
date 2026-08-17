@@ -17,7 +17,6 @@ class User extends Authenticatable
         'name',
         'email',
         'phone_number',
-        'role',
         'status',
         'password',
         'last_login_at',
@@ -39,11 +38,33 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user has a specific role.
+     * User Roles Relationship
      */
-    public function hasRole(string $role): bool
+    public function roles()
     {
-        return $this->role === $role;
+        return $this->belongsToMany(Role::class, 'user_roles');
+    }
+
+    /**
+     * Check if user has a specific role by name.
+     */
+    public function hasRole(string|array $roles): bool
+    {
+        if (is_string($roles)) {
+            $roles = [$roles];
+        }
+
+        return $this->roles()->whereIn('name', $roles)->exists();
+    }
+
+    /**
+     * Check if user has a specific permission via assigned roles.
+     */
+    public function hasPermission(string $permission): bool
+    {
+        return $this->roles()
+            ->whereHas('permissions', fn ($query) => $query->where('name', $permission))
+            ->exists();
     }
 
     /**
@@ -51,7 +72,7 @@ class User extends Authenticatable
      */
     public function canManagePayroll(): bool
     {
-        return in_array($this->role, ['super_admin', 'payroll_officer', 'finance_director']);
+        return $this->hasRole(['super_admin', 'payroll_officer', 'finance_director']);
     }
 
     /**
