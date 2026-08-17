@@ -72,45 +72,100 @@
             />
         </div>
 
-        <!-- Filter & Search Bar -->
-        <div class="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col md:flex-row gap-4 justify-between items-center">
-            <form method="GET" action="{{ route('admin.users.index') }}" class="w-full flex flex-col md:flex-row items-center gap-3">
-                <div class="w-full md:w-80">
-                    <x-input 
+        <!-- Modern Search & Filter Command Bar -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs p-3 sm:p-4">
+            <form method="GET" action="{{ route('admin.users.index') }}" class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+                
+                <!-- Main Search Input with Dynamic Clear -->
+                <div class="relative flex-1">
+                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
+                        <i class="bx bx-search text-lg"></i>
+                    </div>
+                    <input 
                         type="text" 
                         name="search" 
-                        placeholder="Search by name, email, or staff ID..." 
-                        value="{{ request('search') }}"
-                        icon="bx-search" 
-                    />
+                        value="{{ request('search') }}" 
+                        placeholder="Search administrators by name, email address, or staff ID (e.g. ADM-001)..." 
+                        class="w-full pl-10 pr-10 py-2.5 rounded-xl text-xs bg-slate-50/80 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 dark:focus:border-indigo-400 transition-all font-sans"
+                    >
+                    @if(request('search'))
+                        <a href="{{ route('admin.users.index', request()->except('search')) }}" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                            <i class="bx bx-x-circle text-base"></i>
+                        </a>
+                    @endif
                 </div>
 
-                <div class="flex items-center gap-2 w-full md:w-auto">
-                    <select name="status" class="text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-2.5 text-slate-900 dark:text-white">
-                        <option value="">All Statuses</option>
-                        <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
-                        <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
-                        <option value="suspended" {{ request('status') === 'suspended' ? 'selected' : '' }}>Suspended</option>
-                    </select>
+                <!-- Filter Controls & Actions Segment -->
+                <div class="flex flex-wrap items-center gap-2.5">
+                    
+                    <!-- Status Filter Dropdown -->
+                    <div class="relative min-w-[130px] flex-1 sm:flex-initial">
+                        <select name="status" onchange="this.form.submit()" class="w-full text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700/80 bg-slate-50/80 dark:bg-slate-800/60 pl-3 pr-8 py-2.5 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 cursor-pointer appearance-none">
+                            <option value="">Status: All</option>
+                            <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>• Active</option>
+                            <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>• Inactive</option>
+                            <option value="suspended" {{ request('status') === 'suspended' ? 'selected' : '' }}>• Suspended</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+                            <i class="bx bx-chevron-down text-base"></i>
+                        </div>
+                    </div>
 
-                    <select name="role_id" class="text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-2.5 text-slate-900 dark:text-white">
-                        <option value="">All Roles</option>
-                        @foreach($roles as $role)
-                            <option value="{{ $role->id }}" {{ request('role_id') == $role->id ? 'selected' : '' }}>{{ $role->display_name }}</option>
-                        @endforeach
-                    </select>
+                    <!-- Role Filter Dropdown -->
+                    <div class="relative min-w-[150px] flex-1 sm:flex-initial">
+                        <select name="role_id" onchange="this.form.submit()" class="w-full text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700/80 bg-slate-50/80 dark:bg-slate-800/60 pl-3 pr-8 py-2.5 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 cursor-pointer appearance-none">
+                            <option value="">Role: All Roles</option>
+                            @foreach($roles as $role)
+                                <option value="{{ $role->id }}" {{ request('role_id') == $role->id ? 'selected' : '' }}>{{ $role->display_name }}</option>
+                            @endforeach
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+                            <i class="bx bx-chevron-down text-base"></i>
+                        </div>
+                    </div>
 
-                    <x-button variant="secondary" size="md" type="submit">
+                    <!-- Search Button -->
+                    <x-button variant="primary" size="md" type="submit" icon="bx-filter-alt">
                         Filter
                     </x-button>
 
+                    <!-- Reset Link / Clear Badge -->
                     @if(request()->hasAny(['search', 'status', 'role_id']))
-                        <a href="{{ route('admin.users.index') }}" class="text-xs text-slate-500 hover:text-indigo-600 dark:text-slate-400 p-2">
+                        <a href="{{ route('admin.users.index') }}" class="inline-flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/50 hover:bg-rose-100 dark:hover:bg-rose-900/60 transition">
+                            <i class="bx bx-reset"></i>
                             Reset
                         </a>
                     @endif
                 </div>
             </form>
+
+            <!-- Active Filter Badges Bar -->
+            @if(request()->hasAny(['search', 'status', 'role_id']))
+                <div class="flex items-center gap-2 mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-[11px] flex-wrap">
+                    <span class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Active Filters:</span>
+                    @if(request('search'))
+                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-medium">
+                            Keyword: "{{ request('search') }}"
+                            <a href="{{ route('admin.users.index', request()->except('search')) }}" class="hover:text-indigo-900 dark:hover:text-white"><i class="bx bx-x"></i></a>
+                        </span>
+                    @endif
+                    @if(request('status'))
+                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-medium">
+                            Status: {{ ucfirst(request('status')) }}
+                            <a href="{{ route('admin.users.index', request()->except('status')) }}" class="hover:text-amber-900 dark:hover:text-white"><i class="bx bx-x"></i></a>
+                        </span>
+                    @endif
+                    @if(request('role_id'))
+                        @php $activeRole = $roles->firstWhere('id', request('role_id')); @endphp
+                        @if($activeRole)
+                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300 font-medium">
+                                Role: {{ $activeRole->display_name }}
+                                <a href="{{ route('admin.users.index', request()->except('role_id')) }}" class="hover:text-purple-900 dark:hover:text-white"><i class="bx bx-x"></i></a>
+                            </span>
+                        @endif
+                    @endif
+                </div>
+            @endif
         </div>
 
         <!-- Users Table -->
