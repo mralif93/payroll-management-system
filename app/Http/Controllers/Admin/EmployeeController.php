@@ -122,11 +122,18 @@ class EmployeeController extends Controller
             'basic_salary' => ['required', 'numeric', 'min:0'],
             'employment_status' => ['required', 'in:active,probation,confirmed,resigned'],
             'employment_type' => ['required', 'in:permanent,contract,intern,part_time'],
+            'resigned_date' => ['nullable', 'date'],
             'bank_name' => ['nullable', 'string'],
             'bank_account_no' => ['nullable', 'string'],
             'email' => ['nullable', 'email'],
             'phone_number' => ['nullable', 'string'],
         ]);
+
+        if ($validated['employment_status'] === 'resigned' && empty($validated['resigned_date'])) {
+            $validated['resigned_date'] = now()->toDateString();
+        } elseif ($validated['employment_status'] !== 'resigned') {
+            $validated['resigned_date'] = null;
+        }
 
         $oldValues = $employee->only(array_keys($validated));
         $employee->update($validated);
@@ -177,7 +184,7 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Toggle employment status between active and resigned/suspended.
+     * Toggle employment status between active and resigned/suspended with optional effective date.
      */
     public function toggleStatus(Request $request, Employee $employee)
     {
@@ -186,7 +193,7 @@ class EmployeeController extends Controller
 
         $employee->employment_status = $newStatus;
         if ($newStatus === 'resigned') {
-            $employee->resigned_date = now();
+            $employee->resigned_date = $request->input('resigned_date', now()->toDateString());
         } else {
             $employee->resigned_date = null;
         }
@@ -200,9 +207,9 @@ class EmployeeController extends Controller
             'user_id' => auth()->id(),
             'module' => 'employees',
             'event' => $newStatus === 'resigned' ? 'employee_resigned' : 'employee_reactivated',
-            'description' => "Employee {$employee->full_name} ({$employee->employee_no}) {$actionText}",
-            'old_values' => ['employment_status' => $oldStatus],
-            'new_values' => ['employment_status' => $newStatus],
+            'description' => "Employee {$employee->full_name} ({$employee->employee_no}) {$actionText} (Effective: " . ($employee->resigned_date?->toDateString() ?? 'N/A') . ")",
+            'old_values' => ['employment_status' => $oldStatus, 'resigned_date' => $employee->getOriginal('resigned_date')],
+            'new_values' => ['employment_status' => $newStatus, 'resigned_date' => $employee->resigned_date?->toDateString()],
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent(),
             'severity' => 'info',

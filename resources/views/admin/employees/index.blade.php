@@ -434,7 +434,7 @@
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Employment Status</label>
                         <div class="relative">
-                            <select name="employment_status" id="edit-emp-status" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
+                            <select name="employment_status" id="edit-emp-status" onchange="toggleResignedDateField(this.value)" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
                                 <option value="active">Active (On Payroll)</option>
                                 <option value="probation">Probation</option>
                                 <option value="confirmed">Confirmed</option>
@@ -450,7 +450,7 @@
                         <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Employment Type</label>
                         <div class="relative">
                             <select name="employment_type" id="edit-emp-type" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
-                                <option value="permanent">Permanent</option>
+                                <option value="permanent">Permanent Staff</option>
                                 <option value="contract">Contract</option>
                                 <option value="intern">Intern</option>
                                 <option value="part_time">Part Time</option>
@@ -459,6 +459,11 @@
                                 <i class="bx bx-chevron-down text-base"></i>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Dynamic Resigned Date Field in Edit Modal -->
+                    <div id="edit-emp-resigned-container" class="hidden sm:col-span-2 p-3 rounded-xl bg-rose-50/60 dark:bg-rose-950/30 border border-rose-200/60 dark:border-rose-900/60">
+                        <x-input label="Official Resignation / Last Day Date" name="resigned_date" id="edit-emp-resigned-date" type="date" icon="bx-calendar-x" helper="Date employee formally offboarded from monthly payroll" />
                     </div>
                 </div>
             </div>
@@ -553,6 +558,12 @@
                     <div class="text-right text-slate-800 dark:text-slate-200" id="show-emp-joined">01 Jan 2026</div>
                 </div>
 
+                <!-- Resigned Date Row (Dynamic if present) -->
+                <div id="show-emp-resigned-row" class="hidden grid grid-cols-2 p-3 bg-rose-50/40 dark:bg-rose-950/20 hover:bg-rose-50/60 dark:hover:bg-rose-950/40 transition items-center">
+                    <div class="font-bold text-rose-600 dark:text-rose-400">Resigned Date</div>
+                    <div class="text-right font-mono font-bold text-rose-600 dark:text-rose-400" id="show-emp-resigned-val">—</div>
+                </div>
+
                 <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
                     <div class="font-bold text-slate-500 dark:text-slate-400">Statutory Deductions</div>
                     <div class="flex items-center justify-end gap-1.5 flex-wrap">
@@ -594,6 +605,15 @@
 
     <x-slot name="scripts">
         <script>
+            function toggleResignedDateField(status) {
+                const container = document.getElementById('edit-emp-resigned-container');
+                if (status === 'resigned') {
+                    container.classList.remove('hidden');
+                } else {
+                    container.classList.add('hidden');
+                }
+            }
+
             function openShowEmployeeModal(emp, deptName) {
                 document.getElementById('show-emp-avatar').textContent = (emp.full_name || 'EM').substring(0, 2).toUpperCase();
                 document.getElementById('show-emp-name').textContent = emp.full_name || '—';
@@ -608,13 +628,21 @@
                 document.getElementById('show-emp-bank').textContent = (emp.bank_name || 'Bank') + ' (' + (emp.bank_account_no || 'Not set') + ')';
                 document.getElementById('show-emp-joined').textContent = emp.joined_date ? new Date(emp.joined_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
 
+                const resignedRow = document.getElementById('show-emp-resigned-row');
+                if (emp.employment_status === 'resigned' || emp.resigned_date) {
+                    resignedRow.classList.remove('hidden');
+                    document.getElementById('show-emp-resigned-val').textContent = emp.resigned_date ? new Date(emp.resigned_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Recorded';
+                } else {
+                    resignedRow.classList.add('hidden');
+                }
+
                 const statusBadge = document.getElementById('show-emp-status-badge');
                 if (emp.employment_status === 'active') {
                     statusBadge.innerHTML = '<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Active</span>';
                 } else if (emp.employment_status === 'probation') {
                     statusBadge.innerHTML = '<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>Probation</span>';
                 } else {
-                    statusBadge.innerHTML = '<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>' + emp.employment_status + '</span>';
+                    statusBadge.innerHTML = '<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>Resigned / Inactive</span>';
                 }
 
                 openModal('show-employee-modal');
@@ -634,6 +662,9 @@
                 document.getElementById('edit-emp-bank-acc').value = emp.bank_account_no || '';
                 document.getElementById('edit-emp-email').value = emp.email || '';
                 document.getElementById('edit-emp-phone').value = emp.phone_number || '';
+                document.getElementById('edit-emp-resigned-date').value = emp.resigned_date ? emp.resigned_date.substring(0, 10) : '';
+
+                toggleResignedDateField(emp.employment_status || 'active');
 
                 openModal('edit-employee-modal');
             }
