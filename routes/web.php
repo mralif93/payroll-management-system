@@ -19,7 +19,7 @@ Route::get('/', function () {
 
 // Component Kit Playground for Development & Design QA
 Route::get('/demo', function () {
-    return view('demo');
+    return view('demo-components');
 })->name('demo');
 
 // Guest-Only Authentication Routes (Auto-redirect authenticated admins to /admin)
