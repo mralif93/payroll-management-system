@@ -99,6 +99,11 @@
                 <span>Statutory Parameters</span>
             </a>
 
+            <a href="/admin/audit" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition">
+                <i class="bx bx-shield-quarter text-lg"></i>
+                <span>Audit Trails</span>
+            </a>
+
             <a href="/demo" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition">
                 <i class="bx bx-cube-alt text-lg"></i>
                 <span>UI Components Kit</span>

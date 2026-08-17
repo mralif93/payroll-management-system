@@ -47,6 +47,14 @@ class AuthController extends Controller
                 'last_login_ip' => $request->ip(),
             ]);
 
+            \App\Models\AuditTrail::log(
+                module: 'auth',
+                event: 'user.login',
+                description: "User {$user->name} ({$user->email}) successfully logged in.",
+                auditable: $user,
+                severity: 'info'
+            );
+
             return redirect()->intended('/admin')->with('status', 'Welcome back to PayFlow MY Admin Console.');
         }
 

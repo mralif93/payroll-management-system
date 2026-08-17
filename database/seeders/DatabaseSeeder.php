@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             StatutoryParameterSeeder::class,
             RoleAndPermissionSeeder::class,
+            AuditTrailSeeder::class,
         ]);
     }
 }
