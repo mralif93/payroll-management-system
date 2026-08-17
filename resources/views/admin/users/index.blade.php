@@ -348,39 +348,39 @@
                 </div>
             </div>
 
-            <!-- Structured Label | Value Rows Table -->
+            <!-- Structured Label | Value Rows Table (Right Aligned Values) -->
             <div class="rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden bg-white dark:bg-slate-900 divide-y divide-slate-100 dark:divide-slate-800">
                 
                 <!-- Row: Staff ID -->
-                <div class="grid grid-cols-3 sm:grid-cols-4 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition">
+                <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
                     <div class="font-bold text-slate-500 dark:text-slate-400">Staff Employee ID</div>
-                    <div class="col-span-2 sm:col-span-3 font-mono font-bold text-slate-900 dark:text-white" id="show-staff-id">ADM-001</div>
+                    <div class="text-right font-mono font-bold text-slate-900 dark:text-white" id="show-staff-id">ADM-001</div>
                 </div>
 
                 <!-- Row: Phone Number -->
-                <div class="grid grid-cols-3 sm:grid-cols-4 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition">
+                <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
                     <div class="font-bold text-slate-500 dark:text-slate-400">Contact Number</div>
-                    <div class="col-span-2 sm:col-span-3 font-mono text-slate-800 dark:text-slate-200" id="show-phone">+6012-3456789</div>
+                    <div class="text-right font-mono text-slate-800 dark:text-slate-200" id="show-phone">+6012-3456789</div>
                 </div>
 
                 <!-- Row: Roles -->
-                <div class="grid grid-cols-3 sm:grid-cols-4 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
+                <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
                     <div class="font-bold text-slate-500 dark:text-slate-400">Access Roles</div>
-                    <div class="col-span-2 sm:col-span-3 flex items-center gap-1.5 flex-wrap" id="show-roles-container">
+                    <div class="flex items-center justify-end gap-1.5 flex-wrap" id="show-roles-container">
                         <x-badge variant="indigo" size="sm">Super Administrator</x-badge>
                     </div>
                 </div>
 
                 <!-- Row: Last Login -->
-                <div class="grid grid-cols-3 sm:grid-cols-4 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition">
+                <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
                     <div class="font-bold text-slate-500 dark:text-slate-400">Last Login Activity</div>
-                    <div class="col-span-2 sm:col-span-3 text-slate-800 dark:text-slate-200" id="show-last-login">Never logged in</div>
+                    <div class="text-right text-slate-800 dark:text-slate-200" id="show-last-login">Never logged in</div>
                 </div>
 
                 <!-- Row: Registered Date -->
-                <div class="grid grid-cols-3 sm:grid-cols-4 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition">
+                <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
                     <div class="font-bold text-slate-500 dark:text-slate-400">Account Created</div>
-                    <div class="col-span-2 sm:col-span-3 text-slate-800 dark:text-slate-200" id="show-created-at">17 Aug 2026</div>
+                    <div class="text-right text-slate-800 dark:text-slate-200" id="show-created-at">17 Aug 2026</div>
                 </div>
 
             </div>
