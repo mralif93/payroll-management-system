@@ -110,14 +110,14 @@
                     </div>
 
                     @if($latestPayrollRun)
-                        <form method="POST" action="{{ route('admin.banking.bank-file', $latestPayrollRun) }}">
-                            @csrf
-                            <input type="hidden" name="format_type" value="maybank2e_fixed">
-                            <input type="hidden" name="download" value="1">
-                            <x-button variant="warning" size="sm" class="w-full" icon="bx-download" type="submit">
-                                Export Maybank2e (.txt)
-                            </x-button>
-                        </form>
+                        <button 
+                            type="button" 
+                            onclick="confirmExport('{{ route('admin.banking.bank-file', $latestPayrollRun) }}', 'format_type', 'maybank2e_fixed', 'Maybank2e Multi-Pay (.txt)', 'Maybank Corporate MAS Fixed-Width Format', '{{ $latestPayrollRun->batch_no }}', 'RM {{ number_format($latestPayrollRun->total_net_disbursement, 2) }}', '{{ $latestPayrollRun->items->count() }} Employees')" 
+                            class="w-full py-2 px-3 text-xs font-semibold rounded-xl bg-amber-500 hover:bg-amber-600 text-white shadow-sm flex items-center justify-center gap-1.5 transition cursor-pointer"
+                        >
+                            <i class="bx bx-download text-base"></i>
+                            <span>Export Maybank2e (.txt)</span>
+                        </button>
                     @else
                         <button disabled class="w-full py-2 text-xs font-semibold rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 cursor-not-allowed">
                             No Batch Available
@@ -143,14 +143,14 @@
                     </div>
 
                     @if($latestPayrollRun)
-                        <form method="POST" action="{{ route('admin.banking.bank-file', $latestPayrollRun) }}">
-                            @csrf
-                            <input type="hidden" name="format_type" value="cimb_bizchannel_csv">
-                            <input type="hidden" name="download" value="1">
-                            <x-button variant="danger" size="sm" class="w-full" icon="bx-download" type="submit">
-                                Export CIMB CSV (.csv)
-                            </x-button>
-                        </form>
+                        <button 
+                            type="button" 
+                            onclick="confirmExport('{{ route('admin.banking.bank-file', $latestPayrollRun) }}', 'format_type', 'cimb_bizchannel_csv', 'CIMB BizChannel CSV (.csv)', 'CIMB Corporate Batch Credit CSV Format', '{{ $latestPayrollRun->batch_no }}', 'RM {{ number_format($latestPayrollRun->total_net_disbursement, 2) }}', '{{ $latestPayrollRun->items->count() }} Employees')" 
+                            class="w-full py-2 px-3 text-xs font-semibold rounded-xl bg-rose-600 hover:bg-rose-700 text-white shadow-sm flex items-center justify-center gap-1.5 transition cursor-pointer"
+                        >
+                            <i class="bx bx-download text-base"></i>
+                            <span>Export CIMB CSV (.csv)</span>
+                        </button>
                     @else
                         <button disabled class="w-full py-2 text-xs font-semibold rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 cursor-not-allowed">
                             No Batch Available
@@ -176,14 +176,14 @@
                     </div>
 
                     @if($latestPayrollRun)
-                        <form method="POST" action="{{ route('admin.banking.bank-file', $latestPayrollRun) }}">
-                            @csrf
-                            <input type="hidden" name="format_type" value="duitnow_txt">
-                            <input type="hidden" name="download" value="1">
-                            <x-button variant="primary" size="sm" class="w-full" icon="bx-download" type="submit">
-                                Export DuitNow (.txt)
-                            </x-button>
-                        </form>
+                        <button 
+                            type="button" 
+                            onclick="confirmExport('{{ route('admin.banking.bank-file', $latestPayrollRun) }}', 'format_type', 'duitnow_txt', 'DuitNow & IBG Batch (.txt)', 'Universal Interbank Direct Credit File', '{{ $latestPayrollRun->batch_no }}', 'RM {{ number_format($latestPayrollRun->total_net_disbursement, 2) }}', '{{ $latestPayrollRun->items->count() }} Employees')" 
+                            class="w-full py-2 px-3 text-xs font-semibold rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm flex items-center justify-center gap-1.5 transition cursor-pointer"
+                        >
+                            <i class="bx bx-download text-base"></i>
+                            <span>Export DuitNow (.txt)</span>
+                        </button>
                     @else
                         <button disabled class="w-full py-2 text-xs font-semibold rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 cursor-not-allowed">
                             No Batch Available
@@ -219,14 +219,14 @@
                     </div>
 
                     @if($latestPayrollRun)
-                        <form method="POST" action="{{ route('admin.banking.statutory-file', $latestPayrollRun) }}">
-                            @csrf
-                            <input type="hidden" name="statutory_body" value="epf">
-                            <input type="hidden" name="download" value="1">
-                            <x-button variant="primary" size="sm" class="w-full" icon="bx-download" type="submit">
-                                Export KWSP File (.csv)
-                            </x-button>
-                        </form>
+                        <button 
+                            type="button" 
+                            onclick="confirmExport('{{ route('admin.banking.statutory-file', $latestPayrollRun) }}', 'statutory_body', 'epf', 'KWSP EPF Form A (.csv)', 'EPF i-Akaun Majikan Upload Schedule', '{{ $latestPayrollRun->batch_no }}', 'RM {{ number_format($latestPayrollRun->items->sum('epf_employee') + $latestPayrollRun->items->sum('epf_employer'), 2) }}', '{{ $latestPayrollRun->items->count() }} Employees')" 
+                            class="w-full py-2 px-3 text-xs font-semibold rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm flex items-center justify-center gap-1.5 transition cursor-pointer"
+                        >
+                            <i class="bx bx-download text-base"></i>
+                            <span>Export KWSP File (.csv)</span>
+                        </button>
                     @else
                         <button disabled class="w-full py-2 text-xs font-semibold rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 cursor-not-allowed">
                             No Batch Available
@@ -252,14 +252,14 @@
                     </div>
 
                     @if($latestPayrollRun)
-                        <form method="POST" action="{{ route('admin.banking.statutory-file', $latestPayrollRun) }}">
-                            @csrf
-                            <input type="hidden" name="statutory_body" value="socso">
-                            <input type="hidden" name="download" value="1">
-                            <x-button variant="secondary" size="sm" class="w-full" icon="bx-download" type="submit">
-                                Export ASSIST File (.txt)
-                            </x-button>
-                        </form>
+                        <button 
+                            type="button" 
+                            onclick="confirmExport('{{ route('admin.banking.statutory-file', $latestPayrollRun) }}', 'statutory_body', 'socso', 'PERKESO ASSIST Schedule (.txt)', 'Form 8A (Act 4 + EIS + June 2026 SKBBK)', '{{ $latestPayrollRun->batch_no }}', 'RM {{ number_format($latestPayrollRun->items->sum('socso_employee') + $latestPayrollRun->items->sum('skbbk_employee') + $latestPayrollRun->items->sum('socso_employer') + $latestPayrollRun->items->sum('eis_employee') + $latestPayrollRun->items->sum('eis_employer'), 2) }}', '{{ $latestPayrollRun->items->count() }} Employees')" 
+                            class="w-full py-2 px-3 text-xs font-semibold rounded-xl bg-purple-600 hover:bg-purple-700 text-white shadow-sm flex items-center justify-center gap-1.5 transition cursor-pointer"
+                        >
+                            <i class="bx bx-download text-base"></i>
+                            <span>Export ASSIST File (.txt)</span>
+                        </button>
                     @else
                         <button disabled class="w-full py-2 text-xs font-semibold rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 cursor-not-allowed">
                             No Batch Available
@@ -285,14 +285,14 @@
                     </div>
 
                     @if($latestPayrollRun)
-                        <form method="POST" action="{{ route('admin.banking.statutory-file', $latestPayrollRun) }}">
-                            @csrf
-                            <input type="hidden" name="statutory_body" value="lhdn_cp39">
-                            <input type="hidden" name="download" value="1">
-                            <x-button variant="danger" size="sm" class="w-full" icon="bx-download" type="submit">
-                                Export CP39 (.txt)
-                            </x-button>
-                        </form>
+                        <button 
+                            type="button" 
+                            onclick="confirmExport('{{ route('admin.banking.statutory-file', $latestPayrollRun) }}', 'statutory_body', 'lhdn_cp39', 'LHDN e-CP39 MTD Schedule (.txt)', 'Monthly Tax Deduction CP39 Data Format', '{{ $latestPayrollRun->batch_no }}', 'RM {{ number_format($latestPayrollRun->items->sum('pcb_amount'), 2) }}', '{{ $latestPayrollRun->items->count() }} Employees')" 
+                            class="w-full py-2 px-3 text-xs font-semibold rounded-xl bg-rose-600 hover:bg-rose-700 text-white shadow-sm flex items-center justify-center gap-1.5 transition cursor-pointer"
+                        >
+                            <i class="bx bx-download text-base"></i>
+                            <span>Export CP39 (.txt)</span>
+                        </button>
                     @else
                         <button disabled class="w-full py-2 text-xs font-semibold rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 cursor-not-allowed">
                             No Batch Available
@@ -386,6 +386,84 @@
         </div>
 
     </div>
+
+    <!-- EXPORT & DOWNLOAD CONFIRMATION MODAL -->
+    <x-modal id="export-confirm-modal" title="Confirm File Generation &amp; Download" subtitle="Verify batch parameters before creating official export file" icon="bx-download" size="md">
+        <form id="export-confirm-form" method="POST" action="">
+            @csrf
+            <input type="hidden" id="modal-param-name" name="" value="">
+            <input type="hidden" name="download" value="1">
+
+            <div class="space-y-4 text-left text-xs">
+                
+                <!-- Notice Banner -->
+                <div class="p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 flex items-start gap-3 text-amber-800 dark:text-amber-200">
+                    <i class="bx bx-info-circle text-lg text-amber-600 shrink-0 mt-0.5"></i>
+                    <div>
+                        <span class="font-bold block text-xs">Official Compliance File Generation</span>
+                        <p class="text-[11px] text-amber-700 dark:text-amber-300 mt-0.5">
+                            Generating this file will create an immutable audit record in the system and prepare direct download.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Structured Metadata Box -->
+                <div class="rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden bg-slate-50/50 dark:bg-slate-900/50 divide-y divide-slate-100 dark:divide-slate-800">
+                    <div class="grid grid-cols-2 p-3 items-center">
+                        <span class="font-bold text-slate-500 dark:text-slate-400">Export Format</span>
+                        <span class="text-right font-bold text-slate-900 dark:text-white" id="modal-format-title">—</span>
+                    </div>
+                    <div class="grid grid-cols-2 p-3 items-center">
+                        <span class="font-bold text-slate-500 dark:text-slate-400">Format Description</span>
+                        <span class="text-right text-[11px] text-slate-600 dark:text-slate-300" id="modal-format-desc">—</span>
+                    </div>
+                    <div class="grid grid-cols-2 p-3 items-center">
+                        <span class="font-bold text-slate-500 dark:text-slate-400">Payroll Cycle Batch</span>
+                        <span class="text-right font-mono font-bold text-indigo-600 dark:text-indigo-400" id="modal-batch-no">—</span>
+                    </div>
+                    <div class="grid grid-cols-2 p-3 items-center">
+                        <span class="font-bold text-slate-500 dark:text-slate-400">Total Records</span>
+                        <span class="text-right font-mono font-semibold text-slate-700 dark:text-slate-300" id="modal-headcount">—</span>
+                    </div>
+                    <div class="grid grid-cols-2 p-3 items-center bg-indigo-50/40 dark:bg-indigo-950/20">
+                        <span class="font-extrabold text-slate-900 dark:text-white">Total Amount</span>
+                        <span class="text-right font-mono font-extrabold text-emerald-600 dark:text-emerald-400 text-sm" id="modal-amount">—</span>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100 dark:border-slate-800">
+                    <x-button variant="secondary" size="sm" type="button" onclick="closeModal('export-confirm-modal')">
+                        Cancel
+                    </x-button>
+                    <x-button variant="primary" size="sm" type="submit" icon="bx-download" onclick="setTimeout(() => closeModal('export-confirm-modal'), 600)">
+                        Confirm &amp; Download File
+                    </x-button>
+                </div>
+            </div>
+        </form>
+    </x-modal>
+
+    <x-slot name="scripts">
+        <script>
+            function confirmExport(actionUrl, paramName, paramValue, formatTitle, formatDesc, batchNo, amount, headcount) {
+                const form = document.getElementById('export-confirm-form');
+                form.action = actionUrl;
+                
+                const hiddenInput = document.getElementById('modal-param-name');
+                hiddenInput.name = paramName;
+                hiddenInput.value = paramValue;
+
+                document.getElementById('modal-format-title').textContent = formatTitle;
+                document.getElementById('modal-format-desc').textContent = formatDesc;
+                document.getElementById('modal-batch-no').textContent = batchNo;
+                document.getElementById('modal-amount').textContent = amount;
+                document.getElementById('modal-headcount').textContent = headcount;
+
+                openModal('export-confirm-modal');
+            }
+        </script>
+    </x-slot>
 
 </x-layouts.admin>
 
