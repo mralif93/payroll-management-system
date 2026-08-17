@@ -36,14 +36,22 @@ class AuthController extends Controller
 
         $remember = $request->boolean('remember');
 
-        if (Auth::attempt($credentials, $remember)) {
+        // Only allow active users to authenticate
+        if (Auth::attempt(array_merge($credentials, ['status' => 'active']), $remember)) {
             $request->session()->regenerate();
+
+            // Record login audit info
+            $user = Auth::user();
+            $user->update([
+                'last_login_at' => now(),
+                'last_login_ip' => $request->ip(),
+            ]);
 
             return redirect()->intended('/admin')->with('status', 'Welcome back to PayFlow MY Admin Console.');
         }
 
         throw ValidationException::withMessages([
-            'email' => __('auth.failed', [], 'en') ?: 'These credentials do not match our records.',
+            'email' => 'These credentials do not match our records or your account is suspended.',
         ]);
     }
 

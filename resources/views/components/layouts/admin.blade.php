@@ -112,7 +112,12 @@
                     {{ substr(Auth::user()->name ?? 'HR', 0, 2) }}
                 </div>
                 <div class="overflow-hidden">
-                    <div class="text-xs font-bold text-slate-900 dark:text-white truncate">{{ Auth::user()->name ?? 'Payroll Officer' }}</div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-xs font-bold text-slate-900 dark:text-white truncate">{{ Auth::user()->name ?? 'Payroll Officer' }}</span>
+                        @if(Auth::user()?->staff_id)
+                            <span class="px-1 py-0.2 rounded text-[9px] font-mono font-bold bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">{{ Auth::user()->staff_id }}</span>
+                        @endif
+                    </div>
                     <div class="text-[10px] text-slate-400 dark:text-slate-500 font-mono truncate">{{ Auth::user()->email ?? 'admin@payroll.my' }}</div>
                 </div>
             </div>
