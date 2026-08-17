@@ -185,8 +185,8 @@
                                             View
                                         </x-action-button>
                                         
-                                        <!-- Edit Action -->
-                                        <x-action-button variant="purple" icon="bx-edit" title="Edit User" onclick="openEditModal({{ json_encode($user) }}, {{ json_encode($user->roles->pluck('id')) }})">
+                                        <!-- Edit Action (Pencil Icon) -->
+                                        <x-action-button variant="purple" icon="bx-pencil" title="Edit User" onclick="openEditModal({{ json_encode($user) }}, {{ json_encode($user->roles->pluck('id')) }})">
                                             Edit
                                         </x-action-button>
 
@@ -283,7 +283,7 @@
     </x-modal>
 
     <!-- 2. EDIT USER MODAL -->
-    <x-modal id="edit-user-modal" title="Edit Administrative User" subtitle="Update personal details, credentials, and role assignments" icon="bx-edit" size="lg">
+    <x-modal id="edit-user-modal" title="Edit Administrative User" subtitle="Update personal details, credentials, and role assignments" icon="bx-pencil" size="lg">
         <form id="edit-user-form" method="POST" action="" class="space-y-4 text-left">
             @csrf
             @method('PUT')
