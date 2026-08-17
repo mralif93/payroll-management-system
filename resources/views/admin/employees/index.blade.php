@@ -341,7 +341,7 @@
                     
                     <x-input label="Joined Date" name="joined_date" type="date" required icon="bx-calendar-check" />
 
-                    <div>
+                    <div class="sm:col-span-2">
                         <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Employment Type</label>
                         <div class="relative">
                             <select name="employment_type" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
