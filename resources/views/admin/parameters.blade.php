@@ -237,6 +237,33 @@
             </div>
         </div>
 
+        @php
+            $epfParams = $parameters['epf']->first()?->value_payload ?? [
+                'standard_employee_rate' => 0.11,
+                'voluntary_reduced_employee_rate' => 0.09,
+                'employer_rate_low_wage' => 0.13,
+                'employer_rate_high_wage' => 0.12,
+                'senior_citizen_employee_rate' => 0.00,
+                'senior_citizen_employer_rate' => 0.04,
+                'salary_threshold' => 5000.00,
+            ];
+            $socsoParams = $parameters['socso']->first()?->value_payload ?? [
+                'wage_ceiling' => 6000.00,
+                'category_1' => ['employer_rate_percentage' => 0.0175, 'employee_base_percentage' => 0.005],
+                'category_2' => ['employer_rate_percentage' => 0.0125, 'employee_base_percentage' => 0.00],
+            ];
+            $eisParams = $parameters['eis']->first()?->value_payload ?? [
+                'wage_ceiling' => 6000.00,
+                'employee_rate' => 0.002,
+                'employer_rate' => 0.002,
+            ];
+            $pcbParams = $parameters['pcb']->first()?->value_payload ?? [
+                'individual_relief' => 9000.00,
+                'spouse_non_working_relief' => 4000.00,
+                'child_relief_per_child' => 2000.00,
+            ];
+        @endphp
+
         <!-- 1. KWSP / EPF Parameter Card -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
             <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
@@ -246,31 +273,36 @@
                     </div>
                     <div>
                         <h2 class="text-sm font-bold text-slate-900 dark:text-white">KWSP / EPF Statutory Parameters (Act 1991)</h2>
-                        <span class="text-[11px] text-slate-400 font-mono">P.U. (A) EPF Act 1991 Third Schedule</span>
+                        <span class="text-[11px] text-slate-400 font-mono">{{ $parameters['epf']->first()?->reference_gazette ?? 'P.U. (A) EPF Act 1991 Third Schedule' }}</span>
                     </div>
                 </div>
-                <x-badge variant="indigo" dot="true">Active Standard</x-badge>
+                <div class="flex items-center gap-2">
+                    <x-badge variant="indigo" dot="true">Active Standard</x-badge>
+                    <x-action-button variant="purple" icon="bx-pencil" title="Edit EPF Rates" onclick="openModal('edit-epf-modal')">
+                        Edit Rates
+                    </x-action-button>
+                </div>
             </div>
 
             <div class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
                     <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Standard Employee</span>
-                    <span class="text-xl font-bold text-slate-900 dark:text-white font-mono mt-1 block">11.0%</span>
-                    <span class="text-[10px] text-slate-400">Voluntary option 9.0%</span>
+                    <span class="text-xl font-bold text-slate-900 dark:text-white font-mono mt-1 block">{{ ($epfParams['standard_employee_rate'] ?? 0.11) * 100 }}%</span>
+                    <span class="text-[10px] text-slate-400">Voluntary option {{ ($epfParams['voluntary_reduced_employee_rate'] ?? 0.09) * 100 }}%</span>
                 </div>
                 <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Employer (Wage &le; RM5k)</span>
-                    <span class="text-xl font-bold text-indigo-600 dark:text-indigo-400 font-mono mt-1 block">13.0%</span>
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Employer (Wage &le; RM{{ number_format($epfParams['salary_threshold'] ?? 5000, 0) }})</span>
+                    <span class="text-xl font-bold text-indigo-600 dark:text-indigo-400 font-mono mt-1 block">{{ ($epfParams['employer_rate_low_wage'] ?? 0.13) * 100 }}%</span>
                     <span class="text-[10px] text-slate-400">Mandatory statutory low wage</span>
                 </div>
                 <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Employer (Wage &gt; RM5k)</span>
-                    <span class="text-xl font-bold text-slate-900 dark:text-white font-mono mt-1 block">12.0%</span>
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Employer (Wage &gt; RM{{ number_format($epfParams['salary_threshold'] ?? 5000, 0) }})</span>
+                    <span class="text-xl font-bold text-slate-900 dark:text-white font-mono mt-1 block">{{ ($epfParams['employer_rate_high_wage'] ?? 0.12) * 100 }}%</span>
                     <span class="text-[10px] text-slate-400">Standard statutory bracket</span>
                 </div>
                 <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
                     <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Senior Citizen (Age &ge; 60)</span>
-                    <span class="text-xl font-bold text-emerald-600 dark:text-emerald-400 font-mono mt-1 block">4.0% (ER) / 0% (EE)</span>
+                    <span class="text-xl font-bold text-emerald-600 dark:text-emerald-400 font-mono mt-1 block">{{ ($epfParams['senior_citizen_employer_rate'] ?? 0.04) * 100 }}% (ER) / {{ ($epfParams['senior_citizen_employee_rate'] ?? 0) * 100 }}% (EE)</span>
                     <span class="text-[10px] text-slate-400">Malaysian Citizens</span>
                 </div>
             </div>
@@ -285,17 +317,22 @@
                     </div>
                     <div>
                         <h2 class="text-sm font-bold text-slate-900 dark:text-white">PERKESO SOCSO &amp; SKBBK (Lindung 24 Jam) Schedule</h2>
-                        <span class="text-[11px] text-slate-400 font-mono">Effective 1 June 2026 • Wage Ceiling RM6,000</span>
+                        <span class="text-[11px] text-slate-400 font-mono">Effective 1 June 2026 • Wage Ceiling RM{{ number_format($socsoParams['wage_ceiling'] ?? 6000, 2) }}</span>
                     </div>
                 </div>
-                <x-badge variant="purple" dot="true">Includes SKBBK 2026</x-badge>
+                <div class="flex items-center gap-2">
+                    <x-badge variant="purple" dot="true">Includes SKBBK 2026</x-badge>
+                    <x-action-button variant="purple" icon="bx-pencil" title="Edit SOCSO Rates" onclick="openModal('edit-socso-modal')">
+                        Edit Schedule
+                    </x-action-button>
+                </div>
             </div>
 
             <div class="p-6 space-y-4">
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
                         <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Act 4 SOCSO Category 1 (Base)</span>
-                        <span class="text-lg font-bold text-slate-900 dark:text-white font-mono mt-1 block">1.75% ER / 0.5% EE</span>
+                        <span class="text-lg font-bold text-slate-900 dark:text-white font-mono mt-1 block">{{ ($socsoParams['category_1']['employer_rate_percentage'] ?? 0.0175) * 100 }}% ER / {{ ($socsoParams['category_1']['employee_base_percentage'] ?? 0.005) * 100 }}% EE</span>
                         <span class="text-[10px] text-slate-400">Employment Injury &amp; Invalidity</span>
                     </div>
                     <div class="p-4 rounded-xl bg-purple-50/60 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800">
@@ -305,7 +342,7 @@
                     </div>
                     <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
                         <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">SOCSO Category 2 (Age &ge; 60)</span>
-                        <span class="text-lg font-bold text-slate-900 dark:text-white font-mono mt-1 block">1.25% ER / RM7.00 SKBBK</span>
+                        <span class="text-lg font-bold text-slate-900 dark:text-white font-mono mt-1 block">{{ ($socsoParams['category_2']['employer_rate_percentage'] ?? 0.0125) * 100 }}% ER / RM7.00 SKBBK</span>
                         <span class="text-[10px] text-slate-400">Employment Injury Only</span>
                     </div>
                 </div>
@@ -327,16 +364,21 @@
                             <span class="text-[10px] text-slate-400">Employment Insurance System</span>
                         </div>
                     </div>
-                    <span class="text-xs font-mono font-bold text-teal-600 dark:text-teal-400">0.2% + 0.2%</span>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-mono font-bold text-teal-600 dark:text-teal-400">{{ ($eisParams['employee_rate'] ?? 0.002) * 100 }}% + {{ ($eisParams['employer_rate'] ?? 0.002) * 100 }}%</span>
+                        <x-action-button variant="purple" icon="bx-pencil" title="Edit EIS Rules" onclick="openModal('edit-eis-modal')">
+                            Edit
+                        </x-action-button>
+                    </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3 text-xs">
                     <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60">
                         <span class="text-[10px] text-slate-400 block">Wage Ceiling Limit</span>
-                        <span class="font-bold text-slate-800 dark:text-white font-mono">RM 6,000.00</span>
+                        <span class="font-bold text-slate-800 dark:text-white font-mono">RM {{ number_format($eisParams['wage_ceiling'] ?? 6000, 2) }}</span>
                     </div>
                     <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60">
                         <span class="text-[10px] text-slate-400 block">Max Deduction (Capped)</span>
-                        <span class="font-bold text-slate-800 dark:text-white font-mono">RM 11.90 each</span>
+                        <span class="font-bold text-slate-800 dark:text-white font-mono">RM {{ number_format(($eisParams['wage_ceiling'] ?? 6000) * ($eisParams['employee_rate'] ?? 0.002) - 0.10, 2) }} each</span>
                     </div>
                 </div>
             </div>
@@ -353,20 +395,25 @@
                             <span class="text-[10px] text-slate-400">Income Tax Act 1967 (Computerised MTD)</span>
                         </div>
                     </div>
-                    <span class="text-xs font-mono font-bold text-rose-600 dark:text-rose-400">Auto MTD Engine</span>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-mono font-bold text-rose-600 dark:text-rose-400">Auto MTD Engine</span>
+                        <x-action-button variant="purple" icon="bx-pencil" title="Edit PCB Reliefs" onclick="openModal('edit-pcb-modal')">
+                            Edit
+                        </x-action-button>
+                    </div>
                 </div>
                 <div class="grid grid-cols-3 gap-2 text-xs">
                     <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60">
                         <span class="text-[9px] text-slate-400 block">Individual (D)</span>
-                        <span class="font-bold text-slate-800 dark:text-white font-mono">RM 9,000</span>
+                        <span class="font-bold text-slate-800 dark:text-white font-mono">RM {{ number_format($pcbParams['individual_relief'] ?? 9000, 0) }}</span>
                     </div>
                     <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60">
                         <span class="text-[9px] text-slate-400 block">Spouse (S)</span>
-                        <span class="font-bold text-slate-800 dark:text-white font-mono">RM 4,000</span>
+                        <span class="font-bold text-slate-800 dark:text-white font-mono">RM {{ number_format($pcbParams['spouse_non_working_relief'] ?? 4000, 0) }}</span>
                     </div>
                     <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60">
                         <span class="text-[9px] text-slate-400 block">Per Child (QC)</span>
-                        <span class="font-bold text-slate-800 dark:text-white font-mono">RM 2,000</span>
+                        <span class="font-bold text-slate-800 dark:text-white font-mono">RM {{ number_format($pcbParams['child_relief_per_child'] ?? 2000, 0) }}</span>
                     </div>
                 </div>
             </div>
@@ -548,7 +595,117 @@
         </form>
     </x-modal>
 
-    <!-- 5. CONFIRM DELETE MODALS -->
+    <!-- 5. EDIT EPF STATUTORY PARAMETERS MODAL -->
+    <x-modal id="edit-epf-modal" title="Edit KWSP / EPF Policy Rates" subtitle="Update Malaysian EPF contribution percentages & wage threshold rules" icon="bx-bank" size="lg">
+        <form method="POST" action="{{ route('admin.parameters.statutory.update', 'epf') }}" class="space-y-4 text-left">
+            @csrf
+            @method('PUT')
+
+            <x-input label="Statutory Gazette Reference" name="reference_gazette" value="{{ $parameters['epf']->first()?->reference_gazette ?? 'P.U. (A) EPF Act 1991 Third Schedule' }}" />
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <x-input label="Standard Employee Rate (%)" name="value_payload[standard_employee_rate]" type="number" step="0.5" value="{{ ($epfParams['standard_employee_rate'] ?? 0.11) * 100 }}" required />
+                <x-input label="Voluntary Reduced Rate (%)" name="value_payload[voluntary_reduced_employee_rate]" type="number" step="0.5" value="{{ ($epfParams['voluntary_reduced_employee_rate'] ?? 0.09) * 100 }}" required />
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                <x-input label="Low Wage Threshold (RM)" name="value_payload[salary_threshold]" type="number" step="100" value="{{ $epfParams['salary_threshold'] ?? 5000 }}" required />
+                <x-input label="Employer Low Wage Rate (%)" name="value_payload[employer_rate_low_wage]" type="number" step="0.5" value="{{ ($epfParams['employer_rate_low_wage'] ?? 0.13) * 100 }}" required />
+                <x-input label="Employer Standard Rate (%)" name="value_payload[employer_rate_high_wage]" type="number" step="0.5" value="{{ ($epfParams['employer_rate_high_wage'] ?? 0.12) * 100 }}" required />
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <x-input label="Senior Citizen ER Rate (%)" name="value_payload[senior_citizen_employer_rate]" type="number" step="0.5" value="{{ ($epfParams['senior_citizen_employer_rate'] ?? 0.04) * 100 }}" required />
+                <x-input label="Senior Citizen EE Rate (%)" name="value_payload[senior_citizen_employee_rate]" type="number" step="0.5" value="{{ ($epfParams['senior_citizen_employee_rate'] ?? 0.00) * 100 }}" required />
+            </div>
+
+            <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <x-button variant="secondary" size="sm" type="button" onclick="closeModal('edit-epf-modal')">
+                    Cancel
+                </x-button>
+                <x-button variant="primary" size="sm" type="submit">
+                    Save EPF Rates
+                </x-button>
+            </div>
+        </form>
+    </x-modal>
+
+    <!-- 6. EDIT SOCSO & SKBBK STATUTORY PARAMETERS MODAL -->
+    <x-modal id="edit-socso-modal" title="Edit PERKESO SOCSO & SKBBK Schedule" subtitle="Configure Act 4 base percentages and June 2026 Lindung 24 Jam rules" icon="bx-shield" size="lg">
+        <form method="POST" action="{{ route('admin.parameters.statutory.update', 'socso') }}" class="space-y-4 text-left">
+            @csrf
+            @method('PUT')
+
+            <x-input label="Statutory Gazette Reference" name="reference_gazette" value="{{ $parameters['socso']->first()?->reference_gazette ?? 'Warta Kerajaan PERKESO SKBBK 2026' }}" />
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                <x-input label="Monthly Wage Ceiling (RM)" name="value_payload[wage_ceiling]" type="number" step="100" value="{{ $socsoParams['wage_ceiling'] ?? 6000 }}" required />
+                <x-input label="Category 1 Employer Rate (%)" name="value_payload[category_1][employer_rate_percentage]" type="number" step="0.05" value="{{ ($socsoParams['category_1']['employer_rate_percentage'] ?? 0.0175) * 100 }}" required />
+                <x-input label="Category 1 Employee Rate (%)" name="value_payload[category_1][employee_base_percentage]" type="number" step="0.05" value="{{ ($socsoParams['category_1']['employee_base_percentage'] ?? 0.005) * 100 }}" required />
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <x-input label="Category 2 (Senior Citizen) ER Rate (%)" name="value_payload[category_2][employer_rate_percentage]" type="number" step="0.05" value="{{ ($socsoParams['category_2']['employer_rate_percentage'] ?? 0.0125) * 100 }}" required />
+                <x-input label="Category 2 (Senior Citizen) EE Rate (%)" name="value_payload[category_2][employee_base_percentage]" type="number" step="0.05" value="{{ ($socsoParams['category_2']['employee_base_percentage'] ?? 0.00) * 100 }}" required />
+            </div>
+
+            <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <x-button variant="secondary" size="sm" type="button" onclick="closeModal('edit-socso-modal')">
+                    Cancel
+                </x-button>
+                <x-button variant="primary" size="sm" type="submit">
+                    Save SOCSO Schedule
+                </x-button>
+            </div>
+        </form>
+    </x-modal>
+
+    <!-- 7. EDIT EIS STATUTORY PARAMETERS MODAL -->
+    <x-modal id="edit-eis-modal" title="Edit SIP / EIS (Act 800) Rates" subtitle="Update Employment Insurance System percentage rates & wage ceiling" icon="bx-briefcase" size="md">
+        <form method="POST" action="{{ route('admin.parameters.statutory.update', 'eis') }}" class="space-y-4 text-left">
+            @csrf
+            @method('PUT')
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <x-input label="Employee EIS Rate (%)" name="value_payload[employee_rate]" type="number" step="0.05" value="{{ ($eisParams['employee_rate'] ?? 0.002) * 100 }}" required />
+                <x-input label="Employer EIS Rate (%)" name="value_payload[employer_rate]" type="number" step="0.05" value="{{ ($eisParams['employer_rate'] ?? 0.002) * 100 }}" required />
+            </div>
+
+            <x-input label="Wage Ceiling Limit (RM)" name="value_payload[wage_ceiling]" type="number" step="100" value="{{ $eisParams['wage_ceiling'] ?? 6000 }}" required />
+
+            <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <x-button variant="secondary" size="sm" type="button" onclick="closeModal('edit-eis-modal')">
+                    Cancel
+                </x-button>
+                <x-button variant="primary" size="sm" type="submit">
+                    Save EIS Parameters
+                </x-button>
+            </div>
+        </form>
+    </x-modal>
+
+    <!-- 8. EDIT PCB TAX RELIEFS MODAL -->
+    <x-modal id="edit-pcb-modal" title="Edit LHDN PCB Standard Reliefs" subtitle="Update statutory individual and dependent relief amounts for monthly tax calculation" icon="bxs-file-pdf" size="md">
+        <form method="POST" action="{{ route('admin.parameters.statutory.update', 'pcb') }}" class="space-y-4 text-left">
+            @csrf
+            @method('PUT')
+
+            <x-input label="Individual Tax Relief (D) (RM)" name="value_payload[individual_relief]" type="number" step="500" value="{{ $pcbParams['individual_relief'] ?? 9000 }}" required />
+            <x-input label="Non-Working Spouse Relief (S) (RM)" name="value_payload[spouse_non_working_relief]" type="number" step="500" value="{{ $pcbParams['spouse_non_working_relief'] ?? 4000 }}" required />
+            <x-input label="Child Relief Per Dependent (QC) (RM)" name="value_payload[child_relief_per_child]" type="number" step="500" value="{{ $pcbParams['child_relief_per_child'] ?? 2000 }}" required />
+
+            <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <x-button variant="secondary" size="sm" type="button" onclick="closeModal('edit-pcb-modal')">
+                    Cancel
+                </x-button>
+                <x-button variant="primary" size="sm" type="submit">
+                    Save PCB Reliefs
+                </x-button>
+            </div>
+        </form>
+    </x-modal>
+
+    <!-- 9. CONFIRM DELETE MODALS -->
     <x-confirm-modal 
         id="delete-department-confirm-modal"
         title="Delete Department"

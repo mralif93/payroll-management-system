@@ -110,6 +110,56 @@ class StatutoryParameterController extends Controller
     }
 
     /**
+     * Update specific statutory policy values (EPF, SOCSO/SKBBK, EIS, PCB).
+     */
+    public function updateStatutoryParameter(Request $request, string $category)
+    {
+        $payload = $request->input('value_payload', []);
+        $referenceGazette = $request->input('reference_gazette');
+
+        $statutory = StatutoryParameter::where('category', $category)->latest('effective_from')->first();
+
+        if ($statutory) {
+            $oldValues = $statutory->value_payload;
+            $newValues = array_merge($oldValues ?? [], $payload);
+            $statutory->value_payload = $newValues;
+            if ($referenceGazette) {
+                $statutory->reference_gazette = $referenceGazette;
+            }
+            $statutory->save();
+        } else {
+            $statutory = StatutoryParameter::create([
+                'category' => $category,
+                'parameter_key' => "{$category}_standard_rules",
+                'name' => strtoupper($category) . ' Statutory Parameters',
+                'description' => "Standard configuration for {$category}",
+                'value_payload' => $payload,
+                'effective_from' => '2024-01-01',
+                'reference_gazette' => $referenceGazette ?? 'Official Gazette',
+                'is_active' => true,
+            ]);
+        }
+
+        $this->parameterResolver->flushCache();
+
+        AuditTrail::create([
+            'auditable_type' => StatutoryParameter::class,
+            'auditable_id' => $statutory->id,
+            'user_id' => auth()->id(),
+            'module' => 'parameters',
+            'event' => 'statutory_rate_updated',
+            'description' => "Updated statutory policy rates for " . strtoupper($category),
+            'old_values' => $oldValues ?? null,
+            'new_values' => $payload,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'severity' => 'warning',
+        ]);
+
+        return redirect()->route('admin.parameters')->with('success', strtoupper($category) . ' statutory parameters updated successfully.');
+    }
+
+    /**
      * Store a newly created corporate department.
      */
     public function storeDepartment(Request $request)
