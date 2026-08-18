@@ -59,12 +59,15 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/tax-ea', [TaxFormEaController::class, 'index'])->name('tax-ea.index');
     Route::post('/tax-ea/compile', [TaxFormEaController::class, 'compileAnnual'])->name('tax-ea.compile');
 
-    // 7. System Governance & Statutory Parameters
+    // 7. System Governance, Statutory Parameters & Allowances
     Route::get('/parameters', [StatutoryParameterController::class, 'index'])->name('parameters');
     Route::post('/parameters', [StatutoryParameterController::class, 'store'])->name('parameters.store');
     Route::post('/parameters/departments', [StatutoryParameterController::class, 'storeDepartment'])->name('parameters.departments.store');
     Route::put('/parameters/departments/{department}', [StatutoryParameterController::class, 'updateDepartment'])->name('parameters.departments.update');
     Route::delete('/parameters/departments/{department}', [StatutoryParameterController::class, 'destroyDepartment'])->name('parameters.departments.destroy');
+    Route::post('/parameters/allowances', [StatutoryParameterController::class, 'storeAllowance'])->name('parameters.allowances.store');
+    Route::put('/parameters/allowances/{component}', [StatutoryParameterController::class, 'updateAllowance'])->name('parameters.allowances.update');
+    Route::delete('/parameters/allowances/{component}', [StatutoryParameterController::class, 'destroyAllowance'])->name('parameters.allowances.destroy');
     Route::get('/audit', [AuditTrailController::class, 'index'])->name('audit');
 
     // 8. User Access & Role Identity Management

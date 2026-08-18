@@ -145,6 +145,95 @@
             </div>
         </div>
 
+        <!-- SECTION: COMPANY SALARY & ALLOWANCE COMPONENTS MANAGEMENT -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
+            <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-teal-50 dark:bg-teal-950/80 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold text-base shadow-xs">
+                        <i class="bx bx-gift"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-sm font-bold text-slate-900 dark:text-white">Allowance &amp; Benefit Components Registry</h2>
+                        <span class="text-[10px] text-slate-400">Configure recurring allowances, statutory taxability (EPF, SOCSO, EIS, PCB) and benefits</span>
+                    </div>
+                </div>
+                <x-button variant="secondary" size="xs" icon="bx-plus" onclick="openModal('add-allowance-modal')">
+                    New Allowance Type
+                </x-button>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                        <tr>
+                            <th class="p-3.5">Allowance Name</th>
+                            <th class="p-3.5">Component Code</th>
+                            <th class="p-3.5">Statutory Rules (EPF / SOCSO / EIS / PCB)</th>
+                            <th class="p-3.5">Assigned Staff</th>
+                            <th class="p-3.5 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-sans">
+                        @forelse($salaryComponents as $comp)
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
+                                <td class="p-3.5 font-bold text-slate-900 dark:text-white">
+                                    {{ $comp->name }}
+                                </td>
+                                <td class="p-3.5 font-mono text-teal-600 dark:text-teal-400 font-bold">
+                                    {{ $comp->code }}
+                                </td>
+                                <td class="p-3.5">
+                                    <div class="flex items-center gap-1.5 flex-wrap text-[10px]">
+                                        @if($comp->is_epf_subject)
+                                            <span class="px-1.5 py-0.5 rounded font-bold bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">EPF</span>
+                                        @endif
+                                        @if($comp->is_socso_subject)
+                                            <span class="px-1.5 py-0.5 rounded font-bold bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">SOCSO</span>
+                                        @endif
+                                        @if($comp->is_eis_subject)
+                                            <span class="px-1.5 py-0.5 rounded font-bold bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">EIS</span>
+                                        @endif
+                                        @if($comp->is_pcb_subject)
+                                            <span class="px-1.5 py-0.5 rounded font-bold bg-rose-50 dark:bg-rose-950 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800">PCB</span>
+                                        @endif
+                                        @if(!$comp->is_epf_subject && !$comp->is_socso_subject && !$comp->is_eis_subject && !$comp->is_pcb_subject)
+                                            <span class="px-1.5 py-0.5 rounded font-medium bg-slate-100 dark:bg-slate-800 text-slate-500">Exempt (Tax Free)</span>
+                                        @endif
+                                    </div>
+                                </td>
+                                <td class="p-3.5 font-mono">
+                                    <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                                        {{ $comp->employee_salary_components_count }} staff
+                                    </span>
+                                </td>
+                                <td class="p-3.5 text-right">
+                                    <div class="flex items-center justify-end gap-1.5 flex-wrap">
+                                        <!-- Edit Action (Pencil) -->
+                                        <x-action-button variant="purple" icon="bx-pencil" title="Edit Allowance Rules" onclick="openEditAllowanceModal({{ json_encode($comp) }})">
+                                            Edit
+                                        </x-action-button>
+
+                                        <!-- Delete Action with Guard -->
+                                        @if($comp->employee_salary_components_count === 0)
+                                            <x-action-button variant="rose" icon="bx-trash" title="Delete Allowance Component" onclick="confirmDeleteAllowance({{ $comp->id }}, '{{ addslashes($comp->name) }}')">
+                                                Delete
+                                            </x-action-button>
+                                        @endif
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="p-8 text-center text-slate-400">
+                                    No allowance components configured. Click "New Allowance Type" to define benefits.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <!-- 1. KWSP / EPF Parameter Card -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
             <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
@@ -323,12 +412,108 @@
         </form>
     </x-modal>
 
-    <!-- 3. CONFIRM DELETE DEPARTMENT MODAL -->
+    <!-- 3. ADD ALLOWANCE COMPONENT MODAL -->
+    <x-modal id="add-allowance-modal" title="Create Custom Allowance Type" subtitle="Define a custom employee allowance and set Malaysian statutory taxability rules" icon="bx-gift" size="lg">
+        <form method="POST" action="{{ route('admin.parameters.allowances.store') }}" class="space-y-4 text-left">
+            @csrf
+            <input type="hidden" name="type" value="allowance">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <x-input label="Allowance Name" name="name" required placeholder="e.g. Technical Certification Allowance" />
+                <x-input label="Component Code" name="code" required placeholder="e.g. TECH_CERT_ALLOW" />
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">Malaysian Statutory Deductibility &amp; Taxability Rules</label>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40">
+                    <label class="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
+                        <input type="checkbox" name="is_epf_subject" value="1" checked class="rounded text-indigo-600 focus:ring-indigo-500">
+                        <span>Subject to KWSP / EPF (11% EE / 12-13% ER)</span>
+                    </label>
+                    <label class="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
+                        <input type="checkbox" name="is_socso_subject" value="1" checked class="rounded text-indigo-600 focus:ring-indigo-500">
+                        <span>Subject to PERKESO SOCSO &amp; SKBBK</span>
+                    </label>
+                    <label class="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
+                        <input type="checkbox" name="is_eis_subject" value="1" checked class="rounded text-indigo-600 focus:ring-indigo-500">
+                        <span>Subject to SIP / EIS (Act 800)</span>
+                    </label>
+                    <label class="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
+                        <input type="checkbox" name="is_pcb_subject" value="1" checked class="rounded text-indigo-600 focus:ring-indigo-500">
+                        <span>Subject to LHDN Monthly Tax (PCB)</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <x-button variant="secondary" size="sm" type="button" onclick="closeModal('add-allowance-modal')">
+                    Cancel
+                </x-button>
+                <x-button variant="primary" size="sm" type="submit">
+                    Create Allowance Type
+                </x-button>
+            </div>
+        </form>
+    </x-modal>
+
+    <!-- 4. EDIT ALLOWANCE COMPONENT MODAL -->
+    <x-modal id="edit-allowance-modal" title="Edit Allowance Component" subtitle="Modify component title and statutory contribution rules" icon="bx-pencil" size="lg">
+        <form id="edit-allowance-form" method="POST" action="" class="space-y-4 text-left">
+            @csrf
+            @method('PUT')
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <x-input label="Allowance Name" name="name" id="edit-allowance-name" required />
+                <x-input label="Component Code" name="code" id="edit-allowance-code" disabled helper="Unique identifier cannot be modified" />
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">Malaysian Statutory Deductibility &amp; Taxability Rules</label>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40">
+                    <label class="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
+                        <input type="checkbox" name="is_epf_subject" id="edit-allowance-epf" value="1" class="rounded text-indigo-600 focus:ring-indigo-500">
+                        <span>Subject to KWSP / EPF (11% EE / 12-13% ER)</span>
+                    </label>
+                    <label class="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
+                        <input type="checkbox" name="is_socso_subject" id="edit-allowance-socso" value="1" class="rounded text-indigo-600 focus:ring-indigo-500">
+                        <span>Subject to PERKESO SOCSO &amp; SKBBK</span>
+                    </label>
+                    <label class="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
+                        <input type="checkbox" name="is_eis_subject" id="edit-allowance-eis" value="1" class="rounded text-indigo-600 focus:ring-indigo-500">
+                        <span>Subject to SIP / EIS (Act 800)</span>
+                    </label>
+                    <label class="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
+                        <input type="checkbox" name="is_pcb_subject" id="edit-allowance-pcb" value="1" class="rounded text-indigo-600 focus:ring-indigo-500">
+                        <span>Subject to LHDN Monthly Tax (PCB)</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <x-button variant="secondary" size="sm" type="button" onclick="closeModal('edit-allowance-modal')">
+                    Cancel
+                </x-button>
+                <x-button variant="primary" size="sm" type="submit">
+                    Save Changes
+                </x-button>
+            </div>
+        </form>
+    </x-modal>
+
+    <!-- 5. CONFIRM DELETE MODALS -->
     <x-confirm-modal 
         id="delete-department-confirm-modal"
         title="Delete Department"
         message="Are you sure you want to delete this organizational department? This action cannot be undone."
         confirmText="Yes, Delete Department"
+        confirmVariant="danger"
+    />
+
+    <x-confirm-modal 
+        id="delete-allowance-confirm-modal"
+        title="Delete Allowance Component"
+        message="Are you sure you want to delete this custom allowance type? This action cannot be undone."
+        confirmText="Yes, Delete Component"
         confirmVariant="danger"
     />
 
@@ -351,7 +536,30 @@
                 document.getElementById('delete-department-confirm-modal-message').textContent = `Are you sure you want to delete department "${deptName}"?`;
                 openModal('delete-department-confirm-modal');
             }
+
+            function openEditAllowanceModal(comp) {
+                const form = document.getElementById('edit-allowance-form');
+                form.action = `/admin/parameters/allowances/${comp.id}`;
+
+                document.getElementById('edit-allowance-name').value = comp.name || '';
+                document.getElementById('edit-allowance-code').value = comp.code || '';
+                document.getElementById('edit-allowance-epf').checked = comp.is_epf_subject == 1;
+                document.getElementById('edit-allowance-socso').checked = comp.is_socso_subject == 1;
+                document.getElementById('edit-allowance-eis').checked = comp.is_eis_subject == 1;
+                document.getElementById('edit-allowance-pcb').checked = comp.is_pcb_subject == 1;
+
+                openModal('edit-allowance-modal');
+            }
+
+            function confirmDeleteAllowance(compId, compName) {
+                const form = document.getElementById('delete-allowance-confirm-modal-form');
+                form.action = `/admin/parameters/allowances/${compId}`;
+                document.getElementById('delete-allowance-confirm-modal-method').value = 'DELETE';
+                document.getElementById('delete-allowance-confirm-modal-message').textContent = `Are you sure you want to delete allowance component "${compName}"?`;
+                openModal('delete-allowance-confirm-modal');
+            }
         </script>
     </x-slot>
 
 </x-layouts.admin>
+

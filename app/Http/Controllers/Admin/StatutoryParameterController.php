@@ -24,8 +24,9 @@ class StatutoryParameterController extends Controller
         $parameters = StatutoryParameter::latest('effective_from')->get()->groupBy('category');
         $company = Company::first();
         $departments = Department::withCount('employees')->orderBy('name')->get();
+        $salaryComponents = \App\Models\SalaryComponent::withCount('employeeSalaryComponents')->orderBy('type')->orderBy('name')->get();
 
-        return view('admin.parameters', compact('parameters', 'company', 'departments'));
+        return view('admin.parameters', compact('parameters', 'company', 'departments', 'salaryComponents'));
     }
 
     /**
@@ -151,5 +152,110 @@ class StatutoryParameterController extends Controller
         ]);
 
         return redirect()->route('admin.parameters')->with('success', "Department '{$oldName}' deleted successfully.");
+    }
+
+    /**
+     * Store a newly created salary allowance component.
+     */
+    public function storeAllowance(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:100'],
+            'code' => ['required', 'string', 'max:50', 'unique:salary_components,code'],
+            'type' => ['required', 'in:allowance,earning,deduction,reimbursement'],
+            'is_epf_subject' => ['nullable', 'boolean'],
+            'is_socso_subject' => ['nullable', 'boolean'],
+            'is_eis_subject' => ['nullable', 'boolean'],
+            'is_pcb_subject' => ['nullable', 'boolean'],
+        ]);
+
+        $validated['is_epf_subject'] = $request->boolean('is_epf_subject');
+        $validated['is_socso_subject'] = $request->boolean('is_socso_subject');
+        $validated['is_eis_subject'] = $request->boolean('is_eis_subject');
+        $validated['is_pcb_subject'] = $request->boolean('is_pcb_subject');
+        $validated['is_active'] = true;
+
+        $component = \App\Models\SalaryComponent::create($validated);
+
+        AuditTrail::create([
+            'auditable_type' => \App\Models\SalaryComponent::class,
+            'auditable_id' => $component->id,
+            'user_id' => auth()->id(),
+            'module' => 'parameters',
+            'event' => 'allowance_created',
+            'description' => "Created salary component/allowance '{$component->name}' ({$component->code})",
+            'old_values' => null,
+            'new_values' => $validated,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'severity' => 'info',
+        ]);
+
+        return redirect()->route('admin.parameters')->with('success', "Allowance component '{$component->name}' created successfully.");
+    }
+
+    /**
+     * Update an existing salary allowance component.
+     */
+    public function updateAllowance(Request $request, \App\Models\SalaryComponent $component)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:100'],
+            'is_epf_subject' => ['nullable', 'boolean'],
+            'is_socso_subject' => ['nullable', 'boolean'],
+            'is_eis_subject' => ['nullable', 'boolean'],
+            'is_pcb_subject' => ['nullable', 'boolean'],
+        ]);
+
+        $validated['is_epf_subject'] = $request->boolean('is_epf_subject');
+        $validated['is_socso_subject'] = $request->boolean('is_socso_subject');
+        $validated['is_eis_subject'] = $request->boolean('is_eis_subject');
+        $validated['is_pcb_subject'] = $request->boolean('is_pcb_subject');
+
+        $oldValues = $component->only(['name', 'is_epf_subject', 'is_socso_subject', 'is_eis_subject', 'is_pcb_subject']);
+        $component->update($validated);
+
+        AuditTrail::create([
+            'auditable_type' => \App\Models\SalaryComponent::class,
+            'auditable_id' => $component->id,
+            'user_id' => auth()->id(),
+            'module' => 'parameters',
+            'event' => 'allowance_updated',
+            'description' => "Updated salary component/allowance '{$component->name}' ({$component->code})",
+            'old_values' => $oldValues,
+            'new_values' => $validated,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'severity' => 'info',
+        ]);
+
+        return redirect()->route('admin.parameters')->with('success', "Allowance '{$component->name}' updated successfully.");
+    }
+
+    /**
+     * Delete an existing salary allowance component.
+     */
+    public function destroyAllowance(Request $request, \App\Models\SalaryComponent $component)
+    {
+        $name = $component->name;
+        $code = $component->code;
+
+        $component->delete();
+
+        AuditTrail::create([
+            'auditable_type' => \App\Models\SalaryComponent::class,
+            'auditable_id' => $component->id,
+            'user_id' => auth()->id(),
+            'module' => 'parameters',
+            'event' => 'allowance_deleted',
+            'description' => "Deleted salary allowance component '{$name}' ({$code})",
+            'old_values' => null,
+            'new_values' => null,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'severity' => 'warning',
+        ]);
+
+        return redirect()->route('admin.parameters')->with('success', "Allowance component '{$name}' removed.");
     }
 }
