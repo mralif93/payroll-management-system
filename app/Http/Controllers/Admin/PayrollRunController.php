@@ -16,32 +16,40 @@ use Illuminate\Support\Str;
 class PayrollRunController extends Controller
 {
     /**
-     * Get exact PERKESO SOCSO (Act 4) Employee and Employer contribution from statutory wage bracket.
+     * Get exact PERKESO SOCSO (Act 4 + 2026 SKBBK Lindung 24 Jam) Employee and Employer contribution from statutory wage bracket.
      */
-    public static function calculateSocso(float $grossWage): array
+    public static function calculateSocso(float $grossWage, bool $isSkbbkEnabled = true): array
     {
         // PERKESO wage ceiling is RM6,000.00
         $wage = min($grossWage, 6000.00);
 
-        if ($wage <= 30.00) return ['ee' => 0.10, 'er' => 0.40];
-        if ($wage <= 50.00) return ['ee' => 0.20, 'er' => 0.70];
-        if ($wage <= 70.00) return ['ee' => 0.30, 'er' => 1.10];
-        if ($wage <= 100.00) return ['ee' => 0.40, 'er' => 1.50];
-        if ($wage <= 140.00) return ['ee' => 0.60, 'er' => 2.10];
-        if ($wage <= 200.00) return ['ee' => 0.85, 'er' => 2.95];
-        if ($wage <= 300.00) return ['ee' => 1.25, 'er' => 4.35];
-        if ($wage <= 400.00) return ['ee' => 1.75, 'er' => 6.15];
-        if ($wage <= 500.00) return ['ee' => 2.25, 'er' => 7.85];
+        if ($wage <= 30.00) return ['ee' => $isSkbbkEnabled ? 0.25 : 0.10, 'er' => 0.40];
+        if ($wage <= 50.00) return ['ee' => $isSkbbkEnabled ? 0.50 : 0.20, 'er' => 0.70];
+        if ($wage <= 70.00) return ['ee' => $isSkbbkEnabled ? 0.75 : 0.30, 'er' => 1.10];
+        if ($wage <= 100.00) return ['ee' => $isSkbbkEnabled ? 1.00 : 0.40, 'er' => 1.50];
+        if ($wage <= 140.00) return ['ee' => $isSkbbkEnabled ? 1.50 : 0.60, 'er' => 2.10];
+        if ($wage <= 200.00) return ['ee' => $isSkbbkEnabled ? 2.15 : 0.85, 'er' => 2.95];
+        if ($wage <= 300.00) return ['ee' => $isSkbbkEnabled ? 3.15 : 1.25, 'er' => 4.35];
+        if ($wage <= 400.00) return ['ee' => $isSkbbkEnabled ? 4.40 : 1.75, 'er' => 6.15];
+        if ($wage <= 500.00) return ['ee' => $isSkbbkEnabled ? 5.65 : 2.25, 'er' => 7.85];
         
         // For wages > RM500 up to RM6000, brackets are in increments of RM100:
-        // E.g., RM4,400.01 - RM4,500.00 => EE: RM22.25, ER: RM77.85
-        // Total Base SOCSO: 0.5% EE, 1.75% ER
+        // Base Act 4: EE 0.50 per RM100 tier (Start 2.25)
+        // 2026 SKBBK (Phase 1: 0.75% EE + 0.5% Act 4 = 1.25% or exact gazetted tier table)
+        // For RM4,400.01 - RM4,500.00: Base Act 4 EE = 22.25, Combined SKBBK 2026 EE = 55.60, ER = 77.85
         $tier = (int) ceil(($wage - 500.00) / 100.00);
-        $ee = 2.25 + ($tier * 0.50);
+        
+        if ($isSkbbkEnabled) {
+            $ee = 5.60 + ($tier * 1.25);
+            $maxEe = 74.40;
+        } else {
+            $ee = 2.25 + ($tier * 0.50);
+            $maxEe = 29.75;
+        }
         $er = 7.85 + ($tier * 1.75);
 
         return [
-            'ee' => min(29.75, round($ee, 2)),
+            'ee' => min($maxEe, round($ee, 2)),
             'er' => min(104.15, round($er, 2)),
         ];
     }
@@ -250,11 +258,12 @@ class PayrollRunController extends Controller
                 }
                 $epfEr = round($gross * $epfErRate, 2);
 
-                // Compute Tiered PERKESO (Act 4 Standard Schedule)
-                $socsoValues = self::calculateSocso($gross);
+                // Compute Tiered PERKESO (Act 4 + 2026 SKBBK if opted in)
+                $isSkbbkEnabled = (bool) ($employee->statutoryProfile?->is_skbbk_contributed ?? true);
+                $socsoValues = self::calculateSocso($gross, $isSkbbkEnabled);
                 $socsoEe = $socsoValues['ee'];
                 $socsoEr = $socsoValues['er'];
-                $skbbkEe = 0.00; // SKBBK is optional experimental scheme or included in employer rate
+                $skbbkEe = 0.00; // SKBBK is included in total employee SOCSO
 
                 // Compute EIS (Act 800 Standard Schedule)
                 $isEisEnabled = (bool) ($employee->statutoryProfile?->is_eis_contributed ?? true);
@@ -411,7 +420,9 @@ class PayrollRunController extends Controller
                 $epfErRate = ($gross <= 5000) ? 0.13 : 0.12;
                 $epfEr = round($gross * $epfErRate, 2);
 
-                $socsoValues = self::calculateSocso($gross);
+                // Compute Tiered PERKESO (Act 4 + 2026 SKBBK if opted in)
+                $isSkbbkEnabled = (bool) ($employee->statutoryProfile?->is_skbbk_contributed ?? true);
+                $socsoValues = self::calculateSocso($gross, $isSkbbkEnabled);
                 $socsoEe = $socsoValues['ee'];
                 $socsoEr = $socsoValues['er'];
                 $skbbkEe = 0.00;
