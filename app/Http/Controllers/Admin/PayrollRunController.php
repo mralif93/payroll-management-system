@@ -92,39 +92,54 @@ class PayrollRunController extends Controller
             $allowances = (float) $employee->salaryComponents->where('salaryComponent.type', 'allowance')->sum('amount');
             $gross = $basic + $allowances;
 
-            // Compute EPF (Dynamic EE Rate: Standard 11%, Reduced 9%, or Custom %; ER Rate: 13% <=RM5k, 12% >RM5k or Custom %)
-            $epfRateType = $employee->statutoryProfile?->epf_rate_type ?? 'standard_11';
-            if ($epfRateType === 'reduced_9') {
-                $epfEeRate = 0.09;
-            } elseif ($epfRateType === 'custom' && $employee->statutoryProfile?->epf_employee_custom_rate) {
-                $epfEeRate = ((float) $employee->statutoryProfile->epf_employee_custom_rate) / 100;
+            $empType = $employee->employment_type ?? 'permanent';
+
+            // 1. Interns (Practical Students receiving allowance) are legally exempt from mandatory EPF, SOCSO & EIS
+            if ($empType === 'intern') {
+                $epfEe = 0.00;
+                $epfEr = 0.00;
+                $socsoEe = 0.00;
+                $skbbkEe = 0.00;
+                $socsoEr = 0.00;
+                $eisEe = 0.00;
+                $eisEr = 0.00;
+                $pcb = 0.00;
             } else {
-                $epfEeRate = 0.11;
+                // 2. Permanent, Contract & Part-Time Staff: Full Statutory Calculation
+                // Compute EPF (Dynamic EE Rate: Standard 11%, Reduced 9%, or Custom %; ER Rate: 13% <=RM5k, 12% >RM5k or Custom %)
+                $epfRateType = $employee->statutoryProfile?->epf_rate_type ?? 'standard_11';
+                if ($epfRateType === 'reduced_9') {
+                    $epfEeRate = 0.09;
+                } elseif ($epfRateType === 'custom' && $employee->statutoryProfile?->epf_employee_custom_rate) {
+                    $epfEeRate = ((float) $employee->statutoryProfile->epf_employee_custom_rate) / 100;
+                } else {
+                    $epfEeRate = 0.11;
+                }
+
+                $epfEe = round($gross * $epfEeRate, 2);
+
+                if ($epfRateType === 'custom' && $employee->statutoryProfile?->epf_employer_custom_rate) {
+                    $epfErRate = ((float) $employee->statutoryProfile->epf_employer_custom_rate) / 100;
+                } else {
+                    $epfErRate = ($gross <= 5000) ? 0.13 : 0.12;
+                }
+                $epfEr = round($gross * $epfErRate, 2);
+
+                // Compute Tiered PERKESO (Base Act 4 + Optional June 2026 SKBBK)
+                $isSkbbkEnabled = (bool) ($employee->statutoryProfile?->is_skbbk_contributed ?? true);
+                $socsoEe = ($gross <= 2000) ? 9.90 : min(29.90, round($gross * 0.005, 2));
+                $skbbkEe = $isSkbbkEnabled ? (($gross <= 2000) ? 14.50 : min(43.50, round($gross * 0.00725, 2))) : 0.00;
+                $socsoEr = ($gross <= 2000) ? 34.15 : min(104.15, round($gross * 0.0175, 2));
+
+                // Compute EIS (0.2% EE, 0.2% ER capped @ RM6k)
+                $isEisEnabled = (bool) ($employee->statutoryProfile?->is_eis_contributed ?? true);
+                $eisWage = min($gross, 6000.00);
+                $eisEe = $isEisEnabled ? round($eisWage * 0.002, 2) : 0.00;
+                $eisEr = $isEisEnabled ? round($eisWage * 0.002, 2) : 0.00;
+
+                // Compute PCB Estimation
+                $pcb = ($gross > 3500) ? round(($gross - 3500) * 0.08, 2) : 0.00;
             }
-
-            $epfEe = round($gross * $epfEeRate, 2);
-
-            if ($epfRateType === 'custom' && $employee->statutoryProfile?->epf_employer_custom_rate) {
-                $epfErRate = ((float) $employee->statutoryProfile->epf_employer_custom_rate) / 100;
-            } else {
-                $epfErRate = ($gross <= 5000) ? 0.13 : 0.12;
-            }
-            $epfEr = round($gross * $epfErRate, 2);
-
-            // Compute Tiered PERKESO (Base Act 4 + Optional June 2026 SKBBK)
-            $isSkbbkEnabled = (bool) ($employee->statutoryProfile?->is_skbbk_contributed ?? true);
-            $socsoEe = ($gross <= 2000) ? 9.90 : min(29.90, round($gross * 0.005, 2));
-            $skbbkEe = $isSkbbkEnabled ? (($gross <= 2000) ? 14.50 : min(43.50, round($gross * 0.00725, 2))) : 0.00;
-            $socsoEr = ($gross <= 2000) ? 34.15 : min(104.15, round($gross * 0.0175, 2));
-
-            // Compute EIS (0.2% EE, 0.2% ER capped @ RM6k)
-            $isEisEnabled = (bool) ($employee->statutoryProfile?->is_eis_contributed ?? true);
-            $eisWage = min($gross, 6000.00);
-            $eisEe = $isEisEnabled ? round($eisWage * 0.002, 2) : 0.00;
-            $eisEr = $isEisEnabled ? round($eisWage * 0.002, 2) : 0.00;
-
-            // Compute PCB Estimation
-            $pcb = ($gross > 3500) ? round(($gross - 3500) * 0.08, 2) : 0.00;
 
             $totalDeductions = $epfEe + $socsoEe + $skbbkEe + $eisEe + $pcb;
             $netSalary = $gross - $totalDeductions;
