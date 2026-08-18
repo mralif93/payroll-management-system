@@ -64,9 +64,10 @@ class EmployeeController extends Controller
 
         $employee = Employee::create($validated);
 
-        // Auto-create statutory profile with configured toggles
+        // Auto-create statutory profile with configured toggles and EPF rate
         $employee->statutoryProfile()->create([
-            'epf_rate_type' => 'standard_11',
+            'epf_rate_type' => $request->input('epf_rate_type', 'standard_11'),
+            'epf_employee_custom_rate' => $request->filled('epf_employee_custom_rate') ? (float) $request->input('epf_employee_custom_rate') : null,
             'socso_category' => 'category_1_full',
             'is_eis_contributed' => $request->boolean('is_eis_contributed', true),
             'is_skbbk_contributed' => $request->boolean('is_skbbk_contributed', true),
@@ -132,6 +133,8 @@ class EmployeeController extends Controller
             'resigned_date' => ['nullable', 'date'],
             'bank_name' => ['nullable', 'string'],
             'bank_account_no' => ['nullable', 'string'],
+            'epf_rate_type' => ['nullable', 'in:standard_11,reduced_9,custom'],
+            'epf_employee_custom_rate' => ['nullable', 'numeric', 'min:0', 'max:100'],
         ]);
 
         if ($validated['employment_status'] === 'resigned' && empty($validated['resigned_date'])) {
@@ -143,10 +146,12 @@ class EmployeeController extends Controller
         $oldValues = $employee->only(array_keys($validated));
         $employee->update($validated);
 
-        // Update statutory profile toggles
+        // Update statutory profile toggles and EPF rate
         $employee->statutoryProfile()->updateOrCreate(
             ['employee_id' => $employee->id],
             [
+                'epf_rate_type' => $request->input('epf_rate_type', 'standard_11'),
+                'epf_employee_custom_rate' => $request->filled('epf_employee_custom_rate') ? (float) $request->input('epf_employee_custom_rate') : null,
                 'is_skbbk_contributed' => $request->boolean('is_skbbk_contributed'),
                 'is_eis_contributed' => $request->boolean('is_eis_contributed'),
             ]

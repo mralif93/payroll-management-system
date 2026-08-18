@@ -92,9 +92,23 @@ class PayrollRunController extends Controller
             $allowances = (float) $employee->salaryComponents->where('salaryComponent.type', 'allowance')->sum('amount');
             $gross = $basic + $allowances;
 
-            // Compute EPF (11% EE, 12%/13% ER)
-            $epfEe = round($gross * 0.11, 2);
-            $epfErRate = ($gross <= 5000) ? 0.13 : 0.12;
+            // Compute EPF (Dynamic EE Rate: Standard 11%, Reduced 9%, or Custom %; ER Rate: 13% <=RM5k, 12% >RM5k or Custom %)
+            $epfRateType = $employee->statutoryProfile?->epf_rate_type ?? 'standard_11';
+            if ($epfRateType === 'reduced_9') {
+                $epfEeRate = 0.09;
+            } elseif ($epfRateType === 'custom' && $employee->statutoryProfile?->epf_employee_custom_rate) {
+                $epfEeRate = ((float) $employee->statutoryProfile->epf_employee_custom_rate) / 100;
+            } else {
+                $epfEeRate = 0.11;
+            }
+
+            $epfEe = round($gross * $epfEeRate, 2);
+
+            if ($epfRateType === 'custom' && $employee->statutoryProfile?->epf_employer_custom_rate) {
+                $epfErRate = ((float) $employee->statutoryProfile->epf_employer_custom_rate) / 100;
+            } else {
+                $epfErRate = ($gross <= 5000) ? 0.13 : 0.12;
+            }
             $epfEr = round($gross * $epfErRate, 2);
 
             // Compute Tiered PERKESO (Base Act 4 + Optional June 2026 SKBBK)

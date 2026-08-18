@@ -381,9 +381,33 @@
             <div class="space-y-3">
                 <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
                     <span class="w-6 h-6 rounded-lg bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xs font-bold">4</span>
-                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Statutory Scheme Toggles &amp; Opt-Outs</h4>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Statutory Scheme Toggles &amp; EPF Rates</h4>
                 </div>
 
+                <!-- EPF Rate Configuration -->
+                <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 space-y-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">KWSP / EPF Employee Rate</label>
+                            <div class="relative">
+                                <select name="epf_rate_type" id="create-emp-epf-rate-type" onchange="toggleCustomEpfFields(this.value, 'create')" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
+                                    <option value="standard_11">Standard Statutory (11.0% EE)</option>
+                                    <option value="reduced_9">Voluntary Reduced Rate (9.0% EE)</option>
+                                    <option value="custom">Custom Specified Rate (%)</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+                                    <i class="bx bx-chevron-down text-base"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="create-custom-epf-container" class="hidden">
+                            <x-input label="Custom Employee EPF Rate (%)" name="epf_employee_custom_rate" id="create-emp-epf-custom-rate" type="number" step="0.5" placeholder="e.g. 13.0" icon="bx-percentage" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SKBBK & EIS Checkboxes -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-indigo-50/20 transition cursor-pointer">
                         <input type="checkbox" name="is_skbbk_contributed" value="1" checked class="mt-0.5 rounded text-indigo-600 focus:ring-indigo-500">
@@ -549,9 +573,33 @@
             <div class="space-y-3">
                 <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
                     <span class="w-6 h-6 rounded-lg bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xs font-bold">4</span>
-                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Statutory Scheme Toggles &amp; Opt-Outs</h4>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Statutory Scheme Toggles &amp; EPF Rates</h4>
                 </div>
 
+                <!-- EPF Rate Configuration -->
+                <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 space-y-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">KWSP / EPF Employee Rate</label>
+                            <div class="relative">
+                                <select name="epf_rate_type" id="edit-emp-epf-rate-type" onchange="toggleCustomEpfFields(this.value, 'edit')" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
+                                    <option value="standard_11">Standard Statutory (11.0% EE)</option>
+                                    <option value="reduced_9">Voluntary Reduced Rate (9.0% EE)</option>
+                                    <option value="custom">Custom Specified Rate (%)</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+                                    <i class="bx bx-chevron-down text-base"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="edit-custom-epf-container" class="hidden">
+                            <x-input label="Custom Employee EPF Rate (%)" name="epf_employee_custom_rate" id="edit-emp-epf-custom-rate" type="number" step="0.5" placeholder="e.g. 13.0" icon="bx-percentage" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SKBBK & EIS Checkboxes -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-indigo-50/20 transition cursor-pointer">
                         <input type="checkbox" name="is_skbbk_contributed" id="edit-emp-skbbk" value="1" class="mt-0.5 rounded text-indigo-600 focus:ring-indigo-500">
@@ -719,6 +767,15 @@
                 }
             }
 
+            function toggleCustomEpfFields(rateType, modalType) {
+                const container = document.getElementById(`${modalType}-custom-epf-container`);
+                if (rateType === 'custom') {
+                    container.classList.remove('hidden');
+                } else {
+                    container.classList.add('hidden');
+                }
+            }
+
             function openShowEmployeeModal(emp, deptName) {
                 document.getElementById('show-emp-avatar').textContent = (emp.full_name || 'EM').substring(0, 2).toUpperCase();
                 document.getElementById('show-emp-name').textContent = emp.full_name || '—';
@@ -738,10 +795,15 @@
 
                 // Dynamic Statutory Badges
                 const statutoryContainer = document.getElementById('show-emp-statutory-badges');
+                const epfType = emp.statutory_profile ? emp.statutory_profile.epf_rate_type : 'standard_11';
+                let epfLabel = 'EPF 11%';
+                if (epfType === 'reduced_9') epfLabel = 'EPF 9% (Voluntary)';
+                else if (epfType === 'custom') epfLabel = `EPF ${parseFloat(emp.statutory_profile.epf_employee_custom_rate || 0)}% (Custom)`;
+
                 const isSkbbk = emp.statutory_profile ? emp.statutory_profile.is_skbbk_contributed : true;
                 const isEis = emp.statutory_profile ? emp.statutory_profile.is_eis_contributed : true;
                 statutoryContainer.innerHTML = `
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">EPF 11%</span>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">${epfLabel}</span>
                     ${isSkbbk ? '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">SKBBK</span>' : '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700">Opted Out (SKBBK)</span>'}
                     ${isEis ? '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">EIS</span>' : ''}
                 `;
@@ -788,7 +850,13 @@
                 document.getElementById('edit-emp-phone').value = emp.phone_number || '';
                 document.getElementById('edit-emp-resigned-date').value = emp.resigned_date ? emp.resigned_date.substring(0, 10) : '';
 
-                // Statutory Checkboxes
+                // Statutory EPF Rate & Checkboxes
+                const epfType = emp.statutory_profile ? emp.statutory_profile.epf_rate_type : 'standard_11';
+                const epfCustomRate = emp.statutory_profile ? emp.statutory_profile.epf_employee_custom_rate : '';
+                document.getElementById('edit-emp-epf-rate-type').value = epfType;
+                document.getElementById('edit-emp-epf-custom-rate').value = epfCustomRate || '';
+                toggleCustomEpfFields(epfType, 'edit');
+
                 const isSkbbk = emp.statutory_profile ? (emp.statutory_profile.is_skbbk_contributed == 1) : true;
                 const isEis = emp.statutory_profile ? (emp.statutory_profile.is_eis_contributed == 1) : true;
                 document.getElementById('edit-emp-skbbk').checked = isSkbbk;
