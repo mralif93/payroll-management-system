@@ -97,15 +97,17 @@ class PayrollRunController extends Controller
             $epfErRate = ($gross <= 5000) ? 0.13 : 0.12;
             $epfEr = round($gross * $epfErRate, 2);
 
-            // Compute Tiered PERKESO (Base Act 4 + June 2026 SKBBK)
+            // Compute Tiered PERKESO (Base Act 4 + Optional June 2026 SKBBK)
+            $isSkbbkEnabled = (bool) ($employee->statutoryProfile?->is_skbbk_contributed ?? true);
             $socsoEe = ($gross <= 2000) ? 9.90 : min(29.90, round($gross * 0.005, 2));
-            $skbbkEe = ($gross <= 2000) ? 14.50 : min(43.50, round($gross * 0.00725, 2));
+            $skbbkEe = $isSkbbkEnabled ? (($gross <= 2000) ? 14.50 : min(43.50, round($gross * 0.00725, 2))) : 0.00;
             $socsoEr = ($gross <= 2000) ? 34.15 : min(104.15, round($gross * 0.0175, 2));
 
             // Compute EIS (0.2% EE, 0.2% ER capped @ RM6k)
+            $isEisEnabled = (bool) ($employee->statutoryProfile?->is_eis_contributed ?? true);
             $eisWage = min($gross, 6000.00);
-            $eisEe = round($eisWage * 0.002, 2);
-            $eisEr = round($eisWage * 0.002, 2);
+            $eisEe = $isEisEnabled ? round($eisWage * 0.002, 2) : 0.00;
+            $eisEr = $isEisEnabled ? round($eisWage * 0.002, 2) : 0.00;
 
             // Compute PCB Estimation
             $pcb = ($gross > 3500) ? round(($gross - 3500) * 0.08, 2) : 0.00;
