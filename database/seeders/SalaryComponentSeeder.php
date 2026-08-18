@@ -10,7 +10,7 @@ class SalaryComponentSeeder extends Seeder
     public function run(): void
     {
         $components = [
-            // Allowances
+            // 1. Contractual & Variable Allowances (Subject to EPF, SOCSO, EIS, PCB)
             [
                 'code' => 'ATT_ALLOW',
                 'name' => 'Attendance Allowance',
@@ -20,6 +20,73 @@ class SalaryComponentSeeder extends Seeder
                 'is_eis_subject' => true,
                 'is_pcb_subject' => true,
             ],
+            [
+                'code' => 'HOUSING_ALLOW',
+                'name' => 'Housing / Living Allowance (COLA)',
+                'type' => 'allowance',
+                'is_epf_subject' => true,
+                'is_socso_subject' => true,
+                'is_eis_subject' => true,
+                'is_pcb_subject' => true,
+            ],
+            [
+                'code' => 'SHIFT_ALLOW',
+                'name' => 'Shift Allowance',
+                'type' => 'allowance',
+                'is_epf_subject' => true,
+                'is_socso_subject' => true,
+                'is_eis_subject' => true,
+                'is_pcb_subject' => true,
+            ],
+            [
+                'code' => 'COMMISSION',
+                'name' => 'Sales Commission',
+                'type' => 'allowance',
+                'is_epf_subject' => true,
+                'is_socso_subject' => true,
+                'is_eis_subject' => true,
+                'is_pcb_subject' => true,
+            ],
+            [
+                'code' => 'OVERTIME',
+                'name' => 'Overtime (OT) Payment',
+                'type' => 'allowance',
+                'is_epf_subject' => true,
+                'is_socso_subject' => true,
+                'is_eis_subject' => true,
+                'is_pcb_subject' => true,
+            ],
+            [
+                'code' => 'SERVICE_CHARGE',
+                'name' => 'Service Charge / Service Points',
+                'type' => 'allowance',
+                'is_epf_subject' => true,
+                'is_socso_subject' => true,
+                'is_eis_subject' => true,
+                'is_pcb_subject' => true,
+            ],
+
+            // 2. Annual Bonus & Gratuity (Subject to EPF/PCB but exempt from SOCSO/EIS)
+            [
+                'code' => 'ANNUAL_BONUS',
+                'name' => 'Annual Performance Bonus',
+                'type' => 'allowance',
+                'is_epf_subject' => true,
+                'is_socso_subject' => false, // Exempt from SOCSO/EIS under Act 4
+                'is_eis_subject' => false,
+                'is_pcb_subject' => true,
+            ],
+            [
+                'code' => 'GRATUITY',
+                'name' => 'Retirement / Service Gratuity',
+                'type' => 'allowance',
+                'is_epf_subject' => false,
+                'is_socso_subject' => false,
+                'is_eis_subject' => false,
+                'is_pcb_subject' => false, // Tax-exempt under conditions
+            ],
+
+            // 3. Official Reimbursements & Travel Concessions (Statutorily Exempt from EPF, SOCSO, EIS)
             [
                 'code' => 'TRAVEL_ALLOW',
                 'name' => 'Transport / Travel Allowance',
@@ -48,24 +115,25 @@ class SalaryComponentSeeder extends Seeder
                 'is_pcb_subject' => false,
             ],
             [
-                'code' => 'HOUSING_ALLOW',
-                'name' => 'Housing / Living Allowance (COLA)',
+                'code' => 'PARKING_CLAIM',
+                'name' => 'Parking & Toll Reimbursement',
                 'type' => 'allowance',
-                'is_epf_subject' => true,
-                'is_socso_subject' => true,
-                'is_eis_subject' => true,
-                'is_pcb_subject' => true,
+                'is_epf_subject' => false,
+                'is_socso_subject' => false,
+                'is_eis_subject' => false,
+                'is_pcb_subject' => false,
             ],
             [
-                'code' => 'SHIFT_ALLOW',
-                'name' => 'Shift Allowance',
+                'code' => 'MEDICAL_CLAIM',
+                'name' => 'Medical & Clinic Reimbursement',
                 'type' => 'allowance',
-                'is_epf_subject' => true,
-                'is_socso_subject' => true,
-                'is_eis_subject' => true,
-                'is_pcb_subject' => true,
+                'is_epf_subject' => false,
+                'is_socso_subject' => false,
+                'is_eis_subject' => false,
+                'is_pcb_subject' => false,
             ],
-            // Deductions
+
+            // 4. Standard Deductions
             [
                 'code' => 'UNPAID_LEAVE',
                 'name' => 'Unpaid Leave Deduction',
@@ -114,7 +182,7 @@ class SalaryComponentSeeder extends Seeder
         ];
 
         foreach ($components as $c) {
-            SalaryComponent::firstOrCreate(['code' => $c['code']], $c);
+            SalaryComponent::updateOrCreate(['code' => $c['code']], $c);
         }
     }
 }
