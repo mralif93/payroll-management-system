@@ -129,65 +129,73 @@
     <!-- MAIN RIGHT CONTENT COLUMN -->
     <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
         
-        <!-- Top App Bar Header -->
-        <header class="h-16 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between px-4 sm:px-6 lg:px-8 shrink-0 transition-colors sticky top-0 z-30 shadow-xs">
+        <!-- Top App Bar Header (Modern Floating Glassmorphic Design) -->
+        <header class="h-16 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200/60 dark:border-slate-800/60 flex items-center justify-between px-4 sm:px-6 lg:px-8 shrink-0 transition-all duration-300 sticky top-0 z-30 shadow-2xs">
             
-            <!-- Left: Mobile Hamburger, Logo & Context Breadcrumbs -->
+            <!-- Left: Mobile Drawer Trigger & Clean Breadcrumbs Hierarchy -->
             <div class="flex items-center gap-3 min-w-0">
-                <!-- Hamburger Button for Mobile -->
+                <!-- Hamburger Trigger for Mobile Drawer -->
                 <button 
                     type="button" 
                     onclick="toggleMobileSidebar()" 
-                    class="lg:hidden p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer shadow-2xs"
+                    class="lg:hidden p-2 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer shadow-2xs"
                     title="Open Navigation Menu"
                 >
-                    <i class="bx bx-menu text-xl"></i>
+                    <i class="bx bx-menu-alt-left text-xl"></i>
                 </button>
 
-                <!-- Breadcrumbs Hierarchy -->
-                <nav class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 min-w-0" aria-label="Breadcrumb">
-                    <a href="/admin" class="font-medium text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition hidden sm:inline truncate">
-                        Console
+                <!-- Modern Breadcrumb Pill Badge -->
+                <div class="flex items-center gap-2 text-xs min-w-0">
+                    <a href="/admin" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100/70 dark:bg-slate-800/60 text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 font-medium transition text-[11px]">
+                        <i class="bx bx-home-alt text-xs"></i>
+                        <span>Console</span>
                     </a>
                     <i class="bx bx-chevron-right text-slate-300 dark:text-slate-700 hidden sm:inline text-sm shrink-0"></i>
-                    <span class="font-bold text-slate-900 dark:text-white truncate max-w-[140px] sm:max-w-[240px] md:max-w-none">
-                        {{ $headerTitle ?? 'System Governance' }}
-                    </span>
-                </nav>
+                    <div class="flex items-center gap-2 min-w-0">
+                        <span class="font-bold text-slate-900 dark:text-white truncate text-xs sm:text-sm tracking-tight">
+                            {{ $headerTitle ?? 'System Governance' }}
+                        </span>
+                        <span class="hidden md:inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/60">
+                            v2.4 Active
+                        </span>
+                    </div>
+                </div>
             </div>
 
             <!-- Right: Interactive Controls & User Profile -->
-            <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+            <div class="flex items-center gap-2 sm:gap-2.5 shrink-0">
                 
-                <!-- Theme Toggle Button -->
+                <!-- Modern Segmented Theme Toggle Button -->
                 <button 
                     type="button" 
                     onclick="toggleDarkMode()" 
-                    class="p-2 sm:px-2.5 sm:py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-amber-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer flex items-center gap-1.5 shadow-2xs"
-                    title="Toggle Theme"
+                    class="p-2 sm:px-2.5 sm:py-1.5 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-800/70 text-slate-600 dark:text-amber-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer flex items-center gap-1.5 shadow-2xs group"
+                    title="Toggle Light / Dark Mode"
                 >
-                    <i class="bx bx-moon dark:hidden text-base"></i>
-                    <i class="bx bx-sun hidden dark:inline text-base text-amber-400"></i>
+                    <div class="w-5 h-5 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-amber-400 group-hover:scale-110 transition-transform">
+                        <i class="bx bx-moon dark:hidden text-xs"></i>
+                        <i class="bx bx-sun hidden dark:inline text-xs text-amber-400"></i>
+                    </div>
                     <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-300 hidden md:inline">
                         <span class="dark:hidden">Light</span>
                         <span class="hidden dark:inline">Dark</span>
                     </span>
                 </button>
 
-                <!-- Notifications Flyout Trigger & Menu -->
+                <!-- Notifications Flyout Trigger -->
                 <div class="relative" id="notifications-menu-container">
                     <button 
                         type="button" 
                         onclick="toggleNotificationsMenu(event)"
-                        class="relative p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer shadow-2xs"
+                        class="relative p-2 sm:p-2.5 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-800/70 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer shadow-2xs"
                         title="System Notifications"
                     >
-                        <i class="bx bx-bell text-lg"></i>
+                        <i class="bx bx-bell text-lg leading-none"></i>
                         <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white dark:ring-slate-900 animate-pulse"></span>
                     </button>
 
                     <!-- Notifications Flyout -->
-                    <div id="notifications-menu" class="hidden absolute right-0 mt-2.5 w-80 sm:w-88 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl z-50 overflow-hidden transform opacity-0 scale-95 transition-all duration-200">
+                    <div id="notifications-menu" class="hidden absolute right-0 mt-2.5 w-80 sm:w-88 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 rounded-2xl shadow-xl z-50 overflow-hidden transform opacity-0 scale-95 transition-all duration-200">
                         <div class="p-3.5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
                             <div class="flex items-center gap-2">
                                 <span class="text-xs font-bold text-slate-900 dark:text-white">Notifications</span>
@@ -202,7 +210,7 @@
                                 </div>
                                 <div class="flex-1 min-w-0">
                                     <p class="font-semibold text-slate-800 dark:text-white leading-tight">Statutory Rules Active</p>
-                                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">2026 EPF & SOCSO SKBBK tables loaded.</p>
+                                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">2026 EPF &amp; SOCSO SKBBK tables loaded.</p>
                                     <span class="text-[10px] text-slate-400 mt-1 block font-mono">10 mins ago</span>
                                 </div>
                             </div>
@@ -220,20 +228,20 @@
                     </div>
                 </div>
 
-                <!-- Statutory Badge (Tablet & Desktop) -->
-                <div class="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs text-xs font-semibold">
+                <!-- Live Statutory Status Pill Badge (Desktop) -->
+                <div class="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs text-xs font-semibold">
                     <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                     <span>Statutory 2026</span>
                 </div>
 
-                <div class="h-6 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block mx-0.5"></div>
+                <div class="h-6 w-px bg-slate-200/80 dark:bg-slate-800 hidden sm:block mx-0.5"></div>
 
-                <!-- User Profile Interactive Dropdown -->
+                <!-- User Profile Interactive Dropdown Trigger -->
                 <div class="relative" id="user-menu-container">
                     <button 
                         type="button" 
                         onclick="toggleUserMenu(event)"
-                        class="flex items-center gap-2.5 p-1 sm:px-2.5 sm:py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer shadow-2xs group select-none"
+                        class="flex items-center gap-2.5 p-1 sm:pl-1.5 sm:pr-2.5 sm:py-1 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer shadow-2xs group select-none"
                     >
                         <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-600 via-indigo-700 to-blue-700 text-white font-bold flex items-center justify-center text-xs shadow-xs shrink-0 group-hover:scale-105 transition-transform">
                             {{ substr(auth()->user()?->name ?? 'PA', 0, 2) }}
@@ -250,7 +258,7 @@
                     </button>
 
                     <!-- Dropdown Flyout Menu -->
-                    <div id="user-menu" class="hidden absolute right-0 mt-2.5 w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl z-50 overflow-hidden transform opacity-0 scale-95 transition-all duration-200">
+                    <div id="user-menu" class="hidden absolute right-0 mt-2.5 w-64 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 rounded-2xl shadow-xl z-50 overflow-hidden transform opacity-0 scale-95 transition-all duration-200">
                         
                         <!-- Header with User info -->
                         <div class="p-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 flex items-center gap-3">
