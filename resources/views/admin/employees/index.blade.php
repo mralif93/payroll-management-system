@@ -542,7 +542,7 @@
                 </div>
             </div>
 
-            <!-- Structured Label | Value Rows Table -->
+            <!-- Structured Label | Value Rows Table (Values strictly Right-Aligned) -->
             <div class="rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden bg-white dark:bg-slate-900 divide-y divide-slate-100 dark:divide-slate-800">
                 
                 <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
@@ -551,12 +551,27 @@
                 </div>
 
                 <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
+                    <div class="font-bold text-slate-500 dark:text-slate-400">NRIC / Passport No.</div>
+                    <div class="text-right font-mono font-bold text-slate-900 dark:text-white" id="show-emp-nric">—</div>
+                </div>
+
+                <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
+                    <div class="font-bold text-slate-500 dark:text-slate-400">Date of Birth</div>
+                    <div class="text-right font-mono text-slate-800 dark:text-slate-200" id="show-emp-birth">—</div>
+                </div>
+
+                <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
+                    <div class="font-bold text-slate-500 dark:text-slate-400">Gender</div>
+                    <div class="text-right text-slate-800 dark:text-slate-200 uppercase font-semibold text-[11px]" id="show-emp-gender">—</div>
+                </div>
+
+                <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
                     <div class="font-bold text-slate-500 dark:text-slate-400">Email Address</div>
                     <div class="text-right font-mono text-slate-800 dark:text-slate-200" id="show-emp-email">—</div>
                 </div>
 
                 <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
-                    <div class="font-bold text-slate-500 dark:text-slate-400">Contact Number</div>
+                    <div class="font-bold text-slate-500 dark:text-slate-400">Contact Phone</div>
                     <div class="text-right font-mono text-slate-800 dark:text-slate-200" id="show-emp-phone">—</div>
                 </div>
 
@@ -587,7 +602,7 @@
 
                 <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
                     <div class="font-bold text-slate-500 dark:text-slate-400">Joined Date</div>
-                    <div class="text-right text-slate-800 dark:text-slate-200" id="show-emp-joined">01 Jan 2026</div>
+                    <div class="text-right font-mono text-slate-800 dark:text-slate-200" id="show-emp-joined">01 Jan 2026</div>
                 </div>
 
                 <!-- Resigned Date Row (Dynamic if present) -->
@@ -651,6 +666,9 @@
                 document.getElementById('show-emp-name').textContent = emp.full_name || '—';
                 document.getElementById('show-emp-designation').textContent = (emp.designation || 'Staff') + ' • ' + deptName;
                 document.getElementById('show-emp-no').textContent = emp.employee_no || '—';
+                document.getElementById('show-emp-nric').textContent = emp.nric_passport || '—';
+                document.getElementById('show-emp-birth').textContent = emp.birth_date ? new Date(emp.birth_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
+                document.getElementById('show-emp-gender').textContent = (emp.gender === 'female' ? 'Female (Perempuan)' : 'Male (Lelaki)');
                 document.getElementById('show-emp-email').textContent = emp.email || '—';
                 document.getElementById('show-emp-phone').textContent = emp.phone_number || '—';
                 document.getElementById('show-emp-dept').textContent = deptName;
