@@ -16,6 +16,48 @@ use Illuminate\Support\Str;
 class PayrollRunController extends Controller
 {
     /**
+     * Get exact KWSP / EPF Employee and Employer contribution according to EPF Act 1991 (Third Schedule).
+     * Rule 1: Exact percentages are NOT allowed except for wages > RM20,000.00. Total contribution includes cents rounded to next ringgit.
+     * Rule 2: Wage <= RM5,000 => EE 11%, ER 13%.
+     * Rule 3: Wage > RM5,000 => EE 11%, ER 12%.
+     * Rule 4: Senior citizen (Age 60+) => EE 0%, ER 4%.
+     */
+    public static function calculateEpf(float $grossWage, string $epfRateType = 'standard_11', ?float $customEeRate = null, ?float $customErRate = null, bool $isSenior = false): array
+    {
+        if ($grossWage <= 0) {
+            return ['ee' => 0.00, 'er' => 0.00];
+        }
+
+        if ($isSenior) {
+            $eeRate = 0.00;
+            $erRate = 0.04;
+        } elseif ($epfRateType === 'reduced_9') {
+            $eeRate = 0.09;
+            $erRate = ($grossWage <= 5000.00) ? 0.13 : 0.12;
+        } elseif ($epfRateType === 'custom') {
+            $eeRate = ($customEeRate !== null) ? ($customEeRate / 100.0) : 0.11;
+            $erRate = ($customErRate !== null) ? ($customErRate / 100.0) : (($grossWage <= 5000.00) ? 0.13 : 0.12);
+        } else {
+            $eeRate = 0.11;
+            $erRate = ($grossWage <= 5000.00) ? 0.13 : 0.12;
+        }
+
+        // For wages <= RM20,000, KWSP statutory rule rounds to the next ringgit (ceil) or exact table lookup
+        if ($grossWage <= 20000.00) {
+            $ee = ($eeRate > 0) ? (float) ceil(round($grossWage * $eeRate, 4)) : 0.00;
+            $er = ($erRate > 0) ? (float) ceil(round($grossWage * $erRate, 4)) : 0.00;
+        } else {
+            $ee = round($grossWage * $eeRate, 2);
+            $er = round($grossWage * $erRate, 2);
+        }
+
+        return [
+            'ee' => $ee,
+            'er' => $er,
+        ];
+    }
+
+    /**
      * Get exact PERKESO SOCSO (Act 4 + 2026 SKBBK Lindung 24 Jam) Employee and Employer contribution from statutory wage bracket.
      */
     public static function calculateSocso(float $grossWage, bool $isSkbbkEnabled = true): array
@@ -255,24 +297,14 @@ class PayrollRunController extends Controller
                 $pcb = 0.00;
             } else {
                 // 3. Permanent, Contract & Part-Time Staff: Full Statutory Calculation
-                // Compute EPF (Dynamic EE Rate: Standard 11%, Reduced 9%, or Custom %; ER Rate: 13% <=RM5k, 12% >RM5k or Custom %)
                 $epfRateType = $employee->statutoryProfile?->epf_rate_type ?? 'standard_11';
-                if ($epfRateType === 'reduced_9') {
-                    $epfEeRate = 0.09;
-                } elseif ($epfRateType === 'custom' && $employee->statutoryProfile?->epf_employee_custom_rate) {
-                    $epfEeRate = ((float) $employee->statutoryProfile->epf_employee_custom_rate) / 100;
-                } else {
-                    $epfEeRate = 0.11;
-                }
+                $customEeRate = $employee->statutoryProfile?->epf_employee_custom_rate ? (float) $employee->statutoryProfile->epf_employee_custom_rate : null;
+                $customErRate = $employee->statutoryProfile?->epf_employer_custom_rate ? (float) $employee->statutoryProfile->epf_employer_custom_rate : null;
+                $isSenior = ($employee->birth_date && \Carbon\Carbon::parse($employee->birth_date)->age >= 60);
 
-                $epfEe = round($gross * $epfEeRate, 2);
-
-                if ($epfRateType === 'custom' && $employee->statutoryProfile?->epf_employer_custom_rate) {
-                    $epfErRate = ((float) $employee->statutoryProfile->epf_employer_custom_rate) / 100;
-                } else {
-                    $epfErRate = ($gross <= 5000) ? 0.13 : 0.12;
-                }
-                $epfEr = round($gross * $epfErRate, 2);
+                $epfValues = self::calculateEpf($gross, $epfRateType, $customEeRate, $customErRate, $isSenior);
+                $epfEe = $epfValues['ee'];
+                $epfEr = $epfValues['er'];
 
                 // Compute Tiered PERKESO (Act 4 + 2026 SKBBK if opted in)
                 $isSkbbkEnabled = (bool) ($employee->statutoryProfile?->is_skbbk_contributed ?? true);
@@ -431,10 +463,13 @@ class PayrollRunController extends Controller
                 $pcb = 0.00;
             } else {
                 $epfRateType = $employee->statutoryProfile?->epf_rate_type ?? 'standard_11';
-                $epfEeRate = ($epfRateType === 'reduced_9') ? 0.09 : 0.11;
-                $epfEe = round($gross * $epfEeRate, 2);
-                $epfErRate = ($gross <= 5000) ? 0.13 : 0.12;
-                $epfEr = round($gross * $epfErRate, 2);
+                $customEeRate = $employee->statutoryProfile?->epf_employee_custom_rate ? (float) $employee->statutoryProfile->epf_employee_custom_rate : null;
+                $customErRate = $employee->statutoryProfile?->epf_employer_custom_rate ? (float) $employee->statutoryProfile->epf_employer_custom_rate : null;
+                $isSenior = ($employee->birth_date && \Carbon\Carbon::parse($employee->birth_date)->age >= 60);
+
+                $epfValues = self::calculateEpf($gross, $epfRateType, $customEeRate, $customErRate, $isSenior);
+                $epfEe = $epfValues['ee'];
+                $epfEr = $epfValues['er'];
 
                 // Compute Tiered PERKESO (Act 4 + 2026 SKBBK if opted in)
                 $isSkbbkEnabled = (bool) ($employee->statutoryProfile?->is_skbbk_contributed ?? true);
