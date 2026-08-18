@@ -244,8 +244,8 @@
 
     </div>
 
-    <!-- INDIVIDUAL PAYSLIP MODAL (Structured 2-Column Right-Aligned Label | Value) -->
-    <x-modal id="payslip-modal" title="Digital Payslip Statement" subtitle="Monthly Malaysian Statutory &amp; Net Disbursement Breakdown" icon="bx-receipt" size="lg">
+    <!-- INDIVIDUAL PAYSLIP MODAL (Clear 3-Column Structured Breakdown: Employer | Employee | Sub-Total) -->
+    <x-modal id="payslip-modal" title="Digital Payslip Statement" subtitle="Monthly Malaysian Statutory &amp; Net Disbursement Breakdown" icon="bx-receipt" size="xl">
         <div class="space-y-4 text-left text-xs">
             
             <!-- Employee Header Card Banner -->
@@ -265,64 +265,104 @@
                 </div>
             </div>
 
-            <!-- Structured Label | Value Rows Table (Values strictly Right-Aligned) -->
+            <!-- Basic Salary & Gross Earnings Summary -->
             <div class="rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden bg-white dark:bg-slate-900 divide-y divide-slate-100 dark:divide-slate-800">
-                
                 <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
-                    <div class="font-bold text-slate-500 dark:text-slate-400">Monthly Basic Salary</div>
+                    <div class="font-semibold text-slate-600 dark:text-slate-400">Monthly Basic Salary</div>
                     <div class="text-right font-mono font-bold text-slate-900 dark:text-white" id="ps-basic">RM 0.00</div>
                 </div>
-
                 <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
-                    <div class="font-bold text-slate-500 dark:text-slate-400">Allowances &amp; Claims</div>
+                    <div class="font-semibold text-slate-600 dark:text-slate-400">Allowances &amp; Claims</div>
                     <div class="text-right font-mono text-slate-800 dark:text-slate-200" id="ps-allowances">RM 0.00</div>
                 </div>
-
-                <div class="grid grid-cols-2 p-3 bg-slate-50/50 dark:bg-slate-800/30 hover:bg-slate-50/70 transition items-center">
+                <div class="grid grid-cols-2 p-3 bg-slate-50/80 dark:bg-slate-800/50 hover:bg-slate-100/60 transition items-center">
                     <div class="font-bold text-slate-900 dark:text-white">Gross Wages Computed</div>
                     <div class="text-right font-mono font-extrabold text-slate-900 dark:text-white text-sm" id="ps-gross">RM 0.00</div>
                 </div>
+            </div>
 
-                <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
-                    <div class="font-bold text-rose-600 dark:text-rose-400">EPF Employee (11%)</div>
-                    <div class="text-right font-mono font-bold text-rose-600 dark:text-rose-400" id="ps-epf-ee">- RM 0.00</div>
+            <!-- Statutory Contributions Matrix Table (Employer | Employee | Sub-Total) -->
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden bg-white dark:bg-slate-900">
+                <div class="p-3 bg-slate-50/80 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Statutory Contributions Matrix</span>
+                    <span class="text-[10px] text-slate-400 font-mono">Malaysian Statutory Baseline</span>
                 </div>
-
-                <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
-                    <div class="font-bold text-rose-600 dark:text-rose-400">PERKESO / SOCSO (Act 4)</div>
-                    <div class="text-right font-mono font-bold text-rose-600 dark:text-rose-400" id="ps-socso-ee">- RM 0.00</div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs font-sans">
+                        <thead class="bg-slate-100/70 dark:bg-slate-800/40 text-[10.5px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200/80 dark:border-slate-800">
+                            <tr>
+                                <th class="p-3">Statutory Scheme</th>
+                                <th class="p-3 text-right text-indigo-600 dark:text-indigo-400">Employer</th>
+                                <th class="p-3 text-right text-rose-600 dark:text-rose-400">Employee</th>
+                                <th class="p-3 text-right text-slate-900 dark:text-white">Sub-Total</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 dark:divide-slate-800/80 font-mono">
+                            <!-- EPF -->
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition">
+                                <td class="p-3 font-sans font-semibold text-slate-800 dark:text-slate-200">
+                                    KWSP / EPF
+                                </td>
+                                <td class="p-3 text-right text-indigo-600 dark:text-indigo-400" id="ps-epf-er">RM 0.00</td>
+                                <td class="p-3 text-right text-rose-600 dark:text-rose-400 font-bold" id="ps-epf-ee">RM 0.00</td>
+                                <td class="p-3 text-right font-bold text-slate-900 dark:text-white" id="ps-epf-subtotal">RM 0.00</td>
+                            </tr>
+                            <!-- SOCSO -->
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition">
+                                <td class="p-3 font-sans font-semibold text-slate-800 dark:text-slate-200">
+                                    PERKESO / SOCSO
+                                </td>
+                                <td class="p-3 text-right text-indigo-600 dark:text-indigo-400" id="ps-socso-er">RM 0.00</td>
+                                <td class="p-3 text-right text-rose-600 dark:text-rose-400 font-bold" id="ps-socso-ee">RM 0.00</td>
+                                <td class="p-3 text-right font-bold text-slate-900 dark:text-white" id="ps-socso-subtotal">RM 0.00</td>
+                            </tr>
+                            <!-- EIS -->
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition">
+                                <td class="p-3 font-sans font-semibold text-slate-800 dark:text-slate-200">
+                                    SIP / EIS
+                                </td>
+                                <td class="p-3 text-right text-indigo-600 dark:text-indigo-400" id="ps-eis-er">RM 0.00</td>
+                                <td class="p-3 text-right text-rose-600 dark:text-rose-400 font-bold" id="ps-eis-ee">RM 0.00</td>
+                                <td class="p-3 text-right font-bold text-slate-900 dark:text-white" id="ps-eis-subtotal">RM 0.00</td>
+                            </tr>
+                            <!-- PCB Tax -->
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition">
+                                <td class="p-3 font-sans font-semibold text-slate-800 dark:text-slate-200">
+                                    LHDN Income Tax (PCB / MTD)
+                                </td>
+                                <td class="p-3 text-right text-slate-400">—</td>
+                                <td class="p-3 text-right text-rose-600 dark:text-rose-400 font-bold" id="ps-pcb">RM 0.00</td>
+                                <td class="p-3 text-right font-bold text-slate-900 dark:text-white" id="ps-pcb-subtotal">RM 0.00</td>
+                            </tr>
+                            <!-- Totals Row -->
+                            <tr class="bg-slate-50/90 dark:bg-slate-800/60 font-bold border-t-2 border-slate-200 dark:border-slate-700">
+                                <td class="p-3 font-sans uppercase tracking-wider text-slate-700 dark:text-slate-300">Total Statutory</td>
+                                <td class="p-3 text-right text-indigo-600 dark:text-indigo-400" id="ps-matrix-total-er">RM 0.00</td>
+                                <td class="p-3 text-right text-rose-600 dark:text-rose-400" id="ps-matrix-total-ee">RM 0.00</td>
+                                <td class="p-3 text-right text-slate-900 dark:text-white font-extrabold" id="ps-matrix-total-grand">RM 0.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
+            </div>
 
-                <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
-                    <div class="font-bold text-rose-600 dark:text-rose-400">SIP / EIS (Act 800)</div>
-                    <div class="text-right font-mono font-bold text-rose-600 dark:text-rose-400" id="ps-eis-ee">- RM 0.00</div>
+            <!-- Net Take-Home Salary Highlight -->
+            <div class="rounded-xl border border-emerald-200 dark:border-emerald-800/80 bg-emerald-50/60 dark:bg-emerald-950/40 p-4 flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-extrabold text-emerald-900 dark:text-emerald-300 uppercase tracking-wider block">Net Take-Home Pay (Disbursement)</span>
+                    <span class="text-[11px] text-emerald-700 dark:text-emerald-400">Gross Wages (RM <span id="ps-net-gross">0.00</span>) - Employee Deductions (RM <span id="ps-net-deductions">0.00</span>)</span>
                 </div>
-
-                <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
-                    <div class="font-bold text-rose-600 dark:text-rose-400">LHDN Monthly Tax (PCB / MTD)</div>
-                    <div class="text-right font-mono font-bold text-rose-600 dark:text-rose-400" id="ps-pcb">- RM 0.00</div>
+                <div class="text-right">
+                    <span class="text-xl font-mono font-black text-emerald-600 dark:text-emerald-400" id="ps-net">RM 0.00</span>
                 </div>
-
-                <!-- Net Take-Home Highlight -->
-                <div class="grid grid-cols-2 p-3.5 bg-emerald-50/60 dark:bg-emerald-950/40 hover:bg-emerald-50/90 transition items-center border-t border-emerald-200 dark:border-emerald-800">
-                    <div class="font-extrabold text-emerald-900 dark:text-emerald-300 text-sm">Net Take-Home Pay</div>
-                    <div class="text-right font-mono font-extrabold text-emerald-600 dark:text-emerald-400 text-base" id="ps-net">RM 0.00</div>
-                </div>
-
-                <!-- Employer Statutory (Company Cost) -->
-                <div class="grid grid-cols-2 p-3 bg-slate-50/30 dark:bg-slate-800/20 text-slate-400 dark:text-slate-500 text-[11px] items-center">
-                    <div>Employer EPF / SOCSO / EIS</div>
-                    <div class="text-right font-mono font-medium" id="ps-employer-total">RM 0.00</div>
-                </div>
-
             </div>
 
             <div class="flex items-center justify-between gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
-                <a id="ps-pdf-link" href="#" target="_blank" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-sm shadow-indigo-600/20 transition cursor-pointer">
-                    <i class="bx bx-printer text-sm"></i>
-                    <span>Print / Save PDF</span>
+                <a id="ps-pdf-link" href="#" target="_blank" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-sm shadow-indigo-600/20 transition cursor-pointer">
+                    <i class="bx bx-printer text-base"></i>
+                    <span>Print Official Payslip (PDF)</span>
                 </a>
-                <x-button variant="secondary" size="sm" type="button" onclick="closeModal('payslip-modal')">
+                <x-button variant="secondary" size="md" type="button" onclick="closeModal('payslip-modal')">
                     Close Payslip
                 </x-button>
             </div>
@@ -356,17 +396,63 @@
                     document.getElementById('ps-pdf-link').href = pdfUrl;
                 }
 
-                document.getElementById('ps-basic').textContent = 'RM ' + parseFloat(item.basic_salary || 0).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                document.getElementById('ps-allowances').textContent = 'RM ' + parseFloat(item.allowances_total || 0).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                document.getElementById('ps-gross').textContent = 'RM ' + parseFloat(item.gross_salary || 0).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                
-                document.getElementById('ps-epf-ee').textContent = '- RM ' + parseFloat(item.epf_employee || 0).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                document.getElementById('ps-socso-ee').textContent = '- RM ' + (parseFloat(item.socso_employee || 0) + parseFloat(item.skbbk_employee || 0)).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                document.getElementById('ps-eis-ee').textContent = '- RM ' + parseFloat(item.eis_employee || 0).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                document.getElementById('ps-pcb').textContent = '- RM ' + parseFloat(item.pcb_amount || 0).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                const basic = parseFloat(item.basic_salary || 0);
+                const allowances = parseFloat(item.allowances_total || 0);
+                const gross = parseFloat(item.gross_salary || 0);
 
-                document.getElementById('ps-net').textContent = 'RM ' + parseFloat(item.net_salary || 0).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                document.getElementById('ps-employer-total').textContent = 'RM ' + parseFloat(item.total_employer_contributions || 0).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' (Company Cost)';
+                const epfEe = parseFloat(item.epf_employee || 0);
+                const epfEr = parseFloat(item.epf_employer || 0);
+                const epfSub = epfEe + epfEr;
+
+                const socsoEe = parseFloat(item.socso_employee || 0) + parseFloat(item.skbbk_employee || 0);
+                const socsoEr = parseFloat(item.socso_employer || 0);
+                const socsoSub = socsoEe + socsoEr;
+
+                const eisEe = parseFloat(item.eis_employee || 0);
+                const eisEr = parseFloat(item.eis_employer || 0);
+                const eisSub = eisEe + eisEr;
+
+                const pcb = parseFloat(item.pcb_amount || 0);
+
+                const totalEe = epfEe + socsoEe + eisEe + pcb;
+                const totalEr = epfEr + socsoEr + eisEr;
+                const grandTotal = totalEe + totalEr;
+                const net = parseFloat(item.net_salary || (gross - totalEe));
+
+                const fmt = num => 'RM ' + num.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                document.getElementById('ps-basic').textContent = fmt(basic);
+                document.getElementById('ps-allowances').textContent = fmt(allowances);
+                document.getElementById('ps-gross').textContent = fmt(gross);
+
+                // EPF
+                document.getElementById('ps-epf-er').textContent = fmt(epfEr);
+                document.getElementById('ps-epf-ee').textContent = fmt(epfEe);
+                document.getElementById('ps-epf-subtotal').textContent = fmt(epfSub);
+
+                // SOCSO
+                document.getElementById('ps-socso-er').textContent = fmt(socsoEr);
+                document.getElementById('ps-socso-ee').textContent = fmt(socsoEe);
+                document.getElementById('ps-socso-subtotal').textContent = fmt(socsoSub);
+
+                // EIS
+                document.getElementById('ps-eis-er').textContent = fmt(eisEr);
+                document.getElementById('ps-eis-ee').textContent = fmt(eisEe);
+                document.getElementById('ps-eis-subtotal').textContent = fmt(eisSub);
+
+                // PCB
+                document.getElementById('ps-pcb').textContent = fmt(pcb);
+                document.getElementById('ps-pcb-subtotal').textContent = fmt(pcb);
+
+                // Totals
+                document.getElementById('ps-matrix-total-er').textContent = fmt(totalEr);
+                document.getElementById('ps-matrix-total-ee').textContent = fmt(totalEe);
+                document.getElementById('ps-matrix-total-grand').textContent = fmt(grandTotal);
+
+                // Net Section
+                document.getElementById('ps-net-gross').textContent = gross.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                document.getElementById('ps-net-deductions').textContent = totalEe.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                document.getElementById('ps-net').textContent = fmt(net);
 
                 openModal('payslip-modal');
             }
