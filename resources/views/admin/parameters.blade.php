@@ -474,6 +474,99 @@
                             <span class="text-xl font-bold text-slate-900 dark:text-white font-mono mt-1 block">RM {{ number_format($pcbParams['child_relief_per_child'] ?? 2000, 0) }}</span>
                             <span class="text-[10px] text-slate-400">Under 18 / studying</span>
                         </div>
+            <!-- ACCORDION ITEM 7: Statutory Leave Categories & Baseline Entitlements (Collapsed by default) -->
+            <div class="accordion-item bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden transition-all duration-300">
+                <div class="accordion-header p-4.5 flex items-center justify-between cursor-pointer select-none hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition" onclick="toggleAccordion('leave-accordion')">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-amber-50 dark:bg-amber-950/80 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold text-base shadow-xs shrink-0">
+                            <i class="bx bx-calendar-event"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-sm font-bold text-slate-900 dark:text-white">Statutory Leave Entitlements (EA 1955 / 2022)</h2>
+                            <span class="text-[11px] text-slate-400">Baseline company leave types, annual quotas, and unpaid salary deduction parameters</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800 font-mono">
+                            {{ $leaveTypes->count() }} Categories
+                        </span>
+                        <div class="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 flex items-center justify-center text-lg transition-transform duration-300 accordion-icon rotate-[-90deg]" id="leave-accordion-icon">
+                            <i class="bx bx-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-content border-t border-slate-100 dark:border-slate-800 hidden" id="leave-accordion-content">
+                    <div class="p-4 bg-slate-50/40 dark:bg-slate-900/40 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
+                        <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">Company-wide baseline annual entitlements</span>
+                        <x-button variant="secondary" size="xs" icon="bx-plus" onclick="openModal('add-leave-type-modal')">
+                            New Leave Category
+                        </x-button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                                <tr>
+                                    <th class="p-3.5">Leave Name</th>
+                                    <th class="p-3.5">Code</th>
+                                    <th class="p-3.5">Type &amp; Payroll Rule</th>
+                                    <th class="p-3.5">Default Days / Year</th>
+                                    <th class="p-3.5">Recorded Leaves</th>
+                                    <th class="p-3.5 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-sans">
+                                @forelse($leaveTypes as $lType)
+                                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
+                                        <td class="p-3.5 font-bold text-slate-900 dark:text-white">
+                                            <div class="flex items-center gap-2">
+                                                <span class="w-2 h-2 rounded-full bg-{{ $lType->color }}-500"></span>
+                                                <span>{{ $lType->name }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="p-3.5 font-mono text-indigo-600 dark:text-indigo-400 font-bold">
+                                            {{ $lType->code }}
+                                        </td>
+                                        <td class="p-3.5">
+                                            @if($lType->is_paid)
+                                                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                                                    Paid Leave (100% Wage)
+                                                </span>
+                                            @else
+                                                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-50 dark:bg-rose-950 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
+                                                    Unpaid (ORP Salary Deducted)
+                                                </span>
+                                            @endif
+                                        </td>
+                                        <td class="p-3.5 font-mono font-bold text-slate-900 dark:text-white">
+                                            {{ $lType->default_days_per_year }} days
+                                        </td>
+                                        <td class="p-3.5 font-mono text-slate-500">
+                                            {{ $lType->applications_count }} applications
+                                        </td>
+                                        <td class="p-3.5 text-right">
+                                            <div class="flex items-center justify-end gap-1.5 flex-wrap">
+                                                <x-action-button variant="purple" icon="bx-pencil" title="Edit Leave Type" onclick="openEditLeaveTypeModal({{ json_encode($lType) }})">
+                                                    Edit
+                                                </x-action-button>
+                                                @if($lType->applications_count === 0 && !in_array($lType->code, ['AL', 'MC', 'UL']))
+                                                    <x-action-button variant="rose" icon="bx-trash" title="Delete Leave Type" onclick="confirmDeleteLeaveType({{ $lType->id }}, '{{ addslashes($lType->name) }}')">
+                                                        Delete
+                                                    </x-action-button>
+                                                @endif
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="p-8 text-center text-slate-400">
+                                            No leave categories configured. Click "New Leave Category" to add.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -771,6 +864,87 @@
         </form>
     </x-modal>
 
+    <!-- 7. ADD LEAVE TYPE MODAL -->
+    <x-modal id="add-leave-type-modal" title="Add Statutory Leave Category" subtitle="Define a company leave entitlement rule and annual default quota" icon="bx-calendar-plus" size="lg">
+        <form method="POST" action="{{ route('admin.parameters.leave-types.store') }}" class="space-y-4 text-left">
+            @csrf
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <x-input label="Leave Category Name" name="name" required placeholder="e.g. Marriage Leave, Study Leave" />
+                <x-input label="Leave Code / Acronym" name="code" required placeholder="e.g. ML, SL" />
+                <x-input label="Annual Default Days" name="default_days_per_year" type="number" min="0" max="365" required placeholder="e.g. 14" />
+                
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Payroll Compensation Rule</label>
+                    <div class="relative">
+                        <select name="is_paid" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
+                            <option value="1">Paid Leave (100% Full Wages)</option>
+                            <option value="0">Unpaid Leave (ORP Basic / 26 days Deduction)</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+                            <i class="bx bx-chevron-down text-base"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sm:col-span-2">
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Description & Guidelines</label>
+                    <textarea name="description" rows="2" placeholder="Policy terms, eligibility criteria, documentation needed..." class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white placeholder:text-slate-400 focus:bg-white dark:focus:bg-slate-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition"></textarea>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2.5 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <x-button variant="secondary" size="sm" type="button" onclick="closeModal('add-leave-type-modal')">
+                    Cancel
+                </x-button>
+                <x-button variant="primary" size="sm" type="submit" icon="bx-check">
+                    Create Leave Category
+                </x-button>
+            </div>
+        </form>
+    </x-modal>
+
+    <!-- 8. EDIT LEAVE TYPE MODAL -->
+    <x-modal id="edit-leave-type-modal" title="Edit Leave Entitlement Rule" subtitle="Update leave code, annual quota, and statutory payment rules" icon="bx-pencil" size="lg">
+        <form id="edit-leave-type-form" method="POST" action="" class="space-y-4 text-left">
+            @csrf
+            @method('PUT')
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <x-input label="Leave Category Name" name="name" id="edit-leave-name" required />
+                <x-input label="Leave Code / Acronym" name="code" id="edit-leave-code" required />
+                <x-input label="Annual Default Days" name="default_days_per_year" id="edit-leave-days" type="number" min="0" max="365" required />
+                
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Payroll Compensation Rule</label>
+                    <div class="relative">
+                        <select name="is_paid" id="edit-leave-paid" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
+                            <option value="1">Paid Leave (100% Full Wages)</option>
+                            <option value="0">Unpaid Leave (ORP Basic / 26 days Deduction)</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+                            <i class="bx bx-chevron-down text-base"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sm:col-span-2">
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Description & Guidelines</label>
+                    <textarea name="description" id="edit-leave-desc" rows="2" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white placeholder:text-slate-400 focus:bg-white dark:focus:bg-slate-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition"></textarea>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2.5 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <x-button variant="secondary" size="sm" type="button" onclick="closeModal('edit-leave-type-modal')">
+                    Cancel
+                </x-button>
+                <x-button variant="primary" size="sm" type="submit" icon="bx-check">
+                    Save Changes
+                </x-button>
+            </div>
+        </form>
+    </x-modal>
+
     <!-- 9. CONFIRM DELETE MODALS -->
     <x-confirm-modal 
         id="delete-department-confirm-modal"
@@ -788,6 +962,14 @@
         confirmVariant="danger"
     />
 
+    <x-confirm-modal 
+        id="delete-leave-type-confirm-modal"
+        title="Delete Leave Category"
+        message="Are you sure you want to delete this leave category? This action cannot be undone."
+        confirmText="Yes, Delete Leave Type"
+        confirmVariant="danger"
+    />
+
     <x-slot name="scripts">
         <script>
             function toggleAccordion(targetId) {
@@ -797,7 +979,8 @@
                     'epf-accordion',
                     'socso-accordion',
                     'eis-accordion',
-                    'pcb-accordion'
+                    'pcb-accordion',
+                    'leave-accordion'
                 ];
 
                 accordionKeys.forEach(key => {
@@ -805,18 +988,37 @@
                     const icon = document.getElementById(`${key}-icon`);
 
                     if (key === targetId) {
-                        // If it's already open, keep it open (or toggle off if desired, but here we switch to target)
                         const isCurrentlyHidden = content.classList.contains('hidden');
                         if (isCurrentlyHidden) {
                             content.classList.remove('hidden');
                             if (icon) icon.classList.remove('rotate-[-90deg]');
                         }
                     } else {
-                        // Collapse all other items
                         if (content) content.classList.add('hidden');
                         if (icon) icon.classList.add('rotate-[-90deg]');
                     }
                 });
+            }
+
+            function openEditLeaveTypeModal(lType) {
+                const form = document.getElementById('edit-leave-type-form');
+                form.action = `/admin/parameters/leave-types/${lType.id}`;
+
+                document.getElementById('edit-leave-name').value = lType.name || '';
+                document.getElementById('edit-leave-code').value = lType.code || '';
+                document.getElementById('edit-leave-days').value = lType.default_days_per_year || 0;
+                document.getElementById('edit-leave-paid').value = lType.is_paid ? '1' : '0';
+                document.getElementById('edit-leave-desc').value = lType.description || '';
+
+                openModal('edit-leave-type-modal');
+            }
+
+            function confirmDeleteLeaveType(id, name) {
+                const form = document.getElementById('delete-leave-type-confirm-modal-form');
+                form.action = `/admin/parameters/leave-types/${id}`;
+                document.getElementById('delete-leave-type-confirm-modal-method').value = 'DELETE';
+                document.getElementById('delete-leave-type-confirm-modal-message').textContent = `Are you sure you want to delete leave category "${name}"?`;
+                openModal('delete-leave-type-confirm-modal');
             }
 
             function openEditDepartmentModal(dept) {

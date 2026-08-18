@@ -25,8 +25,9 @@ class StatutoryParameterController extends Controller
         $company = Company::first();
         $departments = Department::withCount('employees')->orderBy('name')->get();
         $salaryComponents = \App\Models\SalaryComponent::withCount('employeeSalaryComponents')->orderBy('type')->orderBy('name')->get();
+        $leaveTypes = \App\Models\LeaveType::withCount('applications')->orderBy('name')->get();
 
-        return view('admin.parameters', compact('parameters', 'company', 'departments', 'salaryComponents'));
+        return view('admin.parameters', compact('parameters', 'company', 'departments', 'salaryComponents', 'leaveTypes'));
     }
 
     /**
@@ -352,5 +353,115 @@ class StatutoryParameterController extends Controller
         ]);
 
         return redirect()->route('admin.parameters')->with('success', "Allowance component '{$name}' removed.");
+    }
+
+    /**
+     * Store new leave type configuration.
+     */
+    public function storeLeaveType(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:100'],
+            'code' => ['required', 'string', 'max:20', 'unique:leave_types,code'],
+            'is_paid' => ['nullable', 'boolean'],
+            'default_days_per_year' => ['required', 'integer', 'min:0', 'max:365'],
+            'color' => ['nullable', 'string', 'max:30'],
+            'description' => ['nullable', 'string', 'max:500'],
+        ]);
+
+        $validated['is_paid'] = $request->boolean('is_paid');
+        $validated['color'] = $validated['color'] ?? 'indigo';
+
+        $leaveType = \App\Models\LeaveType::create($validated);
+
+        // Populate baseline balances for active employees
+        $currentYear = (int) date('Y');
+        $employees = \App\Models\Employee::where('employment_status', '!=', 'resigned')->get();
+        foreach ($employees as $employee) {
+            $quota = ($employee->employment_type === 'intern' && $leaveType->code !== 'AL' && $leaveType->code !== 'MC') ? 0 : $leaveType->default_days_per_year;
+            \App\Models\EmployeeLeaveBalance::firstOrCreate(
+                ['employee_id' => $employee->id, 'leave_type_id' => $leaveType->id, 'year' => $currentYear],
+                ['total_entitled' => $quota, 'taken_days' => 0.0, 'pending_days' => 0.0, 'remaining_days' => $quota]
+            );
+        }
+
+        AuditTrail::create([
+            'auditable_type' => \App\Models\LeaveType::class,
+            'auditable_id' => $leaveType->id,
+            'user_id' => auth()->id(),
+            'module' => 'parameters',
+            'event' => 'leave_type_created',
+            'description' => "Created statutory leave type '{$leaveType->name}' ({$leaveType->code}) with {$leaveType->default_days_per_year} default days",
+            'old_values' => null,
+            'new_values' => $validated,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'severity' => 'info',
+        ]);
+
+        return redirect()->route('admin.parameters')->with('success', "Leave type '{$leaveType->name}' created successfully.");
+    }
+
+    /**
+     * Update leave type configuration.
+     */
+    public function updateLeaveType(Request $request, \App\Models\LeaveType $leaveType)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:100'],
+            'code' => ['required', 'string', 'max:20', 'unique:leave_types,code,' . $leaveType->id],
+            'is_paid' => ['nullable', 'boolean'],
+            'default_days_per_year' => ['required', 'integer', 'min:0', 'max:365'],
+            'color' => ['nullable', 'string', 'max:30'],
+            'description' => ['nullable', 'string', 'max:500'],
+        ]);
+
+        $validated['is_paid'] = $request->boolean('is_paid');
+        $oldValues = $leaveType->only(['name', 'code', 'is_paid', 'default_days_per_year', 'description']);
+
+        $leaveType->update($validated);
+
+        AuditTrail::create([
+            'auditable_type' => \App\Models\LeaveType::class,
+            'auditable_id' => $leaveType->id,
+            'user_id' => auth()->id(),
+            'module' => 'parameters',
+            'event' => 'leave_type_updated',
+            'description' => "Updated leave category '{$leaveType->name}' ({$leaveType->code})",
+            'old_values' => $oldValues,
+            'new_values' => $validated,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'severity' => 'info',
+        ]);
+
+        return redirect()->route('admin.parameters')->with('success', "Leave category '{$leaveType->name}' updated successfully.");
+    }
+
+    /**
+     * Delete leave type configuration.
+     */
+    public function destroyLeaveType(Request $request, \App\Models\LeaveType $leaveType)
+    {
+        $name = $leaveType->name;
+        $code = $leaveType->code;
+
+        $leaveType->delete();
+
+        AuditTrail::create([
+            'auditable_type' => \App\Models\LeaveType::class,
+            'auditable_id' => $leaveType->id,
+            'user_id' => auth()->id(),
+            'module' => 'parameters',
+            'event' => 'leave_type_deleted',
+            'description' => "Deleted leave category '{$name}' ({$code})",
+            'old_values' => null,
+            'new_values' => null,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'severity' => 'warning',
+        ]);
+
+        return redirect()->route('admin.parameters')->with('success', "Leave category '{$name}' removed.");
     }
 }

@@ -48,6 +48,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::post('/leaves', [\App\Http\Controllers\Admin\LeaveController::class, 'store'])->name('leaves.store');
     Route::patch('/leaves/{leave}/status', [\App\Http\Controllers\Admin\LeaveController::class, 'updateStatus'])->name('leaves.update-status');
     Route::delete('/leaves/{leave}', [\App\Http\Controllers\Admin\LeaveController::class, 'destroy'])->name('leaves.destroy');
+    Route::put('/leaves/balances/{balance}', [\App\Http\Controllers\Admin\LeaveController::class, 'updateBalance'])->name('leaves.balances.update');
 
     // 3. Monthly Payroll Runs
     Route::get('/payroll', [PayrollRunController::class, 'index'])->name('payroll.index');
@@ -77,6 +78,9 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::post('/parameters/allowances', [StatutoryParameterController::class, 'storeAllowance'])->name('parameters.allowances.store');
     Route::put('/parameters/allowances/{component}', [StatutoryParameterController::class, 'updateAllowance'])->name('parameters.allowances.update');
     Route::delete('/parameters/allowances/{component}', [StatutoryParameterController::class, 'destroyAllowance'])->name('parameters.allowances.destroy');
+    Route::post('/parameters/leave-types', [StatutoryParameterController::class, 'storeLeaveType'])->name('parameters.leave-types.store');
+    Route::put('/parameters/leave-types/{leaveType}', [StatutoryParameterController::class, 'updateLeaveType'])->name('parameters.leave-types.update');
+    Route::delete('/parameters/leave-types/{leaveType}', [StatutoryParameterController::class, 'destroyLeaveType'])->name('parameters.leave-types.destroy');
     Route::get('/audit', [AuditTrailController::class, 'index'])->name('audit');
 
     // 8. User Access & Role Identity Management

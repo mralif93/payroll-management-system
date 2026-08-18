@@ -71,8 +71,28 @@ class LeaveController extends Controller
         $departments = Department::all();
         $employees = Employee::where('employment_status', '!=', 'resigned')->orderBy('full_name')->get();
 
+        // 2. Employee Balances Roster for Tab 2
+        $employeeBalancesQuery = Employee::with(['department', 'leaveBalances.leaveType'])
+            ->where('employment_status', '!=', 'resigned')
+            ->orderBy('full_name');
+
+        if ($request->filled('balance_search')) {
+            $bSearch = $request->input('balance_search');
+            $employeeBalancesQuery->where(function ($q) use ($bSearch) {
+                $q->where('full_name', 'like', "%{$bSearch}%")
+                  ->orWhere('employee_no', 'like', "%{$bSearch}%");
+            });
+        }
+
+        if ($request->filled('balance_dept')) {
+            $employeeBalancesQuery->where('department_id', $request->input('balance_dept'));
+        }
+
+        $employeeBalances = $employeeBalancesQuery->paginate(10, ['*'], 'balance_page')->withQueryString();
+
         return view('admin.leaves.index', compact(
             'leaves',
+            'employeeBalances',
             'totalPending',
             'totalApprovedMonth',
             'activeOnLeaveToday',
@@ -227,5 +247,41 @@ class LeaveController extends Controller
         $leave->delete();
 
         return redirect()->route('admin.leaves.index')->with('success', "Leave record removed.");
+    }
+
+    /**
+     * Update individual employee leave balance entitlement.
+     */
+    public function updateBalance(Request $request, EmployeeLeaveBalance $balance)
+    {
+        $validated = $request->validate([
+            'total_entitled' => ['required', 'numeric', 'min:0', 'max:365'],
+            'taken_days' => ['required', 'numeric', 'min:0', 'max:365'],
+        ]);
+
+        $oldValues = $balance->only(['total_entitled', 'taken_days', 'remaining_days']);
+        $newRemaining = max(0.0, (float) $validated['total_entitled'] - (float) $validated['taken_days']);
+
+        $balance->update([
+            'total_entitled' => (float) $validated['total_entitled'],
+            'taken_days' => (float) $validated['taken_days'],
+            'remaining_days' => $newRemaining,
+        ]);
+
+        AuditTrail::create([
+            'auditable_type' => EmployeeLeaveBalance::class,
+            'auditable_id' => $balance->id,
+            'user_id' => auth()->id(),
+            'module' => 'leaves',
+            'event' => 'leave_balance_adjusted',
+            'description' => "Adjusted {$balance->leaveType?->name} quota for {$balance->employee?->full_name} to {$balance->total_entitled} days (Remaining: {$newRemaining}d)",
+            'old_values' => $oldValues,
+            'new_values' => $balance->only(['total_entitled', 'taken_days', 'remaining_days']),
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'severity' => 'info',
+        ]);
+
+        return redirect()->route('admin.leaves.index', ['tab' => 'balances'])->with('success', "Leave balance for {$balance->employee?->full_name} ({$balance->leaveType?->name}) updated successfully.");
     }
 }
