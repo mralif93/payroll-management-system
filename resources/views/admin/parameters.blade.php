@@ -75,345 +75,385 @@
             />
         </div>
 
-        <!-- SECTION: ORGANIZATIONAL DEPARTMENTS MANAGEMENT -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
-            <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-base shadow-xs">
-                        <i class="bx bx-sitemap"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-sm font-bold text-slate-900 dark:text-white">Corporate Departments Roster</h2>
-                        <span class="text-[10px] text-slate-400">Used for employee division assignment and department payroll summaries</span>
-                    </div>
-                </div>
-                <x-button variant="secondary" size="xs" icon="bx-plus" onclick="openModal('add-department-modal')">
-                    New Department
-                </x-button>
-            </div>
+        <!-- EXCLUSIVE ACCORDION CONTAINER (Only 1 item open at a time; Item 1 open by default) -->
+        <div class="space-y-4" id="parameters-accordion">
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs">
-                    <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]">
-                        <tr>
-                            <th class="p-3.5">Department Name</th>
-                            <th class="p-3.5">Code / Acronym</th>
-                            <th class="p-3.5">Assigned Staff</th>
-                            <th class="p-3.5">Created Date</th>
-                            <th class="p-3.5 text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-sans">
-                        @forelse($departments as $dept)
-                            <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
-                                <td class="p-3.5 font-bold text-slate-900 dark:text-white">
-                                    {{ $dept->name }}
-                                </td>
-                                <td class="p-3.5 font-mono text-indigo-600 dark:text-indigo-400 font-bold">
-                                    {{ $dept->code ?? '—' }}
-                                </td>
-                                <td class="p-3.5 font-mono">
-                                    <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
-                                        {{ $dept->employees_count }} staff
-                                    </span>
-                                </td>
-                                <td class="p-3.5 text-slate-400">
-                                    {{ $dept->created_at ? $dept->created_at->format('d M Y') : '—' }}
-                                </td>
-                                <td class="p-3.5 text-right">
-                                    <div class="flex items-center justify-end gap-1.5 flex-wrap">
-                                        <!-- Edit Action (Pencil) -->
-                                        <x-action-button variant="purple" icon="bx-pencil" title="Edit Department" onclick="openEditDepartmentModal({{ json_encode($dept) }})">
-                                            Edit
-                                        </x-action-button>
-
-                                        <!-- Delete Action with Guard -->
-                                        @if($dept->employees_count === 0)
-                                            <x-action-button variant="rose" icon="bx-trash" title="Delete Department" onclick="confirmDeleteDepartment({{ $dept->id }}, '{{ addslashes($dept->name) }}')">
-                                                Delete
-                                            </x-action-button>
-                                        @endif
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="p-8 text-center text-slate-400">
-                                    No organizational departments found. Click "Add Department" to create units.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- SECTION: COMPANY SALARY & ALLOWANCE COMPONENTS MANAGEMENT -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
-            <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-xl bg-teal-50 dark:bg-teal-950/80 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold text-base shadow-xs">
-                        <i class="bx bx-gift"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-sm font-bold text-slate-900 dark:text-white">Allowance &amp; Benefit Components Registry</h2>
-                        <span class="text-[10px] text-slate-400">Configure recurring allowances, statutory taxability (EPF, SOCSO, EIS, PCB) and benefits</span>
-                    </div>
-                </div>
-                <x-button variant="secondary" size="xs" icon="bx-plus" onclick="openModal('add-allowance-modal')">
-                    New Allowance Type
-                </x-button>
-            </div>
-
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs">
-                    <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]">
-                        <tr>
-                            <th class="p-3.5">Allowance Name</th>
-                            <th class="p-3.5">Component Code</th>
-                            <th class="p-3.5">Statutory Rules (EPF / SOCSO / EIS / PCB)</th>
-                            <th class="p-3.5">Assigned Staff</th>
-                            <th class="p-3.5 text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-sans">
-                        @forelse($salaryComponents as $comp)
-                            <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
-                                <td class="p-3.5 font-bold text-slate-900 dark:text-white">
-                                    {{ $comp->name }}
-                                </td>
-                                <td class="p-3.5 font-mono text-teal-600 dark:text-teal-400 font-bold">
-                                    {{ $comp->code }}
-                                </td>
-                                <td class="p-3.5">
-                                    <div class="flex items-center gap-1.5 flex-wrap text-[10px]">
-                                        @if($comp->is_epf_subject)
-                                            <span class="px-1.5 py-0.5 rounded font-bold bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">EPF</span>
-                                        @endif
-                                        @if($comp->is_socso_subject)
-                                            <span class="px-1.5 py-0.5 rounded font-bold bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">SOCSO</span>
-                                        @endif
-                                        @if($comp->is_eis_subject)
-                                            <span class="px-1.5 py-0.5 rounded font-bold bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">EIS</span>
-                                        @endif
-                                        @if($comp->is_pcb_subject)
-                                            <span class="px-1.5 py-0.5 rounded font-bold bg-rose-50 dark:bg-rose-950 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800">PCB</span>
-                                        @endif
-                                        @if(!$comp->is_epf_subject && !$comp->is_socso_subject && !$comp->is_eis_subject && !$comp->is_pcb_subject)
-                                            <span class="px-1.5 py-0.5 rounded font-medium bg-slate-100 dark:bg-slate-800 text-slate-500">Exempt (Tax Free)</span>
-                                        @endif
-                                    </div>
-                                </td>
-                                <td class="p-3.5 font-mono">
-                                    <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
-                                        {{ $comp->employee_salary_components_count }} staff
-                                    </span>
-                                </td>
-                                <td class="p-3.5 text-right">
-                                    <div class="flex items-center justify-end gap-1.5 flex-wrap">
-                                        <!-- Edit Action (Pencil) -->
-                                        <x-action-button variant="purple" icon="bx-pencil" title="Edit Allowance Rules" onclick="openEditAllowanceModal({{ json_encode($comp) }})">
-                                            Edit
-                                        </x-action-button>
-
-                                        <!-- Delete Action with Guard -->
-                                        @if($comp->employee_salary_components_count === 0)
-                                            <x-action-button variant="rose" icon="bx-trash" title="Delete Allowance Component" onclick="confirmDeleteAllowance({{ $comp->id }}, '{{ addslashes($comp->name) }}')">
-                                                Delete
-                                            </x-action-button>
-                                        @endif
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="p-8 text-center text-slate-400">
-                                    No allowance components configured. Click "New Allowance Type" to define benefits.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        @php
-            $epfParams = $parameters['epf']->first()?->value_payload ?? [
-                'standard_employee_rate' => 0.11,
-                'voluntary_reduced_employee_rate' => 0.09,
-                'employer_rate_low_wage' => 0.13,
-                'employer_rate_high_wage' => 0.12,
-                'senior_citizen_employee_rate' => 0.00,
-                'senior_citizen_employer_rate' => 0.04,
-                'salary_threshold' => 5000.00,
-            ];
-            $socsoParams = $parameters['socso']->first()?->value_payload ?? [
-                'wage_ceiling' => 6000.00,
-                'category_1' => ['employer_rate_percentage' => 0.0175, 'employee_base_percentage' => 0.005],
-                'category_2' => ['employer_rate_percentage' => 0.0125, 'employee_base_percentage' => 0.00],
-            ];
-            $eisParams = $parameters['eis']->first()?->value_payload ?? [
-                'wage_ceiling' => 6000.00,
-                'employee_rate' => 0.002,
-                'employer_rate' => 0.002,
-            ];
-            $pcbParams = $parameters['pcb']->first()?->value_payload ?? [
-                'individual_relief' => 9000.00,
-                'spouse_non_working_relief' => 4000.00,
-                'child_relief_per_child' => 2000.00,
-            ];
-        @endphp
-
-        <!-- 1. KWSP / EPF Parameter Card -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
-            <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-lg">
-                        <i class="bx bxs-bank"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-sm font-bold text-slate-900 dark:text-white">KWSP / EPF Statutory Parameters (Act 1991)</h2>
-                        <span class="text-[11px] text-slate-400 font-mono">{{ $parameters['epf']->first()?->reference_gazette ?? 'P.U. (A) EPF Act 1991 Third Schedule' }}</span>
-                    </div>
-                </div>
-                <div class="flex items-center gap-2">
-                    <x-badge variant="indigo" dot="true">Active Standard</x-badge>
-                    <x-action-button variant="purple" icon="bx-pencil" title="Edit EPF Rates" onclick="openModal('edit-epf-modal')">
-                        Edit Rates
-                    </x-action-button>
-                </div>
-            </div>
-
-            <div class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Standard Employee</span>
-                    <span class="text-xl font-bold text-slate-900 dark:text-white font-mono mt-1 block">{{ ($epfParams['standard_employee_rate'] ?? 0.11) * 100 }}%</span>
-                    <span class="text-[10px] text-slate-400">Voluntary option {{ ($epfParams['voluntary_reduced_employee_rate'] ?? 0.09) * 100 }}%</span>
-                </div>
-                <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Employer (Wage &le; RM{{ number_format($epfParams['salary_threshold'] ?? 5000, 0) }})</span>
-                    <span class="text-xl font-bold text-indigo-600 dark:text-indigo-400 font-mono mt-1 block">{{ ($epfParams['employer_rate_low_wage'] ?? 0.13) * 100 }}%</span>
-                    <span class="text-[10px] text-slate-400">Mandatory statutory low wage</span>
-                </div>
-                <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Employer (Wage &gt; RM{{ number_format($epfParams['salary_threshold'] ?? 5000, 0) }})</span>
-                    <span class="text-xl font-bold text-slate-900 dark:text-white font-mono mt-1 block">{{ ($epfParams['employer_rate_high_wage'] ?? 0.12) * 100 }}%</span>
-                    <span class="text-[10px] text-slate-400">Standard statutory bracket</span>
-                </div>
-                <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Senior Citizen (Age 60+)</span>
-                    <span class="text-xl font-bold text-emerald-600 dark:text-emerald-400 font-mono mt-1 block">{{ ($epfParams['senior_citizen_employer_rate'] ?? 0.04) * 100 }}% (ER) / {{ ($epfParams['senior_citizen_employee_rate'] ?? 0) * 100 }}% (EE)</span>
-                    <span class="text-[10px] text-slate-400">Malaysian Citizens</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- 2. PERKESO / SOCSO (Act 4) & June 2026 SKBBK Card -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
-            <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-sky-50 dark:bg-sky-950/80 text-sky-600 dark:text-sky-400 flex items-center justify-center font-bold text-lg">
-                        <i class="bx bxs-shield"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-sm font-bold text-slate-900 dark:text-white">PERKESO SOCSO &amp; SKBBK (Lindung 24 Jam) Schedule</h2>
-                        <span class="text-[11px] text-slate-400 font-mono">Effective 1 June 2026 • Wage Ceiling RM{{ number_format($socsoParams['wage_ceiling'] ?? 6000, 2) }}</span>
-                    </div>
-                </div>
-                <div class="flex items-center gap-2">
-                    <x-badge variant="purple" dot="true">Includes SKBBK 2026</x-badge>
-                    <x-action-button variant="purple" icon="bx-pencil" title="Edit SOCSO Rates" onclick="openModal('edit-socso-modal')">
-                        Edit Schedule
-                    </x-action-button>
-                </div>
-            </div>
-
-            <div class="p-6 space-y-4">
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                        <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Act 4 SOCSO Category 1 (Base)</span>
-                        <span class="text-lg font-bold text-slate-900 dark:text-white font-mono mt-1 block">{{ ($socsoParams['category_1']['employer_rate_percentage'] ?? 0.0175) * 100 }}% ER / {{ ($socsoParams['category_1']['employee_base_percentage'] ?? 0.005) * 100 }}% EE</span>
-                        <span class="text-[10px] text-slate-400">Employment Injury &amp; Invalidity</span>
-                    </div>
-                    <div class="p-4 rounded-xl bg-purple-50/60 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800">
-                        <span class="text-xs text-purple-700 dark:text-purple-300 font-bold block">SKBBK (Lindung 24 Jam)</span>
-                        <span class="text-lg font-bold text-purple-950 dark:text-purple-100 font-mono mt-1 block">Tiered (e.g. RM14.50 @ RM2k)</span>
-                        <span class="text-[10px] text-purple-600 dark:text-purple-400 font-medium">100% Employee Borne</span>
-                    </div>
-                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                        <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">SOCSO Category 2 (Age 60+)</span>
-                        <span class="text-lg font-bold text-slate-900 dark:text-white font-mono mt-1 block">{{ ($socsoParams['category_2']['employer_rate_percentage'] ?? 0.0125) * 100 }}% ER / RM7.00 SKBBK</span>
-                        <span class="text-[10px] text-slate-400">Employment Injury Only</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 3. SIP / EIS & LHDN PCB Row -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            
-            <!-- EIS Card -->
-            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs p-5 space-y-4">
-                <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+            <!-- ACCORDION ITEM 1: Corporate Departments Roster (Open by default) -->
+            <div class="accordion-item bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden transition-all duration-300">
+                <div class="accordion-header p-4.5 flex items-center justify-between cursor-pointer select-none hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition" onclick="toggleAccordion('dept-accordion')">
                     <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 rounded-xl bg-teal-50 dark:bg-teal-950/80 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold text-base">
+                        <div class="w-9 h-9 rounded-xl bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-base shadow-xs shrink-0">
+                            <i class="bx bx-sitemap"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-sm font-bold text-slate-900 dark:text-white">Corporate Departments Roster</h2>
+                            <span class="text-[11px] text-slate-400">Manage company organizational units, codes, and employee department allocations</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 font-mono">
+                            {{ $departments->count() }} Units
+                        </span>
+                        <div class="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 flex items-center justify-center text-lg transition-transform duration-300 accordion-icon" id="dept-accordion-icon">
+                            <i class="bx bx-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-content border-t border-slate-100 dark:border-slate-800" id="dept-accordion-content">
+                    <div class="p-4 bg-slate-50/40 dark:bg-slate-900/40 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
+                        <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">Assigned employee roster per departmental division</span>
+                        <x-button variant="secondary" size="xs" icon="bx-plus" onclick="openModal('add-department-modal')">
+                            New Department
+                        </x-button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                                <tr>
+                                    <th class="p-3.5">Department Name</th>
+                                    <th class="p-3.5">Code / Acronym</th>
+                                    <th class="p-3.5">Assigned Staff</th>
+                                    <th class="p-3.5">Created Date</th>
+                                    <th class="p-3.5 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-sans">
+                                @forelse($departments as $dept)
+                                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
+                                        <td class="p-3.5 font-bold text-slate-900 dark:text-white">
+                                            {{ $dept->name }}
+                                        </td>
+                                        <td class="p-3.5 font-mono text-indigo-600 dark:text-indigo-400 font-bold">
+                                            {{ $dept->code ?? '—' }}
+                                        </td>
+                                        <td class="p-3.5 font-mono">
+                                            <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                                                {{ $dept->employees_count }} staff
+                                            </span>
+                                        </td>
+                                        <td class="p-3.5 text-slate-400">
+                                            {{ $dept->created_at ? $dept->created_at->format('d M Y') : '—' }}
+                                        </td>
+                                        <td class="p-3.5 text-right">
+                                            <div class="flex items-center justify-end gap-1.5 flex-wrap">
+                                                <x-action-button variant="purple" icon="bx-pencil" title="Edit Department" onclick="openEditDepartmentModal({{ json_encode($dept) }})">
+                                                    Edit
+                                                </x-action-button>
+
+                                                @if($dept->employees_count === 0)
+                                                    <x-action-button variant="rose" icon="bx-trash" title="Delete Department" onclick="confirmDeleteDepartment({{ $dept->id }}, '{{ addslashes($dept->name) }}')">
+                                                        Delete
+                                                    </x-action-button>
+                                                @endif
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="p-8 text-center text-slate-400">
+                                            No organizational departments found. Click "Add Department" to create units.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACCORDION ITEM 2: Allowance & Benefit Components Registry (Collapsed by default) -->
+            <div class="accordion-item bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden transition-all duration-300">
+                <div class="accordion-header p-4.5 flex items-center justify-between cursor-pointer select-none hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition" onclick="toggleAccordion('allowance-accordion')">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-teal-50 dark:bg-teal-950/80 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold text-base shadow-xs shrink-0">
+                            <i class="bx bx-gift"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-sm font-bold text-slate-900 dark:text-white">Allowance &amp; Benefit Components Registry</h2>
+                            <span class="text-[11px] text-slate-400">Recurring allowance types, deductions, and Malaysian statutory taxability flags</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-teal-50 dark:bg-teal-950 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800 font-mono">
+                            {{ $salaryComponents->count() }} Components
+                        </span>
+                        <div class="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 flex items-center justify-center text-lg transition-transform duration-300 accordion-icon rotate-[-90deg]" id="allowance-accordion-icon">
+                            <i class="bx bx-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-content border-t border-slate-100 dark:border-slate-800 hidden" id="allowance-accordion-content">
+                    <div class="p-4 bg-slate-50/40 dark:bg-slate-900/40 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
+                        <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">Statutory taxability matrix per compensation component</span>
+                        <x-button variant="secondary" size="xs" icon="bx-plus" onclick="openModal('add-allowance-modal')">
+                            New Allowance Type
+                        </x-button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                                <tr>
+                                    <th class="p-3.5">Allowance Name</th>
+                                    <th class="p-3.5">Component Code</th>
+                                    <th class="p-3.5">Statutory Rules (EPF / SOCSO / EIS / PCB)</th>
+                                    <th class="p-3.5">Assigned Staff</th>
+                                    <th class="p-3.5 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-sans">
+                                @forelse($salaryComponents as $comp)
+                                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
+                                        <td class="p-3.5 font-bold text-slate-900 dark:text-white">
+                                            {{ $comp->name }}
+                                        </td>
+                                        <td class="p-3.5 font-mono text-teal-600 dark:text-teal-400 font-bold">
+                                            {{ $comp->code }}
+                                        </td>
+                                        <td class="p-3.5">
+                                            <div class="flex items-center gap-1.5 flex-wrap text-[10px]">
+                                                @if($comp->is_epf_subject)
+                                                    <span class="px-1.5 py-0.5 rounded font-bold bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">EPF</span>
+                                                @endif
+                                                @if($comp->is_socso_subject)
+                                                    <span class="px-1.5 py-0.5 rounded font-bold bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">SOCSO</span>
+                                                @endif
+                                                @if($comp->is_eis_subject)
+                                                    <span class="px-1.5 py-0.5 rounded font-bold bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">EIS</span>
+                                                @endif
+                                                @if($comp->is_pcb_subject)
+                                                    <span class="px-1.5 py-0.5 rounded font-bold bg-rose-50 dark:bg-rose-950 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800">PCB</span>
+                                                @endif
+                                                @if(!$comp->is_epf_subject && !$comp->is_socso_subject && !$comp->is_eis_subject && !$comp->is_pcb_subject)
+                                                    <span class="px-1.5 py-0.5 rounded font-medium bg-slate-100 dark:bg-slate-800 text-slate-500">Exempt (Tax Free)</span>
+                                                @endif
+                                            </div>
+                                        </td>
+                                        <td class="p-3.5 font-mono">
+                                            <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                                                {{ $comp->employee_salary_components_count }} staff
+                                            </span>
+                                        </td>
+                                        <td class="p-3.5 text-right">
+                                            <div class="flex items-center justify-end gap-1.5 flex-wrap">
+                                                <x-action-button variant="purple" icon="bx-pencil" title="Edit Allowance Rules" onclick="openEditAllowanceModal({{ json_encode($comp) }})">
+                                                    Edit
+                                                </x-action-button>
+
+                                                @if($comp->employee_salary_components_count === 0)
+                                                    <x-action-button variant="rose" icon="bx-trash" title="Delete Allowance Component" onclick="confirmDeleteAllowance({{ $comp->id }}, '{{ addslashes($comp->name) }}')">
+                                                        Delete
+                                                    </x-action-button>
+                                                @endif
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="p-8 text-center text-slate-400">
+                                            No allowance components configured. Click "New Allowance Type" to define benefits.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACCORDION ITEM 3: KWSP / EPF Statutory Parameters (Collapsed by default) -->
+            <div class="accordion-item bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden transition-all duration-300">
+                <div class="accordion-header p-4.5 flex items-center justify-between cursor-pointer select-none hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition" onclick="toggleAccordion('epf-accordion')">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-base shadow-xs shrink-0">
+                            <i class="bx bxs-bank"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-sm font-bold text-slate-900 dark:text-white">KWSP / EPF Statutory Parameters (Act 1991)</h2>
+                            <span class="text-[11px] text-slate-400 font-mono">{{ $parameters['epf']->first()?->reference_gazette ?? 'P.U. (A) EPF Act 1991 Third Schedule' }}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <x-badge variant="indigo" dot="true">Active Standard (11% / 13%)</x-badge>
+                        <div class="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 flex items-center justify-center text-lg transition-transform duration-300 accordion-icon rotate-[-90deg]" id="epf-accordion-icon">
+                            <i class="bx bx-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-content border-t border-slate-100 dark:border-slate-800 hidden" id="epf-accordion-content">
+                    <div class="p-4 bg-slate-50/40 dark:bg-slate-900/40 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
+                        <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">Statutory employee and employer rate configuration</span>
+                        <x-action-button variant="purple" icon="bx-pencil" title="Edit EPF Rates" onclick="openModal('edit-epf-modal')">
+                            Edit EPF Rates
+                        </x-action-button>
+                    </div>
+
+                    <div class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                            <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Standard Employee</span>
+                            <span class="text-xl font-bold text-slate-900 dark:text-white font-mono mt-1 block">{{ ($epfParams['standard_employee_rate'] ?? 0.11) * 100 }}%</span>
+                            <span class="text-[10px] text-slate-400">Voluntary option {{ ($epfParams['voluntary_reduced_employee_rate'] ?? 0.09) * 100 }}%</span>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                            <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Employer (Wage &le; RM{{ number_format($epfParams['salary_threshold'] ?? 5000, 0) }})</span>
+                            <span class="text-xl font-bold text-indigo-600 dark:text-indigo-400 font-mono mt-1 block">{{ ($epfParams['employer_rate_low_wage'] ?? 0.13) * 100 }}%</span>
+                            <span class="text-[10px] text-slate-400">Mandatory statutory low wage</span>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                            <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Employer (Wage &gt; RM{{ number_format($epfParams['salary_threshold'] ?? 5000, 0) }})</span>
+                            <span class="text-xl font-bold text-slate-900 dark:text-white font-mono mt-1 block">{{ ($epfParams['employer_rate_high_wage'] ?? 0.12) * 100 }}%</span>
+                            <span class="text-[10px] text-slate-400">Standard statutory bracket</span>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                            <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Senior Citizen (Age 60+)</span>
+                            <span class="text-xl font-bold text-emerald-600 dark:text-emerald-400 font-mono mt-1 block">{{ ($epfParams['senior_citizen_employer_rate'] ?? 0.04) * 100 }}% (ER) / {{ ($epfParams['senior_citizen_employee_rate'] ?? 0) * 100 }}% (EE)</span>
+                            <span class="text-[10px] text-slate-400">Malaysian Citizens</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACCORDION ITEM 4: PERKESO SOCSO & SKBBK Schedule (Collapsed by default) -->
+            <div class="accordion-item bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden transition-all duration-300">
+                <div class="accordion-header p-4.5 flex items-center justify-between cursor-pointer select-none hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition" onclick="toggleAccordion('socso-accordion')">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-sky-50 dark:bg-sky-950/80 text-sky-600 dark:text-sky-400 flex items-center justify-center font-bold text-base shadow-xs shrink-0">
+                            <i class="bx bxs-shield"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-sm font-bold text-slate-900 dark:text-white">PERKESO SOCSO &amp; SKBBK (Lindung 24 Jam) Schedule</h2>
+                            <span class="text-[11px] text-slate-400 font-mono">Effective 1 June 2026 • Wage Ceiling RM{{ number_format($socsoParams['wage_ceiling'] ?? 6000, 2) }}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <x-badge variant="purple" dot="true">Includes SKBBK 2026</x-badge>
+                        <div class="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 flex items-center justify-center text-lg transition-transform duration-300 accordion-icon rotate-[-90deg]" id="socso-accordion-icon">
+                            <i class="bx bx-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-content border-t border-slate-100 dark:border-slate-800 hidden" id="socso-accordion-content">
+                    <div class="p-4 bg-slate-50/40 dark:bg-slate-900/40 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
+                        <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">Act 4 base contribution brackets & 24-Hour Non-Employment Injury Scheme</span>
+                        <x-action-button variant="purple" icon="bx-pencil" title="Edit SOCSO Rates" onclick="openModal('edit-socso-modal')">
+                            Edit SOCSO Schedule
+                        </x-action-button>
+                    </div>
+
+                    <div class="p-6 space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                                <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Act 4 SOCSO Category 1 (Base)</span>
+                                <span class="text-lg font-bold text-slate-900 dark:text-white font-mono mt-1 block">{{ ($socsoParams['category_1']['employer_rate_percentage'] ?? 0.0175) * 100 }}% ER / {{ ($socsoParams['category_1']['employee_base_percentage'] ?? 0.005) * 100 }}% EE</span>
+                                <span class="text-[10px] text-slate-400">Employment Injury &amp; Invalidity</span>
+                            </div>
+                            <div class="p-4 rounded-xl bg-purple-50/60 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800">
+                                <span class="text-xs text-purple-700 dark:text-purple-300 font-bold block">SKBBK (Lindung 24 Jam)</span>
+                                <span class="text-lg font-bold text-purple-950 dark:text-purple-100 font-mono mt-1 block">Tiered (e.g. RM14.50 @ RM2k)</span>
+                                <span class="text-[10px] text-purple-600 dark:text-purple-400 font-medium">100% Employee Borne</span>
+                            </div>
+                            <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                                <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">SOCSO Category 2 (Age 60+)</span>
+                                <span class="text-lg font-bold text-slate-900 dark:text-white font-mono mt-1 block">{{ ($socsoParams['category_2']['employer_rate_percentage'] ?? 0.0125) * 100 }}% ER / RM7.00 SKBBK</span>
+                                <span class="text-[10px] text-slate-400">Employment Injury Only</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACCORDION ITEM 5: SIP / EIS (Act 800) (Collapsed by default) -->
+            <div class="accordion-item bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden transition-all duration-300">
+                <div class="accordion-header p-4.5 flex items-center justify-between cursor-pointer select-none hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition" onclick="toggleAccordion('eis-accordion')">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-teal-50 dark:bg-teal-950/80 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold text-base shadow-xs shrink-0">
                             <i class="bx bx-briefcase"></i>
                         </div>
                         <div>
-                            <h3 class="text-sm font-bold text-slate-900 dark:text-white">SIP / EIS (Act 800)</h3>
-                            <span class="text-[10px] text-slate-400">Employment Insurance System</span>
+                            <h2 class="text-sm font-bold text-slate-900 dark:text-white">SIP / EIS (Act 800)</h2>
+                            <span class="text-[11px] text-slate-400">Employment Insurance System (0.2% Employee + 0.2% Employer)</span>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-3">
                         <span class="text-xs font-mono font-bold text-teal-600 dark:text-teal-400">{{ ($eisParams['employee_rate'] ?? 0.002) * 100 }}% + {{ ($eisParams['employer_rate'] ?? 0.002) * 100 }}%</span>
-                        <x-action-button variant="purple" icon="bx-pencil" title="Edit EIS Rules" onclick="openModal('edit-eis-modal')">
-                            Edit
-                        </x-action-button>
+                        <div class="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 flex items-center justify-center text-lg transition-transform duration-300 accordion-icon rotate-[-90deg]" id="eis-accordion-icon">
+                            <i class="bx bx-chevron-down"></i>
+                        </div>
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-3 text-xs">
-                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60">
-                        <span class="text-[10px] text-slate-400 block">Wage Ceiling Limit</span>
-                        <span class="font-bold text-slate-800 dark:text-white font-mono">RM {{ number_format($eisParams['wage_ceiling'] ?? 6000, 2) }}</span>
+
+                <div class="accordion-content border-t border-slate-100 dark:border-slate-800 hidden" id="eis-accordion-content">
+                    <div class="p-4 bg-slate-50/40 dark:bg-slate-900/40 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
+                        <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">EIS statutory percentage rates & wage ceiling limit</span>
+                        <x-action-button variant="purple" icon="bx-pencil" title="Edit EIS Rules" onclick="openModal('edit-eis-modal')">
+                            Edit EIS Rules
+                        </x-action-button>
                     </div>
-                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60">
-                        <span class="text-[10px] text-slate-400 block">Max Deduction (Capped)</span>
-                        <span class="font-bold text-slate-800 dark:text-white font-mono">RM {{ number_format(($eisParams['wage_ceiling'] ?? 6000) * ($eisParams['employee_rate'] ?? 0.002) - 0.10, 2) }} each</span>
+
+                    <div class="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                            <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Wage Ceiling Limit</span>
+                            <span class="text-xl font-bold text-slate-900 dark:text-white font-mono mt-1 block">RM {{ number_format($eisParams['wage_ceiling'] ?? 6000, 2) }}</span>
+                            <span class="text-[10px] text-slate-400">Max statutory wage threshold</span>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                            <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Max Monthly Deduction (Capped)</span>
+                            <span class="text-xl font-bold text-teal-600 dark:text-teal-400 font-mono mt-1 block">RM {{ number_format(($eisParams['wage_ceiling'] ?? 6000) * ($eisParams['employee_rate'] ?? 0.002) - 0.10, 2) }} each</span>
+                            <span class="text-[10px] text-slate-400">0.2% Employee / 0.2% Employer</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- LHDN Reliefs Card -->
-            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs p-5 space-y-4">
-                <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+            <!-- ACCORDION ITEM 6: LHDN PCB Standard Reliefs (Collapsed by default) -->
+            <div class="accordion-item bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden transition-all duration-300">
+                <div class="accordion-header p-4.5 flex items-center justify-between cursor-pointer select-none hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition" onclick="toggleAccordion('pcb-accordion')">
                     <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 rounded-xl bg-rose-50 dark:bg-rose-950/80 text-rose-600 dark:text-rose-400 flex items-center justify-center font-bold text-base">
+                        <div class="w-9 h-9 rounded-xl bg-rose-50 dark:bg-rose-950/80 text-rose-600 dark:text-rose-400 flex items-center justify-center font-bold text-base shadow-xs shrink-0">
                             <i class="bx bxs-file-pdf"></i>
                         </div>
                         <div>
-                            <h3 class="text-sm font-bold text-slate-900 dark:text-white">LHDN PCB Standard Reliefs</h3>
-                            <span class="text-[10px] text-slate-400">Income Tax Act 1967 (Computerised MTD)</span>
+                            <h2 class="text-sm font-bold text-slate-900 dark:text-white">LHDN PCB Standard Reliefs</h2>
+                            <span class="text-[11px] text-slate-400">Income Tax Act 1967 (Computerised MTD calculation parameters)</span>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-3">
                         <span class="text-xs font-mono font-bold text-rose-600 dark:text-rose-400">Auto MTD Engine</span>
-                        <x-action-button variant="purple" icon="bx-pencil" title="Edit PCB Reliefs" onclick="openModal('edit-pcb-modal')">
-                            Edit
-                        </x-action-button>
+                        <div class="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 flex items-center justify-center text-lg transition-transform duration-300 accordion-icon rotate-[-90deg]" id="pcb-accordion-icon">
+                            <i class="bx bx-chevron-down"></i>
+                        </div>
                     </div>
                 </div>
-                <div class="grid grid-cols-3 gap-2 text-xs">
-                    <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60">
-                        <span class="text-[9px] text-slate-400 block">Individual (D)</span>
-                        <span class="font-bold text-slate-800 dark:text-white font-mono">RM {{ number_format($pcbParams['individual_relief'] ?? 9000, 0) }}</span>
+
+                <div class="accordion-content border-t border-slate-100 dark:border-slate-800 hidden" id="pcb-accordion-content">
+                    <div class="p-4 bg-slate-50/40 dark:bg-slate-900/40 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
+                        <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">Statutory individual and dependent relief amounts for monthly tax calculation</span>
+                        <x-action-button variant="purple" icon="bx-pencil" title="Edit PCB Reliefs" onclick="openModal('edit-pcb-modal')">
+                            Edit PCB Reliefs
+                        </x-action-button>
                     </div>
-                    <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60">
-                        <span class="text-[9px] text-slate-400 block">Spouse (S)</span>
-                        <span class="font-bold text-slate-800 dark:text-white font-mono">RM {{ number_format($pcbParams['spouse_non_working_relief'] ?? 4000, 0) }}</span>
-                    </div>
-                    <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60">
-                        <span class="text-[9px] text-slate-400 block">Per Child (QC)</span>
-                        <span class="font-bold text-slate-800 dark:text-white font-mono">RM {{ number_format($pcbParams['child_relief_per_child'] ?? 2000, 0) }}</span>
+
+                    <div class="p-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                            <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Individual (D)</span>
+                            <span class="text-xl font-bold text-slate-900 dark:text-white font-mono mt-1 block">RM {{ number_format($pcbParams['individual_relief'] ?? 9000, 0) }}</span>
+                            <span class="text-[10px] text-slate-400">Standard Individual Relief</span>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                            <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Non-Working Spouse (S)</span>
+                            <span class="text-xl font-bold text-slate-900 dark:text-white font-mono mt-1 block">RM {{ number_format($pcbParams['spouse_non_working_relief'] ?? 4000, 0) }}</span>
+                            <span class="text-[10px] text-slate-400">Spouse without income</span>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                            <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Per Child (QC)</span>
+                            <span class="text-xl font-bold text-slate-900 dark:text-white font-mono mt-1 block">RM {{ number_format($pcbParams['child_relief_per_child'] ?? 2000, 0) }}</span>
+                            <span class="text-[10px] text-slate-400">Under 18 / studying</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -706,6 +746,35 @@
 
     <x-slot name="scripts">
         <script>
+            function toggleAccordion(targetId) {
+                const accordionKeys = [
+                    'dept-accordion',
+                    'allowance-accordion',
+                    'epf-accordion',
+                    'socso-accordion',
+                    'eis-accordion',
+                    'pcb-accordion'
+                ];
+
+                accordionKeys.forEach(key => {
+                    const content = document.getElementById(`${key}-content`);
+                    const icon = document.getElementById(`${key}-icon`);
+
+                    if (key === targetId) {
+                        // If it's already open, keep it open (or toggle off if desired, but here we switch to target)
+                        const isCurrentlyHidden = content.classList.contains('hidden');
+                        if (isCurrentlyHidden) {
+                            content.classList.remove('hidden');
+                            if (icon) icon.classList.remove('rotate-[-90deg]');
+                        }
+                    } else {
+                        // Collapse all other items
+                        if (content) content.classList.add('hidden');
+                        if (icon) icon.classList.add('rotate-[-90deg]');
+                    }
+                });
+            }
+
             function openEditDepartmentModal(dept) {
                 const form = document.getElementById('edit-department-form');
                 form.action = `/admin/parameters/departments/${dept.id}`;
