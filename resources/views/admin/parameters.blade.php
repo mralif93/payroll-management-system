@@ -484,39 +484,63 @@
 
     <!-- 0. EDIT COMPANY PROFILE MODAL -->
     <x-modal id="edit-company-modal" title="Edit Company Profile & Statutory IDs" subtitle="Configure employer registration IDs, bank autopay accounts, and contact details" icon="bx-buildings" size="xl">
-        <form method="POST" action="{{ route('admin.parameters.company.update') }}" class="space-y-4 text-left">
+        <form method="POST" action="{{ route('admin.parameters.company.update') }}" class="space-y-5 text-left">
             @csrf
             @method('PUT')
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <x-input label="Company Legal Name" name="name" value="{{ $company->name ?? '' }}" required placeholder="e.g. PayFlow Technologies Sdn Bhd" />
-                <x-input label="SSM Registration No." name="registration_no" value="{{ $company->registration_no ?? '' }}" required placeholder="e.g. 202601009999" />
-            </div>
-
-            <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 space-y-3">
-                <span class="text-xs font-bold text-slate-900 dark:text-white block uppercase tracking-wider">Statutory Organization Numbers</span>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                    <x-input label="KWSP / EPF No." name="epf_no" value="{{ $company->epf_no ?? '' }}" placeholder="e.g. 123456789" />
-                    <x-input label="PERKESO / SOCSO No." name="socso_no" value="{{ $company->socso_no ?? '' }}" placeholder="e.g. A123456789" />
-                    <x-input label="LHDN Employer Tax No. (E)" name="tax_no" value="{{ $company->tax_no ?? '' }}" placeholder="e.g. E 9876543200" />
-                    <x-input label="HRD Corp No." name="hrd_no" value="{{ $company->hrd_no ?? '' }}" placeholder="e.g. HRD-2026-999" />
+            <!-- Section 1: Company Identity -->
+            <div class="space-y-3">
+                <div class="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-1.5">
+                    <i class="bx bx-buildings text-indigo-600 dark:text-indigo-400 text-sm"></i>
+                    <span class="text-xs font-bold text-slate-800 dark:text-white uppercase tracking-wider">Company Identity</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <x-input label="Company Legal Name" name="name" value="{{ $company->name ?? '' }}" required placeholder="e.g. PayFlow Technologies Sdn Bhd" />
+                    <x-input label="SSM Registration No." name="registration_no" value="{{ $company->registration_no ?? '' }}" required placeholder="e.g. 202601009999" />
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <x-input label="AutoPay Bank Name" name="bank_name" value="{{ $company->bank_name ?? '' }}" placeholder="e.g. Malayan Banking Berhad (Maybank)" />
-                <x-input label="Corporate Bank Account No." name="bank_account_no" value="{{ $company->bank_account_no ?? '' }}" placeholder="e.g. 514012345678" />
+            <!-- Section 2: Statutory Organization Numbers (Clean 2-Column Grid) -->
+            <div class="space-y-3">
+                <div class="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-1.5">
+                    <i class="bx bx-shield-quarter text-indigo-600 dark:text-indigo-400 text-sm"></i>
+                    <span class="text-xs font-bold text-slate-800 dark:text-white uppercase tracking-wider">Statutory Organization Numbers</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <x-input label="KWSP / EPF Employer No." name="epf_no" value="{{ $company->epf_no ?? '' }}" placeholder="e.g. 123456789" />
+                    <x-input label="PERKESO / SOCSO Employer No." name="socso_no" value="{{ $company->socso_no ?? '' }}" placeholder="e.g. A123456789" />
+                    <x-input label="LHDN Employer Tax No. (E)" name="tax_no" value="{{ $company->tax_no ?? '' }}" placeholder="e.g. E 9876543200" />
+                    <x-input label="HRD Corp Registration No." name="hrd_no" value="{{ $company->hrd_no ?? '' }}" placeholder="e.g. HRD-2026-999" />
+                </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-                <x-input label="Contact Person" name="contact_person" value="{{ $company->contact_person ?? '' }}" placeholder="e.g. Ahmad Tajudin" />
-                <x-input label="Contact Email" name="contact_email" type="email" value="{{ $company->contact_email ?? '' }}" placeholder="e.g. admin@payroll.my" />
-                <x-input label="Contact Phone" name="contact_phone" value="{{ $company->contact_phone ?? '' }}" placeholder="e.g. +603-88889999" />
+            <!-- Section 3: Corporate Banking & AutoPay -->
+            <div class="space-y-3">
+                <div class="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-1.5">
+                    <i class="bx bxs-bank text-indigo-600 dark:text-indigo-400 text-sm"></i>
+                    <span class="text-xs font-bold text-slate-800 dark:text-white uppercase tracking-wider">Corporate Banking &amp; AutoPay</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <x-input label="AutoPay Bank Name" name="bank_name" value="{{ $company->bank_name ?? '' }}" placeholder="e.g. Malayan Banking Berhad (Maybank)" />
+                    <x-input label="Corporate Bank Account No." name="bank_account_no" value="{{ $company->bank_account_no ?? '' }}" placeholder="e.g. 514012345678" />
+                </div>
             </div>
 
-            <x-input label="Corporate Registered Address" name="address" value="{{ $company->address ?? '' }}" placeholder="Registered office address" />
+            <!-- Section 4: Contact & Office Location -->
+            <div class="space-y-3">
+                <div class="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-1.5">
+                    <i class="bx bx-map-pin text-indigo-600 dark:text-indigo-400 text-sm"></i>
+                    <span class="text-xs font-bold text-slate-800 dark:text-white uppercase tracking-wider">Contact &amp; Registered Address</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                    <x-input label="Contact Person" name="contact_person" value="{{ $company->contact_person ?? '' }}" placeholder="e.g. Ahmad Tajudin" />
+                    <x-input label="Contact Email" name="contact_email" type="email" value="{{ $company->contact_email ?? '' }}" placeholder="e.g. admin@payroll.my" />
+                    <x-input label="Contact Phone" name="contact_phone" value="{{ $company->contact_phone ?? '' }}" placeholder="e.g. +603-88889999" />
+                </div>
+                <x-input label="Corporate Registered Address" name="address" value="{{ $company->address ?? '' }}" placeholder="Registered office address" />
+            </div>
 
-            <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
+            <div class="flex justify-end gap-2.5 pt-4 border-t border-slate-100 dark:border-slate-800">
                 <x-button variant="secondary" size="sm" type="button" onclick="closeModal('edit-company-modal')">
                     Cancel
                 </x-button>
