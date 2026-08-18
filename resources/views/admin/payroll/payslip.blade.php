@@ -14,7 +14,7 @@
     <style>
         @page {
             size: A4 portrait;
-            margin: 12mm 15mm;
+            margin: 10mm 15mm;
         }
 
         * {
@@ -26,8 +26,8 @@
         body {
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: #f8fafc;
-            color: #1e293b;
-            font-size: 12px;
+            color: #0f172a;
+            font-size: 11.5px;
             line-height: 1.4;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
@@ -43,16 +43,20 @@
 
         @media print {
             body {
-                background-color: #ffffff;
+                background: #ffffff !important;
+                color: #000000 !important;
             }
             .no-print {
                 display: none !important;
             }
             .payslip-wrapper {
                 box-shadow: none !important;
-                border: 1px solid #cbd5e1 !important;
+                border: none !important;
+                border-radius: 0 !important;
                 margin: 0 !important;
+                padding: 0 !important;
                 max-width: 100% !important;
+                background: transparent !important;
             }
         }
 
@@ -110,42 +114,27 @@
             position: relative;
         }
 
-        /* Watermark */
-        .watermark {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-30deg);
-            font-size: 72px;
-            font-weight: 900;
-            color: rgba(79, 70, 229, 0.03);
-            text-transform: uppercase;
-            letter-spacing: 8px;
-            pointer-events: none;
-            user-select: none;
-            white-space: nowrap;
-        }
-
+        /* 1. Header Grid */
         .header-grid {
             display: grid;
             grid-template-columns: 1fr auto;
             gap: 20px;
-            border-bottom: 2px solid #4f46e5;
-            padding-bottom: 18px;
-            margin-bottom: 20px;
+            border-bottom: 2px solid #0f172a;
+            padding-bottom: 14px;
+            margin-bottom: 16px;
         }
 
         .company-title {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 800;
             color: #0f172a;
             letter-spacing: -0.3px;
         }
 
         .company-subtitle {
-            font-size: 11px;
-            color: #64748b;
-            margin-top: 2px;
+            font-size: 10.5px;
+            color: #475569;
+            margin-top: 1px;
         }
 
         .statement-badge {
@@ -155,38 +144,40 @@
         .statement-title {
             font-size: 15px;
             font-weight: 800;
-            color: #4f46e5;
+            color: #0f172a;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .period-pill {
-            display: inline-block;
-            background-color: #e0e7ff;
-            color: #3730a3;
+        .period-text {
+            font-size: 12px;
             font-weight: 700;
-            font-size: 11px;
-            padding: 3px 10px;
-            border-radius: 20px;
-            margin-top: 4px;
+            color: #334155;
+            margin-top: 2px;
         }
 
+        .batch-text {
+            font-size: 10px;
+            color: #64748b;
+            margin-top: 2px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* 2. Employee Info Box (Clean no-bg, border line top/bottom) */
         .employee-info-box {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 16px 18px;
-            margin-bottom: 22px;
+            gap: 16px 24px;
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 14px;
+            margin-bottom: 18px;
         }
 
         .info-group {
             display: grid;
-            grid-template-columns: 130px 1fr;
+            grid-template-columns: 125px 1fr;
             gap: 4px;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
             font-size: 11px;
         }
 
@@ -200,64 +191,49 @@
             font-weight: 700;
         }
 
-        /* 2-Column Earnings & Deductions Tables */
+        /* 3. Earnings & Deductions Tables (Clean minimalistic list) */
         .statement-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
+            gap: 28px;
+            margin-bottom: 18px;
         }
 
         .table-section {
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .table-header {
-            background-color: #f1f5f9;
-            padding: 10px 14px;
+            padding: 6px 0;
             font-weight: 800;
             font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1.5px solid #0f172a;
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-
-        .table-header.earnings {
             color: #0f172a;
-            border-top: 3px solid #4f46e5;
-        }
-
-        .table-header.deductions {
-            color: #0f172a;
-            border-top: 3px solid #e11d48;
         }
 
         .table-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 9px 14px;
+            padding: 8px 0;
             border-bottom: 1px solid #f1f5f9;
-            font-size: 11.5px;
-        }
-
-        .table-row:nth-child(even) {
-            background-color: #fafbfc;
+            font-size: 11px;
         }
 
         .table-row-title {
-            color: #334155;
+            color: #1e293b;
             font-weight: 600;
         }
 
         .table-row-desc {
-            font-size: 10px;
-            color: #94a3b8;
+            font-size: 9.5px;
+            color: #64748b;
             display: block;
         }
 
@@ -271,61 +247,61 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 11px 14px;
-            background-color: #f8fafc;
-            border-top: 2px solid #e2e8f0;
+            padding: 10px 0;
+            border-top: 1.5px solid #0f172a;
+            border-bottom: 1px solid #cbd5e1;
             font-weight: 800;
-            font-size: 12px;
+            font-size: 11.5px;
+            margin-top: auto;
         }
 
-        /* Net Pay Hero Box */
-        .net-pay-card {
-            background: linear-gradient(135deg, #065f46 0%, #047857 100%);
-            color: #ffffff;
-            border-radius: 12px;
-            padding: 16px 22px;
+        /* 4. Net Take-Home Salary Highlight (Clean underline & double rule) */
+        .net-pay-section {
+            border-top: 2px solid #0f172a;
+            border-bottom: 2px solid #0f172a;
+            padding: 12px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(6, 95, 70, 0.15);
+            margin-bottom: 18px;
         }
 
         .net-pay-label {
             font-size: 13px;
-            font-weight: 700;
+            font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            color: #0f172a;
         }
 
         .net-pay-subtext {
-            font-size: 11px;
-            color: #a7f3d0;
-            margin-top: 2px;
+            font-size: 10.5px;
+            color: #64748b;
+            margin-top: 1px;
         }
 
         .net-pay-amount {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 900;
             letter-spacing: -0.5px;
+            color: #0f172a;
         }
 
-        /* Employer Contribution Details */
+        /* 5. Employer Contribution Details (Clean text layout) */
         .employer-box {
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 14px 16px;
-            margin-bottom: 24px;
+            border-top: 1px solid #cbd5e1;
+            border-bottom: 1px solid #cbd5e1;
+            padding: 10px 0;
+            margin-bottom: 22px;
         }
 
         .employer-header {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 800;
             color: #475569;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -334,38 +310,33 @@
         .employer-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            text-align: center;
+            gap: 16px;
         }
 
         .employer-item {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 8px 10px;
+            padding: 0;
         }
 
         .employer-item-label {
-            font-size: 10px;
+            font-size: 9.5px;
             font-weight: 600;
             color: #64748b;
         }
 
         .employer-item-amount {
-            font-size: 12px;
+            font-size: 11.5px;
             font-weight: 800;
-            color: #334155;
-            margin-top: 2px;
+            color: #0f172a;
+            margin-top: 1px;
         }
 
-        /* Footer & Signatures */
+        /* 6. Signatures */
         .footer-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 40px;
-            margin-top: 30px;
-            padding-top: 15px;
-            border-top: 1px dashed #cbd5e1;
+            gap: 60px;
+            margin-top: 24px;
+            padding-top: 10px;
         }
 
         .signature-box {
@@ -373,23 +344,23 @@
         }
 
         .signature-line {
-            height: 40px;
-            border-bottom: 1px solid #94a3b8;
-            margin-bottom: 6px;
+            height: 36px;
+            border-bottom: 1px solid #475569;
+            margin-bottom: 5px;
         }
 
         .signature-label {
-            font-size: 10px;
+            font-size: 9.5px;
             font-weight: 700;
-            color: #64748b;
+            color: #475569;
             text-transform: uppercase;
         }
 
         .disclaimer {
-            font-size: 9.5px;
-            color: #94a3b8;
+            font-size: 9px;
+            color: #64748b;
             text-align: center;
-            margin-top: 20px;
+            margin-top: 16px;
         }
     </style>
 </head>
@@ -411,7 +382,6 @@
 
     <!-- Official Payslip Document -->
     <div class="payslip-wrapper">
-        <div class="watermark">PAYFLOW CONFIDENTIAL</div>
 
         <!-- 1. Header & Company Profile -->
         <div class="header-grid">
@@ -419,17 +389,17 @@
                 <div class="company-title">{{ $company->name ?? 'PayFlow Technologies Sdn Bhd' }}</div>
                 <div class="company-subtitle">Company Reg No: {{ $company->registration_no ?? '202601009999' }}</div>
                 <div class="company-subtitle">{{ $company->address ?? 'Level 28, Menara PayFlow, KLCC, 50088 Kuala Lumpur, Malaysia' }}</div>
-                <div class="company-subtitle" style="margin-top: 4px; font-family: monospace; font-size: 10px;">
+                <div class="company-subtitle mono" style="margin-top: 3px; font-size: 9.5px;">
                     KWSP: {{ $company->epf_no ?? '123456789' }} &bull; SOCSO: {{ $company->socso_no ?? 'A1234567B' }} &bull; LHDN (E): {{ $company->tax_no ?? 'E9876543200' }}
                 </div>
             </div>
 
             <div class="statement-badge">
                 <div class="statement-title">Confidential Payslip</div>
-                <div class="period-pill mono">
+                <div class="period-text mono">
                     {{ date("F Y", mktime(0, 0, 0, (int)$payrollRun->period_month, 1, (int)$payrollRun->period_year)) }}
                 </div>
-                <div style="font-size: 10px; color: #64748b; margin-top: 5px; font-family: monospace;">
+                <div class="batch-text">
                     Batch: {{ $payrollRun->batch_no }}
                 </div>
             </div>
@@ -489,7 +459,7 @@
             
             <!-- Earnings -->
             <div class="table-section">
-                <div class="table-header earnings">
+                <div class="table-header">
                     <span>Earnings &amp; Allowances</span>
                     <span class="mono">Amount (MYR)</span>
                 </div>
@@ -516,19 +486,19 @@
                             <span class="table-row-title">Fixed Allowances</span>
                             <span class="table-row-desc">None claimable for period</span>
                         </div>
-                        <span class="table-row-amount mono" style="color: #94a3b8;">RM 0.00</span>
+                        <span class="table-row-amount mono" style="color: #64748b;">RM 0.00</span>
                     </div>
                 @endif
 
                 <div class="table-total-row">
                     <span>Total Gross Earnings</span>
-                    <span class="mono" style="color: #4f46e5;">RM {{ number_format($item->gross_salary, 2) }}</span>
+                    <span class="mono">RM {{ number_format($item->gross_salary, 2) }}</span>
                 </div>
             </div>
 
             <!-- Deductions -->
             <div class="table-section">
-                <div class="table-header deductions">
+                <div class="table-header">
                     <span>Employee Statutory Deductions</span>
                     <span class="mono">Amount (MYR)</span>
                 </div>
@@ -538,7 +508,7 @@
                         <span class="table-row-title">KWSP / EPF (Employee 11%)</span>
                         <span class="table-row-desc">Third Schedule Statutory</span>
                     </div>
-                    <span class="table-row-amount mono" style="color: #e11d48;">- RM {{ number_format($item->epf_employee, 2) }}</span>
+                    <span class="table-row-amount mono">- RM {{ number_format($item->epf_employee, 2) }}</span>
                 </div>
 
                 <div class="table-row">
@@ -546,7 +516,7 @@
                         <span class="table-row-title">PERKESO SOCSO &amp; SKBBK</span>
                         <span class="table-row-desc">Act 4 + 2026 Lindung 24 Jam</span>
                     </div>
-                    <span class="table-row-amount mono" style="color: #e11d48;">- RM {{ number_format($item->socso_employee + $item->skbbk_employee, 2) }}</span>
+                    <span class="table-row-amount mono">- RM {{ number_format($item->socso_employee + $item->skbbk_employee, 2) }}</span>
                 </div>
 
                 <div class="table-row">
@@ -554,7 +524,7 @@
                         <span class="table-row-title">SIP / EIS Employee (0.2%)</span>
                         <span class="table-row-desc">Employment Insurance Act 800</span>
                     </div>
-                    <span class="table-row-amount mono" style="color: #e11d48;">- RM {{ number_format($item->eis_employee, 2) }}</span>
+                    <span class="table-row-amount mono">- RM {{ number_format($item->eis_employee, 2) }}</span>
                 </div>
 
                 <div class="table-row">
@@ -562,19 +532,19 @@
                         <span class="table-row-title">LHDN Monthly Tax (PCB)</span>
                         <span class="table-row-desc">Monthly Tax Deduction</span>
                     </div>
-                    <span class="table-row-amount mono" style="color: #e11d48;">- RM {{ number_format($item->pcb_amount, 2) }}</span>
+                    <span class="table-row-amount mono">- RM {{ number_format($item->pcb_amount, 2) }}</span>
                 </div>
 
                 <div class="table-total-row">
                     <span>Total Deductions</span>
-                    <span class="mono" style="color: #e11d48;">- RM {{ number_format($item->total_employee_deductions, 2) }}</span>
+                    <span class="mono">- RM {{ number_format($item->total_employee_deductions, 2) }}</span>
                 </div>
             </div>
 
         </div>
 
-        <!-- 4. Net Take-Home Salary Hero Box -->
-        <div class="net-pay-card">
+        <!-- 4. Net Take-Home Salary Clean Header Section -->
+        <div class="net-pay-section">
             <div>
                 <div class="net-pay-label">Net Take-Home Pay</div>
                 <div class="net-pay-subtext">Direct electronic bank transfer to {{ $item->employee?->bank_name ?? 'Maybank' }} ({{ $item->employee?->bank_account_no ?? '••••' }})</div>
@@ -584,11 +554,11 @@
             </div>
         </div>
 
-        <!-- 5. Employer Contribution Summary (For Reference) -->
+        <!-- 5. Employer Contribution Summary -->
         <div class="employer-box">
             <div class="employer-header">
                 <span>Employer Statutory Contributions (Company Cost &bull; Not Deducted from Employee)</span>
-                <span class="mono" style="color: #4f46e5;">Total: RM {{ number_format($item->total_employer_contributions, 2) }}</span>
+                <span class="mono">Total: RM {{ number_format($item->total_employer_contributions, 2) }}</span>
             </div>
             <div class="employer-grid mono">
                 <div class="employer-item">
@@ -623,7 +593,7 @@
         </div>
 
         <div class="disclaimer">
-            This is a computer-generated official payslip generated by PayFlow MY Engine conforming to the Malaysian Employment Act 1955 and Statutory Regulations 2026. No physical signature is required for electronic verification.
+            This is an official computer-generated payslip generated by PayFlow MY Engine conforming to the Malaysian Employment Act 1955 and Statutory Regulations 2026.
         </div>
     </div>
 
