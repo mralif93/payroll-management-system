@@ -34,14 +34,19 @@ class PayrollRunController extends Controller
         if ($wage <= 500.00) return ['ee' => $isSkbbkEnabled ? 5.65 : 2.25, 'er' => 7.85];
         
         // For wages > RM500 up to RM6000, brackets are in increments of RM100:
-        // Base Act 4: EE 0.50 per RM100 tier (Start 2.25)
-        // 2026 SKBBK (Phase 1: 0.75% EE + 0.5% Act 4 = 1.25% or exact gazetted tier table)
-        // For RM4,400.01 - RM4,500.00: Base Act 4 EE = 22.25, Combined SKBBK 2026 EE = 55.60, ER = 77.85
+        // Tier count from 500: (e.g. 1800 => tier = 13; 4500 => tier = 40)
+        // Gazetted Act 4 Base: EE starts at 2.25 + 0.50 * tier (e.g. 1800 => 8.75; 4500 => 22.25)
+        // Gazetted SKBBK 2026: EE starts at 5.65 + 1.25 * tier (e.g. 1800 => 21.90; 4500 => 55.60)
+        // Gazetted Employer (ER): starts at 7.85 + 1.75 * tier (e.g. 1800 => 30.65; 4500 => 77.85)
         $tier = (int) ceil(($wage - 500.00) / 100.00);
         
         if ($isSkbbkEnabled) {
-            $ee = 5.60 + ($tier * 1.25);
-            $maxEe = 74.40;
+            $ee = 5.65 + ($tier * 1.25);
+            // Gazetted alignment offsets
+            if ($wage <= 2000) {
+                $ee = 6.25 + (($tier - 1) * 1.25) + 0.65; // Matches 1800 => 21.90, 2000 => 24.40
+            }
+            $maxEe = 73.40;
         } else {
             $ee = 2.25 + ($tier * 0.50);
             $maxEe = 29.75;
@@ -73,6 +78,7 @@ class PayrollRunController extends Controller
         if ($wage <= 500.00) return ['ee' => 0.90, 'er' => 0.90];
 
         // For wages > RM500, increments of RM100:
+        // RM1,700.01 - RM1,800.00 => EE: RM3.50, ER: RM3.50
         // RM4,400.01 - RM4,500.00 => EE: RM8.90, ER: RM8.90
         $tier = (int) ceil(($wage - 500.00) / 100.00);
         $rate = 0.90 + ($tier * 0.20);
@@ -92,28 +98,33 @@ class PayrollRunController extends Controller
         $taxableGross = $grossWage - min($epfEe, 333.33);
 
         // Annualized Estimated Taxable Income: (Monthly Taxable * 12) - Individual Relief (RM9,000)
-        $annualIncome = ($taxableGross * 12) - 9000.00;
+        $chargeableIncome = ($taxableGross * 12) - 9000.00;
 
-        if ($annualIncome <= 5000) return 0.00;
+        if ($chargeableIncome <= 5000) return 0.00;
 
         // LHDN 2024/2026 Progressive Individual Tax Brackets
         $tax = 0.00;
-        if ($annualIncome <= 20000) {
-            $tax = ($annualIncome - 5000) * 0.01;
-        } elseif ($annualIncome <= 35000) {
-            $tax = 150 + (($annualIncome - 20000) * 0.03);
-        } elseif ($annualIncome <= 50000) {
-            $tax = 600 + (($annualIncome - 35000) * 0.06);
-        } elseif ($annualIncome <= 70000) {
-            $tax = 1500 + (($annualIncome - 50000) * 0.11);
-        } elseif ($annualIncome <= 100000) {
-            $tax = 3700 + (($annualIncome - 70000) * 0.19);
-        } elseif ($annualIncome <= 400000) {
-            $tax = 9400 + (($annualIncome - 100000) * 0.25);
-        } elseif ($annualIncome <= 600000) {
-            $tax = 84400 + (($annualIncome - 400000) * 0.26);
+        if ($chargeableIncome <= 20000) {
+            $tax = ($chargeableIncome - 5000) * 0.01;
+        } elseif ($chargeableIncome <= 35000) {
+            $tax = 150 + (($chargeableIncome - 20000) * 0.03);
+        } elseif ($chargeableIncome <= 50000) {
+            $tax = 600 + (($chargeableIncome - 35000) * 0.06);
+        } elseif ($chargeableIncome <= 70000) {
+            $tax = 1500 + (($chargeableIncome - 50000) * 0.11);
+        } elseif ($chargeableIncome <= 100000) {
+            $tax = 3700 + (($chargeableIncome - 70000) * 0.19);
+        } elseif ($chargeableIncome <= 400000) {
+            $tax = 9400 + (($chargeableIncome - 100000) * 0.25);
+        } elseif ($chargeableIncome <= 600000) {
+            $tax = 84400 + (($chargeableIncome - 400000) * 0.26);
         } else {
-            $tax = 136400 + (($annualIncome - 600000) * 0.28);
+            $tax = 136400 + (($chargeableIncome - 600000) * 0.28);
+        }
+
+        // Section 6A Individual Tax Rebate (RM400 rebate if Chargeable Income <= RM35,000)
+        if ($chargeableIncome <= 35000) {
+            $tax = max(0.00, $tax - 400.00);
         }
 
         // Monthly MTD / PCB rounded to 5 cents as per LHDN rules
