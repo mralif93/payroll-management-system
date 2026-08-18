@@ -596,32 +596,19 @@
     </x-modal>
 
     <!-- 5. EDIT EPF STATUTORY PARAMETERS MODAL -->
-    <x-modal id="edit-epf-modal" title="Edit KWSP / EPF Policy Rates" subtitle="Update Malaysian EPF contribution percentages & wage threshold rules" icon="bx-bank" size="lg">
+    <x-modal id="edit-epf-modal" title="Edit KWSP / EPF Policy Rates" subtitle="Update Malaysian EPF contribution percentages & wage threshold rules" icon="bx-bank" size="md">
         <form method="POST" action="{{ route('admin.parameters.statutory.update', 'epf') }}" class="space-y-4 text-left">
             @csrf
             @method('PUT')
 
             <x-input label="Statutory Gazette Reference" name="reference_gazette" value="{{ $parameters['epf']->first()?->reference_gazette ?? 'P.U. (A) EPF Act 1991 Third Schedule' }}" />
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <x-input label="Standard Employee Rate (%)" name="value_payload[standard_employee_rate]" type="number" step="0.5" value="{{ ($epfParams['standard_employee_rate'] ?? 0.11) * 100 }}" required />
-                <x-input label="Voluntary Reduced Rate (%)" name="value_payload[voluntary_reduced_employee_rate]" type="number" step="0.5" value="{{ ($epfParams['voluntary_reduced_employee_rate'] ?? 0.09) * 100 }}" required />
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <x-input label="Low Wage Threshold (RM)" name="value_payload[salary_threshold]" type="number" step="100" value="{{ $epfParams['salary_threshold'] ?? 5000 }}" required />
-                <x-input label="Employer Low Wage Rate (%) (<= RM5,000)" name="value_payload[employer_rate_low_wage]" type="number" step="0.5" value="{{ ($epfParams['employer_rate_low_wage'] ?? 0.13) * 100 }}" required />
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <x-input label="Employer Standard Rate (%) (> RM5,000)" name="value_payload[employer_rate_high_wage]" type="number" step="0.5" value="{{ ($epfParams['employer_rate_high_wage'] ?? 0.12) * 100 }}" required />
-                <x-input label="Senior Citizen ER Rate (%) (Age 60+)" name="value_payload[senior_citizen_employer_rate]" type="number" step="0.5" value="{{ ($epfParams['senior_citizen_employer_rate'] ?? 0.04) * 100 }}" required />
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <x-input label="Senior Citizen EE Rate (%) (Age 60+)" name="value_payload[senior_citizen_employee_rate]" type="number" step="0.5" value="{{ ($epfParams['senior_citizen_employee_rate'] ?? 0.00) * 100 }}" required />
-                <div></div>
-            </div>
+            <x-input label="Standard Employee Rate (%)" name="value_payload[standard_employee_rate]" type="number" step="0.5" value="{{ ($epfParams['standard_employee_rate'] ?? 0.11) * 100 }}" required />
+            <x-input label="Voluntary Reduced Rate (%)" name="value_payload[voluntary_reduced_employee_rate]" type="number" step="0.5" value="{{ ($epfParams['voluntary_reduced_employee_rate'] ?? 0.09) * 100 }}" required />
+            <x-input label="Low Wage Threshold (RM)" name="value_payload[salary_threshold]" type="number" step="100" value="{{ $epfParams['salary_threshold'] ?? 5000 }}" required />
+            <x-input label="Employer Low Wage Rate (%) (<= RM5,000)" name="value_payload[employer_rate_low_wage]" type="number" step="0.5" value="{{ ($epfParams['employer_rate_low_wage'] ?? 0.13) * 100 }}" required />
+            <x-input label="Employer Standard Rate (%) (> RM5,000)" name="value_payload[employer_rate_high_wage]" type="number" step="0.5" value="{{ ($epfParams['employer_rate_high_wage'] ?? 0.12) * 100 }}" required />
+            <x-input label="Senior Citizen ER Rate (%) (Age 60+)" name="value_payload[senior_citizen_employer_rate]" type="number" step="0.5" value="{{ ($epfParams['senior_citizen_employer_rate'] ?? 0.04) * 100 }}" required />
+            <x-input label="Senior Citizen EE Rate (%) (Age 60+)" name="value_payload[senior_citizen_employee_rate]" type="number" step="0.5" value="{{ ($epfParams['senior_citizen_employee_rate'] ?? 0.00) * 100 }}" required />
 
             <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
                 <x-button variant="secondary" size="sm" type="button" onclick="closeModal('edit-epf-modal')">
@@ -635,27 +622,17 @@
     </x-modal>
 
     <!-- 6. EDIT SOCSO & SKBBK STATUTORY PARAMETERS MODAL -->
-    <x-modal id="edit-socso-modal" title="Edit PERKESO SOCSO & SKBBK Schedule" subtitle="Configure Act 4 base percentages and June 2026 Lindung 24 Jam rules" icon="bx-shield" size="lg">
+    <x-modal id="edit-socso-modal" title="Edit PERKESO SOCSO & SKBBK Schedule" subtitle="Configure Act 4 base percentages and June 2026 Lindung 24 Jam rules" icon="bx-shield" size="md">
         <form method="POST" action="{{ route('admin.parameters.statutory.update', 'socso') }}" class="space-y-4 text-left">
             @csrf
             @method('PUT')
 
             <x-input label="Statutory Gazette Reference" name="reference_gazette" value="{{ $parameters['socso']->first()?->reference_gazette ?? 'Warta Kerajaan PERKESO SKBBK 2026' }}" />
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <x-input label="Monthly Wage Ceiling (RM)" name="value_payload[wage_ceiling]" type="number" step="100" value="{{ $socsoParams['wage_ceiling'] ?? 6000 }}" required />
-                <x-input label="Category 1 Employer Rate (%)" name="value_payload[category_1][employer_rate_percentage]" type="number" step="0.05" value="{{ ($socsoParams['category_1']['employer_rate_percentage'] ?? 0.0175) * 100 }}" required />
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <x-input label="Category 1 Employee Rate (%)" name="value_payload[category_1][employee_base_percentage]" type="number" step="0.05" value="{{ ($socsoParams['category_1']['employee_base_percentage'] ?? 0.005) * 100 }}" required />
-                <x-input label="Category 2 (Senior) ER Rate (%)" name="value_payload[category_2][employer_rate_percentage]" type="number" step="0.05" value="{{ ($socsoParams['category_2']['employer_rate_percentage'] ?? 0.0125) * 100 }}" required />
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <x-input label="Category 2 (Senior) EE Rate (%)" name="value_payload[category_2][employee_base_percentage]" type="number" step="0.05" value="{{ ($socsoParams['category_2']['employee_base_percentage'] ?? 0.00) * 100 }}" required />
-                <div></div>
-            </div>
+            <x-input label="Monthly Wage Ceiling (RM)" name="value_payload[wage_ceiling]" type="number" step="100" value="{{ $socsoParams['wage_ceiling'] ?? 6000 }}" required />
+            <x-input label="Category 1 Employer Rate (%)" name="value_payload[category_1][employer_rate_percentage]" type="number" step="0.05" value="{{ ($socsoParams['category_1']['employer_rate_percentage'] ?? 0.0175) * 100 }}" required />
+            <x-input label="Category 1 Employee Rate (%)" name="value_payload[category_1][employee_base_percentage]" type="number" step="0.05" value="{{ ($socsoParams['category_1']['employee_base_percentage'] ?? 0.005) * 100 }}" required />
+            <x-input label="Category 2 (Senior) ER Rate (%)" name="value_payload[category_2][employer_rate_percentage]" type="number" step="0.05" value="{{ ($socsoParams['category_2']['employer_rate_percentage'] ?? 0.0125) * 100 }}" required />
+            <x-input label="Category 2 (Senior) EE Rate (%)" name="value_payload[category_2][employee_base_percentage]" type="number" step="0.05" value="{{ ($socsoParams['category_2']['employee_base_percentage'] ?? 0.00) * 100 }}" required />
 
             <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
                 <x-button variant="secondary" size="sm" type="button" onclick="closeModal('edit-socso-modal')">
@@ -669,20 +646,14 @@
     </x-modal>
 
     <!-- 7. EDIT EIS STATUTORY PARAMETERS MODAL -->
-    <x-modal id="edit-eis-modal" title="Edit SIP / EIS (Act 800) Rates" subtitle="Update Employment Insurance System percentage rates & wage ceiling" icon="bx-briefcase" size="lg">
+    <x-modal id="edit-eis-modal" title="Edit SIP / EIS (Act 800) Rates" subtitle="Update Employment Insurance System percentage rates & wage ceiling" icon="bx-briefcase" size="md">
         <form method="POST" action="{{ route('admin.parameters.statutory.update', 'eis') }}" class="space-y-4 text-left">
             @csrf
             @method('PUT')
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <x-input label="Employee EIS Rate (%)" name="value_payload[employee_rate]" type="number" step="0.05" value="{{ ($eisParams['employee_rate'] ?? 0.002) * 100 }}" required />
-                <x-input label="Employer EIS Rate (%)" name="value_payload[employer_rate]" type="number" step="0.05" value="{{ ($eisParams['employer_rate'] ?? 0.002) * 100 }}" required />
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <x-input label="Wage Ceiling Limit (RM)" name="value_payload[wage_ceiling]" type="number" step="100" value="{{ $eisParams['wage_ceiling'] ?? 6000 }}" required />
-                <div></div>
-            </div>
+            <x-input label="Employee EIS Rate (%)" name="value_payload[employee_rate]" type="number" step="0.05" value="{{ ($eisParams['employee_rate'] ?? 0.002) * 100 }}" required />
+            <x-input label="Employer EIS Rate (%)" name="value_payload[employer_rate]" type="number" step="0.05" value="{{ ($eisParams['employer_rate'] ?? 0.002) * 100 }}" required />
+            <x-input label="Wage Ceiling Limit (RM)" name="value_payload[wage_ceiling]" type="number" step="100" value="{{ $eisParams['wage_ceiling'] ?? 6000 }}" required />
 
             <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
                 <x-button variant="secondary" size="sm" type="button" onclick="closeModal('edit-eis-modal')">
@@ -696,20 +667,14 @@
     </x-modal>
 
     <!-- 8. EDIT PCB TAX RELIEFS MODAL -->
-    <x-modal id="edit-pcb-modal" title="Edit LHDN PCB Standard Reliefs" subtitle="Update statutory individual and dependent relief amounts for monthly tax calculation" icon="bxs-file-pdf" size="lg">
+    <x-modal id="edit-pcb-modal" title="Edit LHDN PCB Standard Reliefs" subtitle="Update statutory individual and dependent relief amounts for monthly tax calculation" icon="bxs-file-pdf" size="md">
         <form method="POST" action="{{ route('admin.parameters.statutory.update', 'pcb') }}" class="space-y-4 text-left">
             @csrf
             @method('PUT')
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <x-input label="Individual Tax Relief (D) (RM)" name="value_payload[individual_relief]" type="number" step="500" value="{{ $pcbParams['individual_relief'] ?? 9000 }}" required />
-                <x-input label="Non-Working Spouse Relief (S) (RM)" name="value_payload[spouse_non_working_relief]" type="number" step="500" value="{{ $pcbParams['spouse_non_working_relief'] ?? 4000 }}" required />
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <x-input label="Child Relief Per Dependent (QC) (RM)" name="value_payload[child_relief_per_child]" type="number" step="500" value="{{ $pcbParams['child_relief_per_child'] ?? 2000 }}" required />
-                <div></div>
-            </div>
+            <x-input label="Individual Tax Relief (D) (RM)" name="value_payload[individual_relief]" type="number" step="500" value="{{ $pcbParams['individual_relief'] ?? 9000 }}" required />
+            <x-input label="Non-Working Spouse Relief (S) (RM)" name="value_payload[spouse_non_working_relief]" type="number" step="500" value="{{ $pcbParams['spouse_non_working_relief'] ?? 4000 }}" required />
+            <x-input label="Child Relief Per Dependent (QC) (RM)" name="value_payload[child_relief_per_child]" type="number" step="500" value="{{ $pcbParams['child_relief_per_child'] ?? 2000 }}" required />
 
             <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
                 <x-button variant="secondary" size="sm" type="button" onclick="closeModal('edit-pcb-modal')">
