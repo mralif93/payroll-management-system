@@ -17,7 +17,7 @@ class EmployeeController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Employee::with(['department', 'statutoryProfile', 'company']);
+        $query = Employee::with(['department', 'statutoryProfile', 'company', 'salaryComponents.salaryComponent']);
 
         if ($request->filled('search')) {
             $search = $request->input('search');
@@ -34,8 +34,9 @@ class EmployeeController extends Controller
 
         $employees = $query->paginate(15);
         $departments = Department::all();
+        $availableAllowances = \App\Models\SalaryComponent::where('type', 'allowance')->where('is_active', true)->get();
 
-        return view('admin.employees.index', compact('employees', 'departments'));
+        return view('admin.employees.index', compact('employees', 'departments', 'availableAllowances'));
     }
 
     /**
@@ -74,6 +75,20 @@ class EmployeeController extends Controller
             'tax_category' => 'single',
             'is_tax_resident' => true,
         ]);
+
+        // Save Allowances if provided
+        if ($request->has('allowances') && is_array($request->input('allowances'))) {
+            foreach ($request->input('allowances') as $componentId => $amount) {
+                if (!empty($amount) && (float) $amount > 0) {
+                    $employee->salaryComponents()->create([
+                        'salary_component_id' => $componentId,
+                        'amount' => (float) $amount,
+                        'effective_from' => $validated['joined_date'],
+                        'is_recurring' => true,
+                    ]);
+                }
+            }
+        }
 
         AuditTrail::create([
             'auditable_type' => Employee::class,
@@ -156,6 +171,24 @@ class EmployeeController extends Controller
                 'is_eis_contributed' => $request->boolean('is_eis_contributed'),
             ]
         );
+
+        // Synchronize Allowances
+        if ($request->has('allowances') && is_array($request->input('allowances'))) {
+            foreach ($request->input('allowances') as $componentId => $amount) {
+                if (!empty($amount) && (float) $amount > 0) {
+                    $employee->salaryComponents()->updateOrCreate(
+                        ['employee_id' => $employee->id, 'salary_component_id' => $componentId],
+                        [
+                            'amount' => (float) $amount,
+                            'effective_from' => $employee->joined_date ?? now()->toDateString(),
+                            'is_recurring' => true,
+                        ]
+                    );
+                } else {
+                    $employee->salaryComponents()->where('salary_component_id', $componentId)->delete();
+                }
+            }
+        }
 
         AuditTrail::create([
             'auditable_type' => Employee::class,

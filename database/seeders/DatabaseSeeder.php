@@ -39,6 +39,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             CompanyAndDepartmentSeeder::class,
+            SalaryComponentSeeder::class,
             StatutoryParameterSeeder::class,
             RoleAndPermissionSeeder::class,
             AuditTrailSeeder::class,

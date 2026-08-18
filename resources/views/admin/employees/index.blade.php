@@ -364,10 +364,32 @@
                 </div>
             </div>
 
-            <!-- Section 3: Banking & Disbursement -->
+            <!-- Section 3: Monthly Fixed Allowances & Stipends -->
             <div class="space-y-3">
                 <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
-                    <span class="w-6 h-6 rounded-lg bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xs font-bold">3</span>
+                    <span class="w-6 h-6 rounded-lg bg-teal-50 dark:bg-teal-950 text-teal-600 dark:text-teal-400 flex items-center justify-center text-xs font-bold">3</span>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Fixed Monthly Allowances (RM)</h4>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    @foreach($availableAllowances as $allowance)
+                        <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40">
+                            <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1 truncate" title="{{ $allowance->name }}">{{ $allowance->name }}</label>
+                            <div class="relative">
+                                <input type="number" step="0.01" min="0" name="allowances[{{ $allowance->id }}]" placeholder="0.00" class="w-full text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-2 text-slate-900 dark:text-white font-mono">
+                            </div>
+                            <span class="text-[9px] text-slate-400 block mt-1">
+                                {{ $allowance->is_epf_subject ? 'EPF/SOCSO' : 'Exempt' }}
+                            </span>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Section 4: Banking & Disbursement -->
+            <div class="space-y-3">
+                <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
+                    <span class="w-6 h-6 rounded-lg bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xs font-bold">4</span>
                     <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Disbursement &amp; Banking Details</h4>
                 </div>
 
@@ -377,10 +399,10 @@
                 </div>
             </div>
 
-            <!-- Section 4: Malaysian Statutory Coverage & Options -->
+            <!-- Section 5: Malaysian Statutory Coverage & Options -->
             <div class="space-y-3">
                 <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
-                    <span class="w-6 h-6 rounded-lg bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xs font-bold">4</span>
+                    <span class="w-6 h-6 rounded-lg bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xs font-bold">5</span>
                     <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Statutory Scheme Toggles &amp; EPF Rates</h4>
                 </div>
 
@@ -556,10 +578,32 @@
                 </div>
             </div>
 
-            <!-- Section 3: Bank Disbursement -->
+            <!-- Section 3: Monthly Fixed Allowances & Stipends -->
             <div class="space-y-3">
                 <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
-                    <span class="w-6 h-6 rounded-lg bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xs font-bold">3</span>
+                    <span class="w-6 h-6 rounded-lg bg-teal-50 dark:bg-teal-950 text-teal-600 dark:text-teal-400 flex items-center justify-center text-xs font-bold">3</span>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Fixed Monthly Allowances (RM)</h4>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    @foreach($availableAllowances as $allowance)
+                        <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40">
+                            <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1 truncate" title="{{ $allowance->name }}">{{ $allowance->name }}</label>
+                            <div class="relative">
+                                <input type="number" step="0.01" min="0" name="allowances[{{ $allowance->id }}]" id="edit-emp-allowance-{{ $allowance->id }}" placeholder="0.00" class="edit-emp-allowance-input w-full text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-2 text-slate-900 dark:text-white font-mono">
+                            </div>
+                            <span class="text-[9px] text-slate-400 block mt-1">
+                                {{ $allowance->is_epf_subject ? 'EPF/SOCSO' : 'Exempt' }}
+                            </span>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Section 4: Bank Disbursement -->
+            <div class="space-y-3">
+                <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
+                    <span class="w-6 h-6 rounded-lg bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xs font-bold">4</span>
                     <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Disbursement &amp; Banking Details</h4>
                 </div>
 
@@ -569,10 +613,10 @@
                 </div>
             </div>
 
-            <!-- Section 4: Malaysian Statutory Coverage & Opt-Outs -->
+            <!-- Section 5: Malaysian Statutory Coverage & Opt-Outs -->
             <div class="space-y-3">
                 <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
-                    <span class="w-6 h-6 rounded-lg bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xs font-bold">4</span>
+                    <span class="w-6 h-6 rounded-lg bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xs font-bold">5</span>
                     <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Statutory Scheme Toggles &amp; EPF Rates</h4>
                 </div>
 
@@ -697,6 +741,11 @@
                 </div>
 
                 <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
+                    <div class="font-bold text-slate-500 dark:text-slate-400">Monthly Allowances</div>
+                    <div class="text-right font-mono font-bold text-teal-600 dark:text-teal-400" id="show-emp-allowances">RM 0.00</div>
+                </div>
+
+                <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
                     <div class="font-bold text-slate-500 dark:text-slate-400">Citizenship</div>
                     <div class="text-right text-slate-800 dark:text-slate-200 uppercase font-semibold text-[11px]" id="show-emp-citizenship">Malaysian</div>
                 </div>
@@ -789,6 +838,14 @@
                 document.getElementById('show-emp-dept').textContent = deptName;
                 document.getElementById('show-emp-type').textContent = (emp.employment_type || 'permanent').toUpperCase();
                 document.getElementById('show-emp-salary').textContent = 'RM ' + parseFloat(emp.basic_salary || 0).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                // Allowances Sum in Show Modal
+                let totalAllowances = 0;
+                if (emp.salary_components && emp.salary_components.length > 0) {
+                    totalAllowances = emp.salary_components.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0);
+                }
+                document.getElementById('show-emp-allowances').textContent = 'RM ' + totalAllowances.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
                 document.getElementById('show-emp-citizenship').textContent = (emp.citizenship || 'malaysian').replace('_', ' ');
                 document.getElementById('show-emp-bank').textContent = (emp.bank_name || 'Bank') + ' (' + (emp.bank_account_no || 'Not set') + ')';
                 document.getElementById('show-emp-joined').textContent = emp.joined_date ? new Date(emp.joined_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
@@ -849,6 +906,19 @@
                 document.getElementById('edit-emp-email').value = emp.email || '';
                 document.getElementById('edit-emp-phone').value = emp.phone_number || '';
                 document.getElementById('edit-emp-resigned-date').value = emp.resigned_date ? emp.resigned_date.substring(0, 10) : '';
+
+                // Reset all allowance inputs in edit modal
+                document.querySelectorAll('.edit-emp-allowance-input').forEach(input => input.value = '');
+
+                // Populate existing allowances
+                if (emp.salary_components && emp.salary_components.length > 0) {
+                    emp.salary_components.forEach(comp => {
+                        const allowanceInput = document.getElementById(`edit-emp-allowance-${comp.salary_component_id}`);
+                        if (allowanceInput) {
+                            allowanceInput.value = parseFloat(comp.amount || 0).toFixed(2);
+                        }
+                    });
+                }
 
                 // Statutory EPF Rate & Checkboxes
                 const epfType = emp.statutory_profile ? emp.statutory_profile.epf_rate_type : 'standard_11';
