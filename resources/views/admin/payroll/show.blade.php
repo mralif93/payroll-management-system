@@ -289,17 +289,17 @@
                 </div>
 
                 <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
-                    <div class="font-bold text-rose-600 dark:text-rose-400">SOCSO Act 4 + 2026 SKBBK</div>
+                    <div class="font-bold text-rose-600 dark:text-rose-400">PERKESO / SOCSO (Act 4)</div>
                     <div class="text-right font-mono font-bold text-rose-600 dark:text-rose-400" id="ps-socso-ee">- RM 0.00</div>
                 </div>
 
                 <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
-                    <div class="font-bold text-rose-600 dark:text-rose-400">EIS Employee (0.2%)</div>
+                    <div class="font-bold text-rose-600 dark:text-rose-400">SIP / EIS (Act 800)</div>
                     <div class="text-right font-mono font-bold text-rose-600 dark:text-rose-400" id="ps-eis-ee">- RM 0.00</div>
                 </div>
 
                 <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
-                    <div class="font-bold text-rose-600 dark:text-rose-400">LHDN Monthly Tax (PCB)</div>
+                    <div class="font-bold text-rose-600 dark:text-rose-400">LHDN Monthly Tax (PCB / MTD)</div>
                     <div class="text-right font-mono font-bold text-rose-600 dark:text-rose-400" id="ps-pcb">- RM 0.00</div>
                 </div>
 
