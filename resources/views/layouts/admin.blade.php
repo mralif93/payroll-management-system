@@ -177,15 +177,11 @@
                 <button 
                     type="button" 
                     onclick="toggleDarkMode()" 
-                    class="w-9 h-9 sm:w-auto sm:px-2.5 sm:h-9 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/60 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer flex items-center justify-center gap-1.5 shrink-0"
+                    id="admin-theme-toggle-btn"
+                    class="w-9 h-9 flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-amber-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer shrink-0 shadow-2xs group"
                     title="Toggle Dark/Light Mode"
                 >
-                    <i class="bx bx-moon dark:hidden text-base text-slate-600"></i>
-                    <i class="bx bx-sun hidden dark:inline text-base text-amber-400"></i>
-                    <span class="text-xs font-semibold hidden xl:inline text-slate-600 dark:text-slate-300">
-                        <span class="dark:hidden">Light</span>
-                        <span class="hidden dark:inline">Dark</span>
-                    </span>
+                    <i id="admin-theme-toggle-icon" class="bx bx-moon text-lg group-hover:scale-110 transition-transform"></i>
                 </button>
 
                 <!-- Notifications Flyout Trigger -->
@@ -329,6 +325,16 @@
 
     <!-- Global Scripts -->
     <script>
+        function updateThemeIcon() {
+            const icon = document.getElementById('admin-theme-toggle-icon') || document.getElementById('theme-toggle-icon');
+            if (!icon) return;
+            if (document.documentElement.classList.contains('dark')) {
+                icon.className = 'bx bx-sun text-lg text-amber-400 group-hover:scale-110 transition-transform';
+            } else {
+                icon.className = 'bx bx-moon text-lg text-slate-600 group-hover:scale-110 transition-transform';
+            }
+        }
+
         function toggleDarkMode() {
             if (document.documentElement.classList.contains('dark')) {
                 document.documentElement.classList.remove('dark');
@@ -337,7 +343,10 @@
                 document.documentElement.classList.add('dark');
                 localStorage.theme = 'dark';
             }
+            updateThemeIcon();
         }
+
+        document.addEventListener('DOMContentLoaded', updateThemeIcon);
 
         function toggleMobileSidebar() {
             const sidebar = document.getElementById('admin-sidebar');

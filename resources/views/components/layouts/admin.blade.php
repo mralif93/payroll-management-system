@@ -187,11 +187,11 @@
                 <button 
                     type="button" 
                     onclick="toggleDarkMode()" 
-                    class="w-9 h-9 flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/70 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer shrink-0"
+                    id="theme-toggle-btn"
+                    class="w-9 h-9 flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-amber-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer shrink-0 shadow-2xs group"
                     title="Toggle Dark/Light Mode"
                 >
-                    <i class="bx bx-moon dark:hidden text-lg text-slate-600"></i>
-                    <i class="bx bx-sun hidden dark:inline text-lg text-amber-400"></i>
+                    <i id="theme-toggle-icon" class="bx bx-moon text-lg group-hover:scale-110 transition-transform"></i>
                 </button>
 
                 <!-- Notifications Button -->
@@ -319,6 +319,16 @@
 
     <!-- Global Theme & Mobile Navigation Script -->
     <script>
+        function updateThemeIcon() {
+            const icon = document.getElementById('theme-toggle-icon');
+            if (!icon) return;
+            if (document.documentElement.classList.contains('dark')) {
+                icon.className = 'bx bx-sun text-lg text-amber-400 group-hover:scale-110 transition-transform';
+            } else {
+                icon.className = 'bx bx-moon text-lg text-slate-600 group-hover:scale-110 transition-transform';
+            }
+        }
+
         function toggleDarkMode() {
             const isDark = document.documentElement.classList.contains('dark');
             if (isDark) {
@@ -328,7 +338,10 @@
                 document.documentElement.classList.add('dark');
                 localStorage.theme = 'dark';
             }
+            updateThemeIcon();
         }
+
+        document.addEventListener('DOMContentLoaded', updateThemeIcon);
 
         function toggleMobileSidebar() {
             const sidebar = document.getElementById('admin-sidebar');
