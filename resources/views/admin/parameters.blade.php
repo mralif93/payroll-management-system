@@ -1,6 +1,6 @@
-<x-layouts.admin title="System Parameters & Governance">
+<x-layouts.admin title="System Parameters & Governance" :hideHeader="true">
 
-    <div class="space-y-8">
+    <div class="space-y-6 sm:space-y-8">
 
         <!-- Flash Messages -->
         @if(session('success'))
@@ -15,21 +15,22 @@
             </x-alert>
         @endif
         
-        <!-- Header Banner & Action -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-                <div class="flex items-center gap-2">
+        <!-- Header Banner & Actions -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-2 border-b border-slate-200/60 dark:border-slate-800/60">
+            <div class="space-y-1">
+                <div class="flex items-center gap-2.5 flex-wrap">
                     <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">System Parameters &amp; Organization</h1>
-                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 inline-flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                         Effective 2026
                     </span>
                 </div>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                <p class="text-xs text-slate-500 dark:text-slate-400 max-w-3xl leading-relaxed">
                     Centralized effective-dated Malaysian statutory schedules, company profile, and organizational department units.
                 </p>
             </div>
 
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 sm:gap-3 flex-wrap shrink-0">
                 <x-button variant="secondary" size="sm" icon="bx-edit" onclick="openModal('edit-company-modal')">
                     Edit Company Profile
                 </x-button>
