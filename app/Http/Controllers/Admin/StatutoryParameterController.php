@@ -30,6 +30,51 @@ class StatutoryParameterController extends Controller
     }
 
     /**
+     * Update corporate company profile.
+     */
+    public function updateCompany(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'registration_no' => ['required', 'string', 'max:50'],
+            'epf_no' => ['nullable', 'string', 'max:50'],
+            'socso_no' => ['nullable', 'string', 'max:50'],
+            'tax_no' => ['nullable', 'string', 'max:50'],
+            'hrd_no' => ['nullable', 'string', 'max:50'],
+            'bank_name' => ['nullable', 'string', 'max:100'],
+            'bank_account_no' => ['nullable', 'string', 'max:50'],
+            'contact_person' => ['nullable', 'string', 'max:100'],
+            'contact_email' => ['nullable', 'email', 'max:100'],
+            'contact_phone' => ['nullable', 'string', 'max:50'],
+            'address' => ['nullable', 'string', 'max:500'],
+        ]);
+
+        $company = Company::first();
+        if (!$company) {
+            $company = Company::create($validated);
+        } else {
+            $oldValues = $company->only(array_keys($validated));
+            $company->update($validated);
+        }
+
+        AuditTrail::create([
+            'auditable_type' => Company::class,
+            'auditable_id' => $company->id,
+            'user_id' => auth()->id(),
+            'module' => 'parameters',
+            'event' => 'company_profile_updated',
+            'description' => "Updated corporate profile for '{$company->name}'",
+            'old_values' => $oldValues ?? null,
+            'new_values' => $validated,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'severity' => 'info',
+        ]);
+
+        return redirect()->route('admin.parameters')->with('success', 'Company profile updated successfully.');
+    }
+
+    /**
      * Store or override a statutory parameter gazette rule.
      */
     public function store(Request $request)

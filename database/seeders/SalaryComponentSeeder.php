@@ -10,6 +10,7 @@ class SalaryComponentSeeder extends Seeder
     public function run(): void
     {
         $components = [
+            // Allowances
             [
                 'code' => 'ATT_ALLOW',
                 'name' => 'Attendance Allowance',
@@ -63,6 +64,52 @@ class SalaryComponentSeeder extends Seeder
                 'is_socso_subject' => true,
                 'is_eis_subject' => true,
                 'is_pcb_subject' => true,
+            ],
+            // Deductions
+            [
+                'code' => 'UNPAID_LEAVE',
+                'name' => 'Unpaid Leave Deduction',
+                'type' => 'deduction',
+                'is_epf_subject' => false,
+                'is_socso_subject' => false,
+                'is_eis_subject' => false,
+                'is_pcb_subject' => false,
+            ],
+            [
+                'code' => 'SALARY_ADVANCE',
+                'name' => 'Salary Advance Repayment',
+                'type' => 'deduction',
+                'is_epf_subject' => false,
+                'is_socso_subject' => false,
+                'is_eis_subject' => false,
+                'is_pcb_subject' => false,
+            ],
+            [
+                'code' => 'STAFF_LOAN',
+                'name' => 'Staff Loan Installment',
+                'type' => 'deduction',
+                'is_epf_subject' => false,
+                'is_socso_subject' => false,
+                'is_eis_subject' => false,
+                'is_pcb_subject' => false,
+            ],
+            [
+                'code' => 'ZAKAT',
+                'name' => 'Zakat Pendapatan',
+                'type' => 'deduction',
+                'is_epf_subject' => false,
+                'is_socso_subject' => false,
+                'is_eis_subject' => false,
+                'is_pcb_subject' => true, // Tax rebate
+            ],
+            [
+                'code' => 'TABUNG_HAJI',
+                'name' => 'Tabung Haji Deduction',
+                'type' => 'deduction',
+                'is_epf_subject' => false,
+                'is_socso_subject' => false,
+                'is_eis_subject' => false,
+                'is_pcb_subject' => false,
             ],
         ];
 

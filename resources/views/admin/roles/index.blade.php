@@ -30,7 +30,7 @@
             </div>
 
             <div class="flex items-center gap-2">
-                <x-button variant="primary" size="sm" icon="bx-plus-circle" onclick="document.getElementById('create-role-modal').showModal()">
+                <x-button variant="primary" size="sm" icon="bx-plus-circle" onclick="openModal('create-role-modal')">
                     Add New Role
                 </x-button>
             </div>
@@ -100,36 +100,46 @@
                                 <td class="p-3.5 font-bold text-slate-900 dark:text-white">
                                     {{ $role->display_name }}
                                 </td>
-                                <td class="p-3.5 font-mono text-indigo-600 dark:text-indigo-400">
+                                <td class="p-3.5 font-mono text-indigo-600 dark:text-indigo-400 font-bold">
                                     {{ $role->name }}
                                 </td>
                                 <td class="p-3.5 text-slate-500 dark:text-slate-400 max-w-xs truncate">
-                                    {{ $role->description ?? 'No description provided' }}
+                                    {{ $role->description ?? '—' }}
                                 </td>
                                 <td class="p-3.5 font-mono">
-                                    <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
-                                        {{ $role->users->count() }} staff
+                                    <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                                        {{ $role->users->count() }} users
                                     </span>
                                 </td>
                                 <td class="p-3.5">
-                                    <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
-                                        {{ $role->permissions->count() }} permissions
-                                    </span>
+                                    <div class="flex flex-wrap gap-1 max-w-xs">
+                                        @foreach($role->permissions->take(4) as $perm)
+                                            <span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
+                                                {{ $perm->name }}
+                                            </span>
+                                        @endforeach
+                                        @if($role->permissions->count() > 4)
+                                            <span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 dark:bg-slate-800 text-slate-500">
+                                                +{{ $role->permissions->count() - 4 }} more
+                                            </span>
+                                        @endif
+                                    </div>
                                 </td>
                                 <td class="p-3.5">
                                     @if($role->is_system)
-                                        <x-badge variant="rose" size="sm">System</x-badge>
+                                        <x-badge variant="rose" size="xs">System</x-badge>
                                     @else
-                                        <x-badge variant="emerald" size="sm">Custom</x-badge>
+                                        <x-badge variant="emerald" size="xs">Custom</x-badge>
                                     @endif
                                 </td>
                                 <td class="p-3.5 text-right">
-                                    <div class="flex items-center justify-end gap-1.5 flex-wrap">
-                                        <x-action-button variant="purple" icon="bx-shield" onclick="openEditRoleModal({{ json_encode($role) }}, {{ json_encode($role->permissions->pluck('id')) }})">
-                                            Edit Scope
+                                    <div class="flex items-center justify-end gap-1.5">
+                                        <x-action-button variant="purple" icon="bx-pencil" title="Edit Role" onclick="openEditRoleModal({{ json_encode($role) }}, {{ json_encode($role->permissions->pluck('id')->toArray()) }})">
+                                            Edit
                                         </x-action-button>
+
                                         @if(!$role->is_system && $role->users->count() === 0)
-                                            <x-action-button variant="rose" icon="bx-trash" onclick="confirmDeleteRole({{ $role->id }}, '{{ addslashes($role->display_name) }}')">
+                                            <x-action-button variant="rose" icon="bx-trash" title="Delete Role" onclick="confirmDeleteRole({{ $role->id }}, '{{ addslashes($role->display_name) }}')">
                                                 Delete
                                             </x-action-button>
                                         @endif
@@ -139,13 +149,19 @@
                         @empty
                             <tr>
                                 <td colspan="7" class="p-8 text-center text-slate-400">
-                                    No roles found. Click "Add New Role" to create access tiers.
+                                    No roles found.
                                 </td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
+
+            @if($roles->hasPages())
+                <div class="p-4 border-t border-slate-100 dark:border-slate-800">
+                    {{ $roles->links() }}
+                </div>
+            @endif
         </div>
 
     </div>
@@ -184,7 +200,7 @@
             </div>
 
             <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
-                <x-button variant="secondary" size="sm" type="button" onclick="document.getElementById('create-role-modal').close()">
+                <x-button variant="secondary" size="sm" type="button" onclick="closeModal('create-role-modal')">
                     Cancel
                 </x-button>
                 <x-button variant="primary" size="sm" type="submit">

@@ -62,6 +62,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     // 7. System Governance, Statutory Parameters & Allowances
     Route::get('/parameters', [StatutoryParameterController::class, 'index'])->name('parameters');
     Route::post('/parameters', [StatutoryParameterController::class, 'store'])->name('parameters.store');
+    Route::put('/parameters/company', [StatutoryParameterController::class, 'updateCompany'])->name('parameters.company.update');
     Route::post('/parameters/departments', [StatutoryParameterController::class, 'storeDepartment'])->name('parameters.departments.store');
     Route::put('/parameters/departments/{department}', [StatutoryParameterController::class, 'updateDepartment'])->name('parameters.departments.update');
     Route::delete('/parameters/departments/{department}', [StatutoryParameterController::class, 'destroyDepartment'])->name('parameters.departments.destroy');
