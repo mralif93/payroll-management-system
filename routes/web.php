@@ -55,6 +55,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::post('/payroll', [PayrollRunController::class, 'store'])->name('payroll.store');
     Route::get('/payroll/{payrollRun}', [PayrollRunController::class, 'show'])->name('payroll.show');
     Route::post('/payroll/{payrollRun}/approve', [PayrollRunController::class, 'approve'])->name('payroll.approve');
+    Route::post('/payroll/{payrollRun}/recalculate', [PayrollRunController::class, 'recalculate'])->name('payroll.recalculate');
     Route::get('/payroll/{payrollRun}/payslip/{item}', [PayrollRunController::class, 'payslip'])->name('payroll.payslip');
 
     // 4. Banking Autopay & Statutory Exporters

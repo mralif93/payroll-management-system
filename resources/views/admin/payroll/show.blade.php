@@ -38,6 +38,13 @@
                     <span>Batches Roster</span>
                 </a>
 
+                <form method="POST" action="{{ route('admin.payroll.recalculate', $payrollRun) }}" onsubmit="return confirm('Recalculate this payroll batch with the latest statutory rates and employee records?')">
+                    @csrf
+                    <x-button variant="secondary" size="md" type="submit" icon="bx-refresh">
+                        Recalculate &amp; Re-sync
+                    </x-button>
+                </form>
+
                 @if($payrollRun->status === 'draft')
                     <form method="POST" action="{{ route('admin.payroll.approve', $payrollRun) }}">
                         @csrf
