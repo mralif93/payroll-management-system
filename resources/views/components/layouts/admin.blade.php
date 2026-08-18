@@ -148,43 +148,65 @@
     <!-- MAIN RIGHT CONTENT COLUMN -->
     <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
         
-        <!-- Top App Bar Header -->
-        <header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-4 sm:px-6 shrink-0 transition-colors z-20">
+        <!-- Top App Bar Header (Ultra-Modern SaaS Glass Design) -->
+        <header class="h-16 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between px-4 sm:px-6 shrink-0 transition-all duration-300 sticky top-0 z-30">
             
-            <!-- Mobile Hamburger & Breadcrumbs -->
-            <div class="flex items-center gap-3">
-                <button type="button" onclick="toggleMobileSidebar()" class="lg:hidden p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer">
-                    <i class="bx bx-menu text-lg"></i>
+            <!-- Left: Mobile Hamburger & Page Context -->
+            <div class="flex items-center gap-3.5 min-w-0">
+                <button type="button" onclick="toggleMobileSidebar()" class="lg:hidden w-9 h-9 flex items-center justify-center rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer shrink-0">
+                    <i class="bx bx-menu-alt-left text-xl"></i>
                 </button>
 
-                <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-                    <span class="font-medium text-slate-400 hidden sm:inline">PayFlow Console</span>
-                    <span class="hidden sm:inline text-slate-300 dark:text-slate-600">/</span>
-                    <span class="font-bold text-slate-800 dark:text-white truncate">{{ $title ?? 'Admin Console' }}</span>
+                <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="hidden sm:flex items-center gap-2 text-xs font-semibold text-slate-400 dark:text-slate-500 shrink-0">
+                        <span class="hover:text-slate-600 dark:hover:text-slate-300 transition">PayFlow</span>
+                        <span class="text-slate-300 dark:text-slate-700">/</span>
+                    </div>
+                    <div class="flex items-center gap-2 min-w-0">
+                        <h2 class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white tracking-tight truncate">
+                            {{ $title ?? 'Admin Console' }}
+                        </h2>
+                        <span class="hidden md:inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/60 shrink-0">
+                            2026 Ready
+                        </span>
+                    </div>
                 </div>
             </div>
 
             <!-- Top Header Right Actions with Standardized UI Kit Controls -->
-            <div class="flex items-center gap-3">
-                <!-- Theme Toggle -->
-                <div class="flex items-center">
-                    <x-theme-toggle id="admin-theme-toggle-btn" />
-                </div>
+            <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+                <!-- Theme Toggle Button -->
+                <button 
+                    type="button" 
+                    onclick="toggleDarkMode()" 
+                    class="w-9 h-9 sm:w-auto sm:px-2.5 sm:h-9 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/60 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer flex items-center justify-center gap-1.5 shrink-0"
+                    title="Toggle Dark/Light Mode"
+                >
+                    <i class="bx bx-moon dark:hidden text-base text-slate-600"></i>
+                    <i class="bx bx-sun hidden dark:inline text-base text-amber-400"></i>
+                    <span class="text-xs font-semibold hidden xl:inline text-slate-600 dark:text-slate-300">
+                        <span class="dark:hidden">Light</span>
+                        <span class="hidden dark:inline">Dark</span>
+                    </span>
+                </button>
 
                 <!-- Notifications Button -->
-                <button type="button" class="relative w-9 h-9 flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition cursor-pointer shadow-xs">
+                <button type="button" class="relative w-9 h-9 flex items-center justify-center rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/60 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer shrink-0">
                     <i class="bx bx-bell text-base"></i>
                     <span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white dark:ring-slate-900"></span>
                 </button>
 
                 <!-- Live Compliance Indicator Badge -->
-                <div class="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/80 shadow-xs">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-semibold">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
                     <span>Statutory 2026</span>
                 </div>
 
                 <!-- Divider -->
-                <div class="h-5 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block"></div>
+                <div class="h-6 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block mx-0.5"></div>
 
                 <!-- Modern Standardized User Profile Dropdown -->
                 <div class="relative" id="user-dropdown-container">
@@ -192,27 +214,27 @@
                         type="button" 
                         id="user-dropdown-toggle"
                         onclick="toggleUserDropdown()"
-                        class="flex items-center gap-2.5 pl-1.5 pr-3 py-1 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300 dark:hover:border-slate-700 transition shadow-xs cursor-pointer group"
+                        class="flex items-center gap-2.5 p-1 sm:pl-1.5 sm:pr-3 sm:py-1 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-700/80 transition cursor-pointer group select-none"
                     >
-                        <div class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs font-bold shrink-0 shadow-xs">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-600 via-indigo-700 to-blue-700 text-white flex items-center justify-center text-xs font-bold shrink-0 shadow-xs group-hover:scale-105 transition-transform">
                             {{ substr(Auth::user()->name ?? 'HR', 0, 2) }}
                         </div>
                         <div class="text-left hidden sm:block">
-                            <span class="text-xs font-bold text-slate-800 dark:text-white block leading-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">{{ Auth::user()->name ?? 'Payroll Officer' }}</span>
-                            <span class="text-[10px] text-slate-400 font-mono">{{ Auth::user()->staff_id ?? 'ADM-001' }}</span>
+                            <span class="text-xs font-bold text-slate-800 dark:text-white block leading-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition truncate max-w-[110px]">{{ Auth::user()->name ?? 'Payroll Officer' }}</span>
+                            <span class="text-[10px] text-slate-400 dark:text-slate-500 font-mono leading-tight">{{ Auth::user()->staff_id ?? 'ADM-001' }}</span>
                         </div>
-                        <i class="bx bx-chevron-down text-slate-400 text-sm hidden sm:block group-hover:text-slate-600 dark:group-hover:text-slate-200 transition"></i>
+                        <i class="bx bx-chevron-down text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-200 transition-transform duration-200 text-base ml-0.5"></i>
                     </button>
 
                     <!-- Dropdown Content Panel -->
                     <div 
                         id="user-dropdown-menu"
-                        class="hidden absolute right-0 mt-2 w-72 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-150"
+                        class="hidden absolute right-0 mt-2.5 w-72 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xl overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-150"
                     >
                         <!-- Profile Card Header -->
                         <div class="p-4 bg-slate-50/80 dark:bg-slate-850 border-b border-slate-100 dark:border-slate-800">
                             <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-sm font-black shadow-sm shrink-0">
+                                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-indigo-800 text-white flex items-center justify-center text-sm font-black shadow-sm shrink-0">
                                     {{ substr(Auth::user()->name ?? 'HR', 0, 2) }}
                                 </div>
                                 <div class="overflow-hidden">
