@@ -117,16 +117,21 @@ class EmployeeController extends Controller
     {
         $validated = $request->validate([
             'full_name' => ['required', 'string', 'max:255'],
+            'email' => ['nullable', 'email'],
+            'phone_number' => ['nullable', 'string'],
+            'nric_passport' => ['required', 'string'],
+            'birth_date' => ['required', 'date'],
+            'gender' => ['required', 'in:male,female'],
+            'citizenship' => ['required', 'in:malaysian,permanent_resident,foreign_worker'],
             'department_id' => ['nullable', 'exists:departments,id'],
             'designation' => ['nullable', 'string', 'max:255'],
             'basic_salary' => ['required', 'numeric', 'min:0'],
+            'joined_date' => ['required', 'date'],
             'employment_status' => ['required', 'in:active,probation,confirmed,resigned'],
             'employment_type' => ['required', 'in:permanent,contract,intern,part_time'],
             'resigned_date' => ['nullable', 'date'],
             'bank_name' => ['nullable', 'string'],
             'bank_account_no' => ['nullable', 'string'],
-            'email' => ['nullable', 'email'],
-            'phone_number' => ['nullable', 'string'],
         ]);
 
         if ($validated['employment_status'] === 'resigned' && empty($validated['resigned_date'])) {

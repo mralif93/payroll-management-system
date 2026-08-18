@@ -94,8 +94,13 @@ class EmployeeCrudTest extends TestCase
 
         $response = $this->actingAs($this->admin)->put(route('admin.employees.update', $emp), [
             'full_name' => 'Siti Nurhaliza',
+            'nric_passport' => '920202-10-5678',
+            'birth_date' => '1992-02-02',
+            'gender' => 'female',
+            'citizenship' => 'malaysian',
             'designation' => 'Senior Accountant',
             'basic_salary' => 5200.00,
+            'joined_date' => '2026-02-01',
             'employment_status' => 'confirmed',
             'employment_type' => 'permanent',
         ]);

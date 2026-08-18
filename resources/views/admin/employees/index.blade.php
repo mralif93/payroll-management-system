@@ -392,15 +392,45 @@
             <div class="space-y-3">
                 <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
                     <span class="w-6 h-6 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xs font-bold">1</span>
-                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Employee Information</h4>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Personal &amp; Identity Details</h4>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div class="sm:col-span-2">
-                        <x-input label="Full Name" name="full_name" id="edit-emp-name" required icon="bx-user" />
+                        <x-input label="Full Legal Name" name="full_name" id="edit-emp-name" required icon="bx-user" />
                     </div>
                     <x-input label="Email Address" name="email" id="edit-emp-email" type="email" icon="bx-envelope" />
                     <x-input label="Contact Phone" name="phone_number" id="edit-emp-phone" icon="bx-phone" />
+                    <x-input label="Staff ID" name="employee_no" id="edit-emp-no" disabled icon="bx-id-card" helper="System Master Identifier" />
+                    <x-input label="NRIC / Passport No." name="nric_passport" id="edit-emp-nric" required icon="bx-card" />
+                    <x-input label="Date of Birth" name="birth_date" id="edit-emp-birth" type="date" required icon="bx-calendar" />
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Gender</label>
+                        <div class="relative">
+                            <select name="gender" id="edit-emp-gender" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
+                                <option value="male">Male (Lelaki)</option>
+                                <option value="female">Female (Perempuan)</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+                                <i class="bx bx-chevron-down text-base"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Citizenship &amp; Tax Status</label>
+                        <div class="relative">
+                            <select name="citizenship" id="edit-emp-citizenship" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
+                                <option value="malaysian">Malaysian Citizen (Warganegara)</option>
+                                <option value="permanent_resident">Permanent Resident (PR)</option>
+                                <option value="foreign_worker">Foreign Expatriate / Worker</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+                                <i class="bx bx-chevron-down text-base"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -408,7 +438,7 @@
             <div class="space-y-3">
                 <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
                     <span class="w-6 h-6 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs font-bold">2</span>
-                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Position &amp; Status</h4>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Employment &amp; Compensation</h4>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
@@ -430,6 +460,8 @@
                     <x-input label="Designation / Role" name="designation" id="edit-emp-designation" icon="bx-briefcase-alt" />
                     
                     <x-input label="Monthly Basic Salary (RM)" name="basic_salary" id="edit-emp-salary" type="number" step="0.01" required icon="bx-money" />
+
+                    <x-input label="Joined Date" name="joined_date" id="edit-emp-joined" type="date" required icon="bx-calendar-check" />
                     
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Employment Status</label>
@@ -472,12 +504,12 @@
             <div class="space-y-3">
                 <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
                     <span class="w-6 h-6 rounded-lg bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xs font-bold">3</span>
-                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Disbursement Details</h4>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Disbursement &amp; Banking Details</h4>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                    <x-input label="Bank Name" name="bank_name" id="edit-emp-bank-name" icon="bx-buildings" />
-                    <x-input label="Bank Account No." name="bank_account_no" id="edit-emp-bank-acc" icon="bx-credit-card" />
+                    <x-input label="Disbursement Bank" name="bank_name" id="edit-emp-bank-name" placeholder="Maybank, CIMB, Public Bank, RHB..." icon="bx-buildings" />
+                    <x-input label="Bank Account Number" name="bank_account_no" id="edit-emp-bank-acc" placeholder="e.g. 514012345678" icon="bx-credit-card" />
                 </div>
             </div>
 
@@ -653,9 +685,15 @@
                 form.action = `/admin/employees/${emp.id}`;
 
                 document.getElementById('edit-emp-name').value = emp.full_name || '';
+                document.getElementById('edit-emp-no').value = emp.employee_no || '';
+                document.getElementById('edit-emp-nric').value = emp.nric_passport || '';
+                document.getElementById('edit-emp-birth').value = emp.birth_date ? emp.birth_date.substring(0, 10) : '';
+                document.getElementById('edit-emp-gender').value = emp.gender || 'male';
+                document.getElementById('edit-emp-citizenship').value = emp.citizenship || 'malaysian';
                 document.getElementById('edit-emp-designation').value = emp.designation || '';
                 document.getElementById('edit-emp-dept').value = emp.department_id || '';
                 document.getElementById('edit-emp-salary').value = emp.basic_salary || '';
+                document.getElementById('edit-emp-joined').value = emp.joined_date ? emp.joined_date.substring(0, 10) : '';
                 document.getElementById('edit-emp-status').value = emp.employment_status || 'active';
                 document.getElementById('edit-emp-type').value = emp.employment_type || 'permanent';
                 document.getElementById('edit-emp-bank-name').value = emp.bank_name || '';
