@@ -130,65 +130,83 @@
     <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
         
         <!-- Top App Bar Header -->
-        <header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-4 sm:px-6 lg:px-8 shrink-0 transition-colors z-20">
+        <header class="h-16 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between px-4 sm:px-6 lg:px-8 shrink-0 transition-colors sticky top-0 z-30 shadow-xs">
             
-            <!-- Left: Mobile Hamburger & Breadcrumbs -->
+            <!-- Left: Mobile Hamburger, Logo & Context Breadcrumbs -->
             <div class="flex items-center gap-3 min-w-0">
                 <!-- Hamburger Button for Mobile -->
                 <button 
                     type="button" 
                     onclick="toggleMobileSidebar()" 
-                    class="lg:hidden p-2 -ml-1.5 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+                    class="lg:hidden p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer shadow-2xs"
                     title="Open Navigation Menu"
                 >
                     <i class="bx bx-menu text-xl"></i>
                 </button>
 
-                <!-- Breadcrumbs / Page Context -->
-                <div class="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 truncate">
-                    <a href="/admin" class="font-medium text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition shrink-0 hidden sm:inline">PayFlow Console</a>
-                    <span class="text-slate-300 dark:text-slate-700 hidden sm:inline">/</span>
-                    <span class="font-bold text-slate-800 dark:text-white truncate">{{ $headerTitle ?? 'System Governance' }}</span>
-                </div>
+                <!-- Breadcrumbs Hierarchy -->
+                <nav class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 min-w-0" aria-label="Breadcrumb">
+                    <a href="/admin" class="font-medium text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition hidden sm:inline truncate">
+                        Console
+                    </a>
+                    <i class="bx bx-chevron-right text-slate-300 dark:text-slate-700 hidden sm:inline text-sm shrink-0"></i>
+                    <span class="font-bold text-slate-900 dark:text-white truncate max-w-[140px] sm:max-w-[240px] md:max-w-none">
+                        {{ $headerTitle ?? 'System Governance' }}
+                    </span>
+                </nav>
             </div>
 
-            <!-- Right: App Bar Actions & Profile -->
+            <!-- Right: Interactive Controls & User Profile -->
             <div class="flex items-center gap-2 sm:gap-3 shrink-0">
-                <!-- Theme Toggle Button -->
+                
+                <!-- Theme Toggle Switch Pill -->
                 <button 
                     type="button" 
                     onclick="toggleDarkMode()" 
-                    class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-amber-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer"
-                    title="Toggle Light / Dark Mode"
+                    class="relative p-2 sm:px-2.5 sm:py-1.5 rounded-xl border border-slate-200/80 dark:border-slate-700/80 bg-slate-100/80 dark:bg-slate-800/80 text-slate-600 dark:text-amber-400 hover:bg-slate-200/70 dark:hover:bg-slate-700 transition cursor-pointer flex items-center gap-1.5 shadow-2xs"
+                    title="Toggle Theme"
                 >
-                    <i class="bx bx-moon dark:hidden text-lg"></i>
-                    <i class="bx bx-sun hidden dark:inline text-lg"></i>
+                    <i class="bx bx-moon dark:hidden text-base"></i>
+                    <i class="bx bx-sun hidden dark:inline text-base text-amber-400"></i>
+                    <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-300 hidden md:inline">
+                        <span class="dark:hidden">Light</span>
+                        <span class="hidden dark:inline">Dark</span>
+                    </span>
                 </button>
 
-                <!-- Notifications -->
-                <button type="button" class="relative p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer" title="Notifications">
+                <!-- Notifications Button -->
+                <button 
+                    type="button" 
+                    class="relative p-2 rounded-xl border border-slate-200/80 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer shadow-2xs"
+                    title="System Notifications"
+                >
                     <i class="bx bx-bell text-lg"></i>
-                    <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500"></span>
+                    <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white dark:ring-slate-900"></span>
                 </button>
 
-                <!-- Statutory Badge (Tablet & Desktop) -->
-                <span class="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    Statutory 2026
-                </span>
+                <!-- Statutory Status Pill (Tablet & Desktop) -->
+                <div class="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs text-xs font-semibold">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>Statutory 2026</span>
+                </div>
 
-                <div class="h-5 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block"></div>
+                <div class="h-6 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block mx-0.5"></div>
 
-                <!-- User Quick Info -->
-                <div class="flex items-center gap-2.5 pl-1">
-                    <div class="w-8 h-8 rounded-xl bg-indigo-600 text-white font-bold flex items-center justify-center text-xs shadow-xs shrink-0">
+                <!-- User Profile Pill Card -->
+                <div class="relative flex items-center gap-2.5 p-1.5 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40 hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition cursor-pointer shadow-2xs">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-600 to-indigo-700 text-white font-bold flex items-center justify-center text-xs shadow-xs shrink-0">
                         {{ substr(auth()->user()?->name ?? 'PA', 0, 2) }}
                     </div>
-                    <div class="hidden xl:block text-left">
-                        <div class="text-xs font-bold text-slate-800 dark:text-white leading-tight">{{ auth()->user()?->name ?? 'Payroll Officer' }}</div>
-                        <div class="text-[10px] text-slate-400 dark:text-slate-500 font-mono">ADM-001</div>
+                    <div class="hidden sm:block text-left pr-1">
+                        <div class="text-xs font-bold text-slate-900 dark:text-white leading-tight truncate max-w-[120px]">
+                            {{ auth()->user()?->name ?? 'Payroll Officer' }}
+                        </div>
+                        <div class="text-[10px] text-slate-400 dark:text-slate-500 font-mono leading-tight">
+                            ADM-001
+                        </div>
                     </div>
                 </div>
+
             </div>
         </header>
 
