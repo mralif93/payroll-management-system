@@ -43,6 +43,12 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('employees', EmployeeController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     Route::post('employees/{employee}/toggle-status', [EmployeeController::class, 'toggleStatus'])->name('employees.toggle-status');
 
+    // 2b. Leave Management Subsystem
+    Route::get('/leaves', [\App\Http\Controllers\Admin\LeaveController::class, 'index'])->name('leaves.index');
+    Route::post('/leaves', [\App\Http\Controllers\Admin\LeaveController::class, 'store'])->name('leaves.store');
+    Route::patch('/leaves/{leave}/status', [\App\Http\Controllers\Admin\LeaveController::class, 'updateStatus'])->name('leaves.update-status');
+    Route::delete('/leaves/{leave}', [\App\Http\Controllers\Admin\LeaveController::class, 'destroy'])->name('leaves.destroy');
+
     // 3. Monthly Payroll Runs
     Route::get('/payroll', [PayrollRunController::class, 'index'])->name('payroll.index');
     Route::post('/payroll', [PayrollRunController::class, 'store'])->name('payroll.store');

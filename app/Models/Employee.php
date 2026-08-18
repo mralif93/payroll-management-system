@@ -71,4 +71,14 @@ class Employee extends Model
     {
         return $this->hasMany(TaxFormEaRecord::class);
     }
+
+    public function leaveApplications()
+    {
+        return $this->hasMany(LeaveApplication::class);
+    }
+
+    public function leaveBalances()
+    {
+        return $this->hasMany(EmployeeLeaveBalance::class);
+    }
 }

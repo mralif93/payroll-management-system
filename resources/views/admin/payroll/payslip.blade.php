@@ -487,6 +487,16 @@
                     </div>
                 @endif
 
+                @if($item->unpaid_leave_deduction > 0)
+                    <div class="table-row" style="background-color: #fff1f2;">
+                        <div>
+                            <span class="table-row-title" style="color: #e11d48;">Unpaid Leave Deduction (ORP)</span>
+                            <span class="table-row-desc">Absence adjustment (Basic / 26 days)</span>
+                        </div>
+                        <span class="table-row-amount mono" style="color: #e11d48;">- RM {{ number_format($item->unpaid_leave_deduction, 2) }}</span>
+                    </div>
+                @endif
+
                 <div class="table-total-row">
                     <span>Total Gross Earnings</span>
                     <span class="mono">RM {{ number_format($item->gross_salary, 2) }}</span>

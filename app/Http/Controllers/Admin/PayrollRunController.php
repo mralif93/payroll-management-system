@@ -87,14 +87,39 @@ class PayrollRunController extends Controller
         $totalEmployerStatutory = 0;
         $totalNet = 0;
 
+        // Calculate period date boundaries
+        $periodStart = sprintf('%04d-%02d-01', $payrollRun->period_year, $payrollRun->period_month);
+        $periodEnd = date('Y-m-t', strtotime($periodStart));
+
         foreach ($employees as $employee) {
             $basic = (float) $employee->basic_salary;
             $allowances = (float) $employee->salaryComponents->where('salaryComponent.type', 'allowance')->sum('amount');
-            $gross = $basic + $allowances;
-
             $empType = $employee->employment_type ?? 'permanent';
 
-            // 1. Interns (Practical Students receiving allowance) are legally exempt from mandatory EPF, SOCSO & EIS
+            // 1. Calculate Unpaid / No-Pay Leave Deductions for the payroll cycle
+            // Malaysian Employment Act 1955: Daily Rate (ORP) = Basic Salary / 26 days
+            $unpaidLeaveDays = (float) \App\Models\LeaveApplication::where('employee_id', $employee->id)
+                ->where('status', 'approved')
+                ->whereHas('leaveType', function ($query) {
+                    $query->where('is_paid', false);
+                })
+                ->where(function ($query) use ($periodStart, $periodEnd) {
+                    $query->whereBetween('start_date', [$periodStart, $periodEnd])
+                        ->orWhereBetween('end_date', [$periodStart, $periodEnd])
+                        ->orWhere(function ($q) use ($periodStart, $periodEnd) {
+                            $q->where('start_date', '<=', $periodStart)
+                                ->where('end_date', '>=', $periodEnd);
+                        });
+                })
+                ->sum('total_days');
+
+            $dailyOrp = ($basic > 0) ? round($basic / 26.0, 2) : 0.00;
+            $unpaidLeaveDeduction = round($unpaidLeaveDays * $dailyOrp, 2);
+
+            // Gross salary after deducting unpaid absence
+            $gross = max(0.00, $basic + $allowances - $unpaidLeaveDeduction);
+
+            // 2. Interns (Practical Students receiving stipend) are legally exempt from mandatory EPF, SOCSO & EIS
             if ($empType === 'intern') {
                 $epfEe = 0.00;
                 $epfEr = 0.00;
@@ -105,7 +130,7 @@ class PayrollRunController extends Controller
                 $eisEr = 0.00;
                 $pcb = 0.00;
             } else {
-                // 2. Permanent, Contract & Part-Time Staff: Full Statutory Calculation
+                // 3. Permanent, Contract & Part-Time Staff: Full Statutory Calculation
                 // Compute EPF (Dynamic EE Rate: Standard 11%, Reduced 9%, or Custom %; ER Rate: 13% <=RM5k, 12% >RM5k or Custom %)
                 $epfRateType = $employee->statutoryProfile?->epf_rate_type ?? 'standard_11';
                 if ($epfRateType === 'reduced_9') {
@@ -150,6 +175,7 @@ class PayrollRunController extends Controller
                 'basic_salary' => $basic,
                 'allowances_total' => $allowances,
                 'gross_salary' => $gross,
+                'unpaid_leave_deduction' => $unpaidLeaveDeduction,
                 'epf_subject_wages' => $gross,
                 'socso_subject_wages' => min($gross, 6000.00),
                 'eis_subject_wages' => min($gross, 6000.00),
