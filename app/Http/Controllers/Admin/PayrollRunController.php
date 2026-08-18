@@ -34,10 +34,10 @@ class PayrollRunController extends Controller
         if ($wage <= 500.00) return ['ee' => $isSkbbkEnabled ? 5.65 : 2.25, 'er' => 7.85];
         
         // For wages > RM500 up to RM6000, brackets are in increments of RM100:
-        // Tier count from 500: (e.g. 1800 => tier = 13; 4500 => tier = 40)
-        // Gazetted Act 4 Base: EE starts at 2.25 + 0.50 * tier (e.g. 1800 => 8.75; 4500 => 22.25)
-        // Gazetted SKBBK 2026: EE starts at 5.65 + 1.25 * tier (e.g. 1800 => 21.90; 4500 => 55.60)
-        // Gazetted Employer (ER): starts at 7.85 + 1.75 * tier (e.g. 1800 => 30.65; 4500 => 77.85)
+        // Tier count from 500: (e.g. 1800 => tier = 13; 4500 => tier = 40; 6000 => tier = 55)
+        // Gazetted Act 4 Base: EE starts at 2.25 + 0.50 * tier (e.g. 1800 => 8.75; 4500 => 22.25; 6000 => 29.75)
+        // Gazetted SKBBK 2026: EE starts at 5.65 + 1.25 * tier (e.g. 1800 => 21.90; 4500 => 55.60; 6000 => 73.40)
+        // Gazetted Employer (ER): starts at 7.85 + 1.75 * tier (e.g. 1800 => 30.65; 4500 => 77.85; 6000 => 104.15)
         $tier = (int) ceil(($wage - 500.00) / 100.00);
         
         if ($isSkbbkEnabled) {
@@ -51,7 +51,12 @@ class PayrollRunController extends Controller
             $ee = 2.25 + ($tier * 0.50);
             $maxEe = 29.75;
         }
-        $er = 7.85 + ($tier * 1.75);
+
+        if ($wage >= 6000.00) {
+            $er = 104.15;
+        } else {
+            $er = 7.85 + ($tier * 1.75);
+        }
 
         return [
             'ee' => min($maxEe, round($ee, 2)),
