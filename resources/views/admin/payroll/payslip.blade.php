@@ -25,7 +25,7 @@
 
         body {
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #f8fafc;
+            background-color: #ffffff;
             color: #0f172a;
             font-size: 11.5px;
             line-height: 1.4;
@@ -52,17 +52,16 @@
             .payslip-wrapper {
                 box-shadow: none !important;
                 border: none !important;
-                border-radius: 0 !important;
                 margin: 0 !important;
                 padding: 0 !important;
                 max-width: 100% !important;
-                background: transparent !important;
+                background: #ffffff !important;
             }
         }
 
         .action-bar {
             max-width: 800px;
-            margin: 20px auto 12px auto;
+            margin: 20px auto 14px auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -107,10 +106,8 @@
             max-width: 800px;
             margin: 0 auto 40px auto;
             background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
-            padding: 32px 36px;
+            border: none;
+            padding: 24px 32px;
             position: relative;
         }
 
