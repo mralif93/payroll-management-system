@@ -129,54 +129,60 @@
     <!-- MAIN RIGHT CONTENT COLUMN -->
     <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
         
-        <!-- Top App Bar Header (Modern Floating Glassmorphic Design) -->
-        <header class="h-16 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200/60 dark:border-slate-800/60 flex items-center justify-between px-4 sm:px-6 lg:px-8 shrink-0 transition-all duration-300 sticky top-0 z-30 shadow-2xs">
+        <!-- Top App Bar Header (Ultra-Modern SaaS Clean Glass Design) -->
+        <header class="h-16 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between px-4 sm:px-6 lg:px-8 shrink-0 transition-all duration-300 sticky top-0 z-30">
             
-            <!-- Left: Mobile Drawer Trigger & Clean Breadcrumbs Hierarchy -->
-            <div class="flex items-center gap-3 min-w-0">
-                <!-- Hamburger Trigger for Mobile Drawer -->
+            <!-- Left: Mobile Toggle, Brand & Current Section Context -->
+            <div class="flex items-center gap-3.5 min-w-0">
+                <!-- Mobile Navigation Toggle -->
                 <button 
                     type="button" 
                     onclick="toggleMobileSidebar()" 
-                    class="lg:hidden p-2 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer shadow-2xs"
+                    class="lg:hidden w-9 h-9 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition flex items-center justify-center cursor-pointer shrink-0"
                     title="Open Navigation Menu"
                 >
                     <i class="bx bx-menu-alt-left text-xl"></i>
                 </button>
 
-                <!-- Modern Breadcrumb Pill Badge -->
-                <div class="flex items-center gap-2 text-xs min-w-0">
-                    <a href="/admin" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100/70 dark:bg-slate-800/60 text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 font-medium transition text-[11px]">
-                        <i class="bx bx-home-alt text-xs"></i>
-                        <span>Console</span>
-                    </a>
-                    <i class="bx bx-chevron-right text-slate-300 dark:text-slate-700 hidden sm:inline text-sm shrink-0"></i>
+                <!-- Page Location & Module Hierarchy -->
+                <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="hidden sm:flex items-center gap-2 text-xs font-semibold text-slate-400 dark:text-slate-500 shrink-0">
+                        <span class="hover:text-slate-600 dark:hover:text-slate-300 transition">PayFlow</span>
+                        <span class="text-slate-300 dark:text-slate-700">/</span>
+                    </div>
                     <div class="flex items-center gap-2 min-w-0">
-                        <span class="font-bold text-slate-900 dark:text-white truncate text-xs sm:text-sm tracking-tight">
+                        <h2 class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white tracking-tight truncate">
                             {{ $headerTitle ?? 'System Governance' }}
-                        </span>
-                        <span class="hidden md:inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/60">
-                            v2.4 Active
+                        </h2>
+                        <span class="hidden md:inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/60 shrink-0">
+                            2026 Ready
                         </span>
                     </div>
                 </div>
             </div>
 
-            <!-- Right: Interactive Controls & User Profile -->
-            <div class="flex items-center gap-2 sm:gap-2.5 shrink-0">
+            <!-- Right: System Status, Quick Actions & User Flyout -->
+            <div class="flex items-center gap-2 sm:gap-3 shrink-0">
                 
-                <!-- Modern Segmented Theme Toggle Button -->
+                <!-- Live Statutory Status Pill (Tablet & Desktop) -->
+                <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-semibold">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <span>Statutory Active</span>
+                </div>
+
+                <!-- Theme Toggle Button -->
                 <button 
                     type="button" 
                     onclick="toggleDarkMode()" 
-                    class="p-2 sm:px-2.5 sm:py-1.5 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-800/70 text-slate-600 dark:text-amber-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer flex items-center gap-1.5 shadow-2xs group"
-                    title="Toggle Light / Dark Mode"
+                    class="w-9 h-9 sm:w-auto sm:px-2.5 sm:h-9 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/60 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer flex items-center justify-center gap-1.5 shrink-0"
+                    title="Toggle Dark/Light Mode"
                 >
-                    <div class="w-5 h-5 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-amber-400 group-hover:scale-110 transition-transform">
-                        <i class="bx bx-moon dark:hidden text-xs"></i>
-                        <i class="bx bx-sun hidden dark:inline text-xs text-amber-400"></i>
-                    </div>
-                    <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-300 hidden md:inline">
+                    <i class="bx bx-moon dark:hidden text-base text-slate-600"></i>
+                    <i class="bx bx-sun hidden dark:inline text-base text-amber-400"></i>
+                    <span class="text-xs font-semibold hidden xl:inline text-slate-600 dark:text-slate-300">
                         <span class="dark:hidden">Light</span>
                         <span class="hidden dark:inline">Dark</span>
                     </span>
@@ -187,11 +193,11 @@
                     <button 
                         type="button" 
                         onclick="toggleNotificationsMenu(event)"
-                        class="relative p-2 sm:p-2.5 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-800/70 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer shadow-2xs"
+                        class="relative w-9 h-9 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/60 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition flex items-center justify-center cursor-pointer shrink-0"
                         title="System Notifications"
                     >
                         <i class="bx bx-bell text-lg leading-none"></i>
-                        <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white dark:ring-slate-900 animate-pulse"></span>
+                        <span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white dark:ring-slate-900"></span>
                     </button>
 
                     <!-- Notifications Flyout -->
@@ -228,20 +234,14 @@
                     </div>
                 </div>
 
-                <!-- Live Statutory Status Pill Badge (Desktop) -->
-                <div class="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs text-xs font-semibold">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>Statutory 2026</span>
-                </div>
-
-                <div class="h-6 w-px bg-slate-200/80 dark:bg-slate-800 hidden sm:block mx-0.5"></div>
+                <div class="h-6 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block mx-0.5"></div>
 
                 <!-- User Profile Interactive Dropdown Trigger -->
                 <div class="relative" id="user-menu-container">
                     <button 
                         type="button" 
                         onclick="toggleUserMenu(event)"
-                        class="flex items-center gap-2.5 p-1 sm:pl-1.5 sm:pr-2.5 sm:py-1 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer shadow-2xs group select-none"
+                        class="flex items-center gap-2.5 p-1 sm:pl-1.5 sm:pr-3 sm:py-1 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-700/80 transition cursor-pointer group select-none"
                     >
                         <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-600 via-indigo-700 to-blue-700 text-white font-bold flex items-center justify-center text-xs shadow-xs shrink-0 group-hover:scale-105 transition-transform">
                             {{ substr(auth()->user()?->name ?? 'PA', 0, 2) }}
@@ -254,7 +254,7 @@
                                 ADM-001
                             </div>
                         </div>
-                        <i class="bx bx-chevron-down text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-200 transition-transform duration-200 text-base" id="user-menu-chevron"></i>
+                        <i class="bx bx-chevron-down text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-200 transition-transform duration-200 text-base ml-0.5" id="user-menu-chevron"></i>
                     </button>
 
                     <!-- Dropdown Flyout Menu -->
