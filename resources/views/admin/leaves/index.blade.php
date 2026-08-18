@@ -85,6 +85,8 @@
                     <i class="bx bx-cut"></i>
                 </div>
             </div>
+        </div>
+
         <!-- Navigation Tabs: Leave Applications vs Employee Quotas & Balances -->
         @php
             $activeTab = request('tab', 'applications');
