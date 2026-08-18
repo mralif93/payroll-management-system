@@ -1,17 +1,48 @@
-<x-layouts.admin 
-    title="Payroll Dashboard - PayFlow MY"
-    headerTitle="Monthly Payroll Operations"
-    headerSubtitle="Real-time Malaysian payroll processing, statutory deductions summary, and batch disbursement."
->
-    <!-- Header Quick Actions -->
-    <x-slot name="headerActions">
-        <x-button variant="secondary" size="sm" icon="bx-filter">
-            Filter Period
-        </x-button>
-        <x-button variant="primary" size="sm" icon="bx-plus">
-            New Payroll Run (Aug 2026)
-        </x-button>
-    </x-slot>
+<x-layouts.admin title="Payroll Dashboard - PayFlow MY" :hideHeader="true">
+
+    <div class="space-y-6">
+
+        <!-- Executive Page Hero Banner & Action Suite -->
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-900 via-slate-900 to-indigo-950 text-white p-6 sm:p-7 shadow-lg shadow-indigo-950/20 border border-indigo-800/40">
+            <!-- Background Decorative Glow -->
+            <div class="absolute -right-16 -top-16 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute right-1/3 -bottom-20 w-48 h-48 bg-purple-500/15 rounded-full blur-2xl pointer-events-none"></div>
+
+            <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+                <div class="space-y-2 max-w-2xl">
+                    <div class="flex items-center gap-2.5 flex-wrap">
+                        <div class="w-8 h-8 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center text-indigo-300 font-bold text-base shadow-xs">
+                            <i class="bx bxs-dashboard"></i>
+                        </div>
+                        <h1 class="text-xl sm:text-2xl font-black text-white tracking-tight">Monthly Payroll Operations</h1>
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 inline-flex items-center gap-1.5 backdrop-blur-xs">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                            Live Payroll Cycle
+                        </span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-indigo-100/80 leading-relaxed">
+                        Real-time Malaysian payroll processing, statutory deductions summary (KWSP, SOCSO, EIS, PCB), and batch disbursement.
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-2.5 sm:gap-3 flex-wrap shrink-0">
+                    <button 
+                        type="button" 
+                        class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 backdrop-blur-md transition flex items-center gap-2 cursor-pointer shadow-xs hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                        <i class="bx bx-filter text-sm text-indigo-200"></i>
+                        <span>Filter Period</span>
+                    </button>
+                    <a 
+                        href="{{ route('admin.payroll.index') }}"
+                        class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-md shadow-indigo-600/30 transition flex items-center gap-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                        <i class="bx bx-plus text-base"></i>
+                        <span>New Payroll Run</span>
+                    </a>
+                </div>
+            </div>
+        </div>
 
     <!-- Top KPI Metrics Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

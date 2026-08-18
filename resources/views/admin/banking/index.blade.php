@@ -6,33 +6,40 @@
 
     <div class="space-y-6">
 
-        <!-- Header Banner & Dynamic Title -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-                <div class="flex items-center gap-2.5">
-                    <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                        {{ $isExportsTab ? 'Statutory Agency Exporters' : 'Bank Autopay & Disbursement' }}
-                    </h1>
-                    @if($isExportsTab)
-                        <x-badge variant="purple" dot="true">2026 Statutory Compliance</x-badge>
-                    @else
-                        <x-badge variant="emerald" dot="true">Bank Autopay Ready</x-badge>
-                    @endif
-                </div>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                    {{ $isExportsTab ? 'Export official monthly submission files for KWSP EPF i-Akaun, PERKESO ASSIST (Act 4 + SKBBK), and LHDN e-CP39.' : 'Generate corporate electronic bulk salary payment files for Maybank2e, CIMB BizChannel, and Interbank DuitNow/IBG.' }}
-                </p>
-            </div>
+        <!-- Executive Page Hero Banner & Action Suite -->
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-900 via-slate-900 to-indigo-950 text-white p-6 sm:p-7 shadow-lg shadow-indigo-950/20 border border-indigo-800/40">
+            <!-- Background Decorative Glow -->
+            <div class="absolute -right-16 -top-16 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute right-1/3 -bottom-20 w-48 h-48 bg-purple-500/15 rounded-full blur-2xl pointer-events-none"></div>
 
-            <!-- Active Batch Selector Badge -->
-            @if($latestPayrollRun)
-                <div class="flex items-center gap-2 bg-white dark:bg-slate-900 p-2 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
-                    <span class="text-xs font-bold text-slate-500 dark:text-slate-400 pl-2">Active Cycle:</span>
-                    <span class="px-2.5 py-1 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-mono font-bold text-xs">
-                        {{ $latestPayrollRun->batch_no }} ({{ date("M Y", mktime(0,0,0, (int)$latestPayrollRun->period_month, 1)) }})
-                    </span>
+            <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+                <div class="space-y-2 max-w-2xl">
+                    <div class="flex items-center gap-2.5 flex-wrap">
+                        <div class="w-8 h-8 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center text-indigo-300 font-bold text-base shadow-xs">
+                            <i class="bx bxs-bank"></i>
+                        </div>
+                        <h1 class="text-xl sm:text-2xl font-black text-white tracking-tight">
+                            {{ $isExportsTab ? 'Statutory Agency Exporters' : 'Bank Autopay & Disbursement' }}
+                        </h1>
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 inline-flex items-center gap-1.5 backdrop-blur-xs">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                            {{ $isExportsTab ? 'KWSP / PERKESO / LHDN Ready' : 'Bank Autopay M2E/CIMB' }}
+                        </span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-indigo-100/80 leading-relaxed">
+                        {{ $isExportsTab ? 'Export official monthly submission files for KWSP EPF i-Akaun, PERKESO ASSIST (Act 4 + SKBBK), and LHDN e-CP39.' : 'Generate corporate electronic bulk salary payment files for Maybank2e, CIMB BizChannel, and Interbank DuitNow/IBG.' }}
+                    </p>
                 </div>
-            @endif
+
+                @if($latestPayrollRun)
+                    <div class="flex items-center gap-2.5 bg-white/10 backdrop-blur-md px-4 py-2.5 rounded-xl border border-white/20 shrink-0">
+                        <span class="text-xs font-bold text-indigo-200">Active Cycle:</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-indigo-600/80 text-white font-mono font-bold text-xs shadow-xs">
+                            {{ $latestPayrollRun->batch_no }} ({{ date("M Y", mktime(0,0,0, (int)$latestPayrollRun->period_month, 1)) }})
+                        </span>
+                    </div>
+                @endif
+            </div>
         </div>
 
         <!-- Navigation Tabs (Bank Autopay vs Statutory Exporters) -->

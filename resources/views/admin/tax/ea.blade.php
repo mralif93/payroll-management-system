@@ -2,28 +2,42 @@
 
     <div class="space-y-8">
 
-        <!-- Header Banner & Action -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-                <div class="flex items-center gap-2">
-                    <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Year-End Form EA Compiler</h1>
-                    <x-badge variant="rose" dot="true">
-                        Borang EA (C.P.8A)
-                    </x-badge>
-                </div>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                    Annual statement of remuneration from employment under Section 83(1A) of the Income Tax Act 1967.
-                </p>
-            </div>
+        <!-- Executive Page Hero Banner & Action Suite -->
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-900 via-slate-900 to-indigo-950 text-white p-6 sm:p-7 shadow-lg shadow-indigo-950/20 border border-indigo-800/40">
+            <!-- Background Decorative Glow -->
+            <div class="absolute -right-16 -top-16 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute right-1/3 -bottom-20 w-48 h-48 bg-purple-500/15 rounded-full blur-2xl pointer-events-none"></div>
 
-            <div class="flex items-center gap-2">
-                <form method="POST" action="{{ route('admin.tax-ea.compile') }}">
-                    @csrf
-                    <input type="hidden" name="tax_year" value="{{ $taxYear ?? date('Y') }}">
-                    <x-button variant="primary" size="sm" icon="bx-refresh" type="submit">
-                        Compile Annual EA ({{ $taxYear ?? date('Y') }})
-                    </x-button>
-                </form>
+            <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+                <div class="space-y-2 max-w-2xl">
+                    <div class="flex items-center gap-2.5 flex-wrap">
+                        <div class="w-8 h-8 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center text-indigo-300 font-bold text-base shadow-xs">
+                            <i class="bx bx-file"></i>
+                        </div>
+                        <h1 class="text-xl sm:text-2xl font-black text-white tracking-tight">Year-End Form EA Compiler</h1>
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 inline-flex items-center gap-1.5 backdrop-blur-xs">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                            Borang EA (C.P.8A)
+                        </span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-indigo-100/80 leading-relaxed">
+                        Annual statement of remuneration from employment under Section 83(1A) of the Malaysian Income Tax Act 1967.
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-2.5 sm:gap-3 flex-wrap shrink-0">
+                    <form method="POST" action="{{ route('admin.tax-ea.compile') }}">
+                        @csrf
+                        <input type="hidden" name="tax_year" value="{{ $taxYear ?? date('Y') }}">
+                        <button 
+                            type="submit" 
+                            class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-md shadow-indigo-600/30 transition flex items-center gap-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+                        >
+                            <i class="bx bx-refresh text-base"></i>
+                            <span>Compile Annual EA ({{ $taxYear ?? date('Y') }})</span>
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
 
