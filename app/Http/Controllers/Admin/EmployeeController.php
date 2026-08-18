@@ -64,12 +64,12 @@ class EmployeeController extends Controller
 
         $employee = Employee::create($validated);
 
-        // Auto-create standard statutory profile
+        // Auto-create statutory profile with configured toggles
         $employee->statutoryProfile()->create([
             'epf_rate_type' => 'standard_11',
             'socso_category' => 'category_1_full',
-            'is_eis_contributed' => true,
-            'is_skbbk_contributed' => true,
+            'is_eis_contributed' => $request->boolean('is_eis_contributed', true),
+            'is_skbbk_contributed' => $request->boolean('is_skbbk_contributed', true),
             'tax_category' => 'single',
             'is_tax_resident' => true,
         ]);
@@ -142,6 +142,15 @@ class EmployeeController extends Controller
 
         $oldValues = $employee->only(array_keys($validated));
         $employee->update($validated);
+
+        // Update statutory profile toggles
+        $employee->statutoryProfile()->updateOrCreate(
+            ['employee_id' => $employee->id],
+            [
+                'is_skbbk_contributed' => $request->boolean('is_skbbk_contributed'),
+                'is_eis_contributed' => $request->boolean('is_eis_contributed'),
+            ]
+        );
 
         AuditTrail::create([
             'auditable_type' => Employee::class,

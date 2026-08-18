@@ -194,8 +194,14 @@
                                 <td class="p-3.5">
                                     <div class="flex items-center gap-1.5 flex-wrap">
                                         <x-badge variant="indigo" size="sm">EPF 11%</x-badge>
-                                        <x-badge variant="purple" size="sm">SKBBK 2026</x-badge>
-                                        <x-badge variant="blue" size="sm">EIS</x-badge>
+                                        @if($emp->statutoryProfile?->is_skbbk_contributed)
+                                            <x-badge variant="purple" size="sm">SKBBK</x-badge>
+                                        @else
+                                            <x-badge variant="slate" size="sm">No SKBBK</x-badge>
+                                        @endif
+                                        @if($emp->statutoryProfile?->is_eis_contributed)
+                                            <x-badge variant="blue" size="sm">EIS</x-badge>
+                                        @endif
                                     </div>
                                 </td>
                                 <td class="p-3.5 font-mono text-[11px]">
@@ -358,7 +364,7 @@
                 </div>
             </div>
 
-            <!-- Section 3: Banking & Statutory Autopay -->
+            <!-- Section 3: Banking & Disbursement -->
             <div class="space-y-3">
                 <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
                     <span class="w-6 h-6 rounded-lg bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xs font-bold">3</span>
@@ -368,6 +374,32 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <x-input label="Disbursement Bank" name="bank_name" placeholder="Maybank, CIMB, Public Bank, RHB..." icon="bx-buildings" />
                     <x-input label="Bank Account Number" name="bank_account_no" placeholder="e.g. 514012345678" icon="bx-credit-card" />
+                </div>
+            </div>
+
+            <!-- Section 4: Malaysian Statutory Coverage & Options -->
+            <div class="space-y-3">
+                <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
+                    <span class="w-6 h-6 rounded-lg bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xs font-bold">4</span>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Statutory Scheme Toggles &amp; Opt-Outs</h4>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-indigo-50/20 transition cursor-pointer">
+                        <input type="checkbox" name="is_skbbk_contributed" value="1" checked class="mt-0.5 rounded text-indigo-600 focus:ring-indigo-500">
+                        <div>
+                            <span class="text-xs font-bold text-slate-900 dark:text-white block">PERKESO SKBBK (Lindung 24 Jam)</span>
+                            <span class="text-[11px] text-slate-400 block leading-tight mt-0.5">24-hour non-employment injury scheme (Uncheck to Opt Out)</span>
+                        </div>
+                    </label>
+
+                    <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-indigo-50/20 transition cursor-pointer">
+                        <input type="checkbox" name="is_eis_contributed" value="1" checked class="mt-0.5 rounded text-indigo-600 focus:ring-indigo-500">
+                        <div>
+                            <span class="text-xs font-bold text-slate-900 dark:text-white block">SIP / EIS Contribution (Act 800)</span>
+                            <span class="text-[11px] text-slate-400 block leading-tight mt-0.5">Employment Insurance System (0.2% EE / 0.2% ER)</span>
+                        </div>
+                    </label>
                 </div>
             </div>
 
@@ -513,6 +545,32 @@
                 </div>
             </div>
 
+            <!-- Section 4: Malaysian Statutory Coverage & Opt-Outs -->
+            <div class="space-y-3">
+                <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
+                    <span class="w-6 h-6 rounded-lg bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xs font-bold">4</span>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Statutory Scheme Toggles &amp; Opt-Outs</h4>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-indigo-50/20 transition cursor-pointer">
+                        <input type="checkbox" name="is_skbbk_contributed" id="edit-emp-skbbk" value="1" class="mt-0.5 rounded text-indigo-600 focus:ring-indigo-500">
+                        <div>
+                            <span class="text-xs font-bold text-slate-900 dark:text-white block">PERKESO SKBBK (Lindung 24 Jam)</span>
+                            <span class="text-[11px] text-slate-400 block leading-tight mt-0.5">24-hour non-employment injury scheme (Uncheck to Opt Out)</span>
+                        </div>
+                    </label>
+
+                    <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-indigo-50/20 transition cursor-pointer">
+                        <input type="checkbox" name="is_eis_contributed" id="edit-emp-eis" value="1" class="mt-0.5 rounded text-indigo-600 focus:ring-indigo-500">
+                        <div>
+                            <span class="text-xs font-bold text-slate-900 dark:text-white block">SIP / EIS Contribution (Act 800)</span>
+                            <span class="text-[11px] text-slate-400 block leading-tight mt-0.5">Employment Insurance System (0.2% EE / 0.2% ER)</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
             <div class="flex items-center justify-end gap-2.5 pt-4 border-t border-slate-100 dark:border-slate-800">
                 <x-button variant="secondary" size="md" type="button" onclick="closeModal('edit-employee-modal')">
                     Cancel
@@ -613,7 +671,7 @@
 
                 <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
                     <div class="font-bold text-slate-500 dark:text-slate-400">Statutory Deductions</div>
-                    <div class="flex items-center justify-end gap-1.5 flex-wrap">
+                    <div class="flex items-center justify-end gap-1.5 flex-wrap" id="show-emp-statutory-badges">
                         <x-badge variant="indigo" size="sm">EPF 11%</x-badge>
                         <x-badge variant="purple" size="sm">SKBBK 2026</x-badge>
                         <x-badge variant="blue" size="sm">EIS</x-badge>
@@ -678,6 +736,16 @@
                 document.getElementById('show-emp-bank').textContent = (emp.bank_name || 'Bank') + ' (' + (emp.bank_account_no || 'Not set') + ')';
                 document.getElementById('show-emp-joined').textContent = emp.joined_date ? new Date(emp.joined_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
 
+                // Dynamic Statutory Badges
+                const statutoryContainer = document.getElementById('show-emp-statutory-badges');
+                const isSkbbk = emp.statutory_profile ? emp.statutory_profile.is_skbbk_contributed : true;
+                const isEis = emp.statutory_profile ? emp.statutory_profile.is_eis_contributed : true;
+                statutoryContainer.innerHTML = `
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">EPF 11%</span>
+                    ${isSkbbk ? '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">SKBBK</span>' : '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700">Opted Out (SKBBK)</span>'}
+                    ${isEis ? '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">EIS</span>' : ''}
+                `;
+
                 const resignedRow = document.getElementById('show-emp-resigned-row');
                 if (emp.employment_status === 'resigned' || emp.resigned_date) {
                     resignedRow.classList.remove('hidden');
@@ -719,6 +787,12 @@
                 document.getElementById('edit-emp-email').value = emp.email || '';
                 document.getElementById('edit-emp-phone').value = emp.phone_number || '';
                 document.getElementById('edit-emp-resigned-date').value = emp.resigned_date ? emp.resigned_date.substring(0, 10) : '';
+
+                // Statutory Checkboxes
+                const isSkbbk = emp.statutory_profile ? (emp.statutory_profile.is_skbbk_contributed == 1) : true;
+                const isEis = emp.statutory_profile ? (emp.statutory_profile.is_eis_contributed == 1) : true;
+                document.getElementById('edit-emp-skbbk').checked = isSkbbk;
+                document.getElementById('edit-emp-eis').checked = isEis;
 
                 toggleResignedDateField(emp.employment_status || 'active');
 
