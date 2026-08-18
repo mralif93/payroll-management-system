@@ -159,11 +159,11 @@
             <!-- Right: Interactive Controls & User Profile -->
             <div class="flex items-center gap-2 sm:gap-3 shrink-0">
                 
-                <!-- Theme Toggle Switch Pill -->
+                <!-- Theme Toggle Button -->
                 <button 
                     type="button" 
                     onclick="toggleDarkMode()" 
-                    class="relative p-2 sm:px-2.5 sm:py-1.5 rounded-xl border border-slate-200/80 dark:border-slate-700/80 bg-slate-100/80 dark:bg-slate-800/80 text-slate-600 dark:text-amber-400 hover:bg-slate-200/70 dark:hover:bg-slate-700 transition cursor-pointer flex items-center gap-1.5 shadow-2xs"
+                    class="p-2 sm:px-2.5 sm:py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-amber-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer flex items-center gap-1.5 shadow-2xs"
                     title="Toggle Theme"
                 >
                     <i class="bx bx-moon dark:hidden text-base"></i>
@@ -174,17 +174,53 @@
                     </span>
                 </button>
 
-                <!-- Notifications Button -->
-                <button 
-                    type="button" 
-                    class="relative p-2 rounded-xl border border-slate-200/80 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer shadow-2xs"
-                    title="System Notifications"
-                >
-                    <i class="bx bx-bell text-lg"></i>
-                    <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white dark:ring-slate-900"></span>
-                </button>
+                <!-- Notifications Flyout Trigger & Menu -->
+                <div class="relative" id="notifications-menu-container">
+                    <button 
+                        type="button" 
+                        onclick="toggleNotificationsMenu(event)"
+                        class="relative p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer shadow-2xs"
+                        title="System Notifications"
+                    >
+                        <i class="bx bx-bell text-lg"></i>
+                        <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white dark:ring-slate-900 animate-pulse"></span>
+                    </button>
 
-                <!-- Statutory Status Pill (Tablet & Desktop) -->
+                    <!-- Notifications Flyout -->
+                    <div id="notifications-menu" class="hidden absolute right-0 mt-2.5 w-80 sm:w-88 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl z-50 overflow-hidden transform opacity-0 scale-95 transition-all duration-200">
+                        <div class="p-3.5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold text-slate-900 dark:text-white">Notifications</span>
+                                <span class="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">2 New</span>
+                            </div>
+                            <span class="text-[10px] text-slate-400 cursor-pointer hover:underline">Mark all read</span>
+                        </div>
+                        <div class="divide-y divide-slate-100 dark:divide-slate-800/60 max-h-72 overflow-y-auto text-xs">
+                            <div class="p-3.5 flex items-start gap-3 hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition cursor-pointer">
+                                <div class="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 flex items-center justify-center font-bold text-sm shrink-0">
+                                    <i class="bx bx-check-shield"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-semibold text-slate-800 dark:text-white leading-tight">Statutory Rules Active</p>
+                                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">2026 EPF & SOCSO SKBBK tables loaded.</p>
+                                    <span class="text-[10px] text-slate-400 mt-1 block font-mono">10 mins ago</span>
+                                </div>
+                            </div>
+                            <div class="p-3.5 flex items-start gap-3 hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition cursor-pointer">
+                                <div class="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 flex items-center justify-center font-bold text-sm shrink-0">
+                                    <i class="bx bx-calendar-check"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-semibold text-slate-800 dark:text-white leading-tight">August 2026 Payroll</p>
+                                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Batch ready for review and disbursement.</p>
+                                    <span class="text-[10px] text-slate-400 mt-1 block font-mono">1 hr ago</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statutory Badge (Tablet & Desktop) -->
                 <div class="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs text-xs font-semibold">
                     <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                     <span>Statutory 2026</span>
@@ -192,17 +228,64 @@
 
                 <div class="h-6 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block mx-0.5"></div>
 
-                <!-- User Profile Pill Card -->
-                <div class="relative flex items-center gap-2.5 p-1.5 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40 hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition cursor-pointer shadow-2xs">
-                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-600 to-indigo-700 text-white font-bold flex items-center justify-center text-xs shadow-xs shrink-0">
-                        {{ substr(auth()->user()?->name ?? 'PA', 0, 2) }}
-                    </div>
-                    <div class="hidden sm:block text-left pr-1">
-                        <div class="text-xs font-bold text-slate-900 dark:text-white leading-tight truncate max-w-[120px]">
-                            {{ auth()->user()?->name ?? 'Payroll Officer' }}
+                <!-- User Profile Interactive Dropdown -->
+                <div class="relative" id="user-menu-container">
+                    <button 
+                        type="button" 
+                        onclick="toggleUserMenu(event)"
+                        class="flex items-center gap-2.5 p-1 sm:px-2.5 sm:py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer shadow-2xs group select-none"
+                    >
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-600 via-indigo-700 to-blue-700 text-white font-bold flex items-center justify-center text-xs shadow-xs shrink-0 group-hover:scale-105 transition-transform">
+                            {{ substr(auth()->user()?->name ?? 'PA', 0, 2) }}
                         </div>
-                        <div class="text-[10px] text-slate-400 dark:text-slate-500 font-mono leading-tight">
-                            ADM-001
+                        <div class="hidden sm:block text-left">
+                            <div class="text-xs font-bold text-slate-900 dark:text-white leading-tight truncate max-w-[110px]">
+                                {{ auth()->user()?->name ?? 'Payroll Officer' }}
+                            </div>
+                            <div class="text-[10px] text-slate-400 dark:text-slate-500 font-mono leading-tight">
+                                ADM-001
+                            </div>
+                        </div>
+                        <i class="bx bx-chevron-down text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-200 transition-transform duration-200 text-base" id="user-menu-chevron"></i>
+                    </button>
+
+                    <!-- Dropdown Flyout Menu -->
+                    <div id="user-menu" class="hidden absolute right-0 mt-2.5 w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl z-50 overflow-hidden transform opacity-0 scale-95 transition-all duration-200">
+                        
+                        <!-- Header with User info -->
+                        <div class="p-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-indigo-800 text-white font-bold flex items-center justify-center text-sm shadow-xs shrink-0">
+                                {{ substr(auth()->user()?->name ?? 'PA', 0, 2) }}
+                            </div>
+                            <div class="overflow-hidden">
+                                <div class="text-xs font-bold text-slate-900 dark:text-white truncate">{{ auth()->user()?->name ?? 'Payroll Officer' }}</div>
+                                <div class="text-[11px] text-slate-400 dark:text-slate-500 font-mono truncate">{{ auth()->user()?->email ?? 'admin@company.com.my' }}</div>
+                                <span class="inline-block px-1.5 py-0.2 rounded text-[9px] font-bold bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 mt-1 uppercase">Administrator</span>
+                            </div>
+                        </div>
+
+                        <!-- Menu Actions -->
+                        <div class="p-2 space-y-1 text-xs font-medium">
+                            <a href="/admin/parameters" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
+                                <i class="bx bx-slider text-base text-slate-400"></i>
+                                <span>System Parameters</span>
+                            </a>
+                            <a href="/admin/audit-trail" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
+                                <i class="bx bx-history text-base text-slate-400"></i>
+                                <span>Audit Trails</span>
+                            </a>
+                            <a href="/demo" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
+                                <i class="bx bx-cube-alt text-base text-slate-400"></i>
+                                <span>UI Components Kit</span>
+                            </a>
+                        </div>
+
+                        <!-- Sign Out -->
+                        <div class="p-2 border-t border-slate-100 dark:border-slate-800">
+                            <a href="/" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 font-semibold transition">
+                                <i class="bx bx-log-out text-base"></i>
+                                <span>Sign Out / Public Exit</span>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -260,6 +343,80 @@
                 backdrop.classList.add('hidden');
             }
         }
+
+        function toggleUserMenu(event) {
+            event.stopPropagation();
+            const menu = document.getElementById('user-menu');
+            const chevron = document.getElementById('user-menu-chevron');
+            const notifMenu = document.getElementById('notifications-menu');
+
+            if (notifMenu && !notifMenu.classList.contains('hidden')) {
+                notifMenu.classList.add('hidden', 'opacity-0', 'scale-95');
+                notifMenu.classList.remove('opacity-100', 'scale-100');
+            }
+
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                setTimeout(() => {
+                    menu.classList.remove('opacity-0', 'scale-95');
+                    menu.classList.add('opacity-100', 'scale-100');
+                }, 10);
+                if (chevron) chevron.classList.add('rotate-180');
+            } else {
+                menu.classList.add('opacity-0', 'scale-95');
+                menu.classList.remove('opacity-100', 'scale-100');
+                setTimeout(() => menu.classList.add('hidden'), 150);
+                if (chevron) chevron.classList.remove('rotate-180');
+            }
+        }
+
+        function toggleNotificationsMenu(event) {
+            event.stopPropagation();
+            const notifMenu = document.getElementById('notifications-menu');
+            const userMenu = document.getElementById('user-menu');
+            const chevron = document.getElementById('user-menu-chevron');
+
+            if (userMenu && !userMenu.classList.contains('hidden')) {
+                userMenu.classList.add('opacity-0', 'scale-95');
+                userMenu.classList.remove('opacity-100', 'scale-100');
+                setTimeout(() => userMenu.classList.add('hidden'), 150);
+                if (chevron) chevron.classList.remove('rotate-180');
+            }
+
+            if (notifMenu.classList.contains('hidden')) {
+                notifMenu.classList.remove('hidden');
+                setTimeout(() => {
+                    notifMenu.classList.remove('opacity-0', 'scale-95');
+                    notifMenu.classList.add('opacity-100', 'scale-100');
+                }, 10);
+            } else {
+                notifMenu.classList.add('opacity-0', 'scale-95');
+                notifMenu.classList.remove('opacity-100', 'scale-100');
+                setTimeout(() => notifMenu.classList.add('hidden'), 150);
+            }
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            const userContainer = document.getElementById('user-menu-container');
+            const notifContainer = document.getElementById('notifications-menu-container');
+            const userMenu = document.getElementById('user-menu');
+            const notifMenu = document.getElementById('notifications-menu');
+            const chevron = document.getElementById('user-menu-chevron');
+
+            if (userContainer && !userContainer.contains(e.target) && userMenu && !userMenu.classList.contains('hidden')) {
+                userMenu.classList.add('opacity-0', 'scale-95');
+                userMenu.classList.remove('opacity-100', 'scale-100');
+                setTimeout(() => userMenu.classList.add('hidden'), 150);
+                if (chevron) chevron.classList.remove('rotate-180');
+            }
+
+            if (notifContainer && !notifContainer.contains(e.target) && notifMenu && !notifMenu.classList.contains('hidden')) {
+                notifMenu.classList.add('opacity-0', 'scale-95');
+                notifMenu.classList.remove('opacity-100', 'scale-100');
+                setTimeout(() => notifMenu.classList.add('hidden'), 150);
+            }
+        });
     </script>
     {{ $scripts ?? '' }}
 </body>
