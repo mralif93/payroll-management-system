@@ -430,15 +430,15 @@
             <div>
                 <div class="info-group">
                     <span class="info-label">KWSP / EPF Member:</span>
-                    <span class="info-value mono">{{ $item->employee?->epf_no ?? '—' }}</span>
+                    <span class="info-value mono">{{ $item->employee?->statutoryProfile?->epf_member_no ?? $item->employee?->epf_no ?? '—' }}</span>
                 </div>
                 <div class="info-group">
                     <span class="info-label">PERKESO / SOCSO:</span>
-                    <span class="info-value mono">{{ $item->employee?->socso_no ?? '—' }}</span>
+                    <span class="info-value mono">{{ $item->employee?->statutoryProfile?->socso_member_no ?? $item->employee?->socso_no ?? '—' }}</span>
                 </div>
                 <div class="info-group">
                     <span class="info-label">LHDN Income Tax No:</span>
-                    <span class="info-value mono">{{ $item->employee?->tax_no ?? '—' }}</span>
+                    <span class="info-value mono">{{ $item->employee?->statutoryProfile?->income_tax_no ?? $item->employee?->tax_no ?? '—' }}</span>
                 </div>
                 <div class="info-group">
                     <span class="info-label">Payment Bank / Acct:</span>

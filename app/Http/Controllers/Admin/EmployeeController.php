@@ -65,8 +65,11 @@ class EmployeeController extends Controller
 
         $employee = Employee::create($validated);
 
-        // Auto-create statutory profile with configured toggles and EPF rate
+        // Auto-create statutory profile with configured toggles, statutory IDs, and EPF rate
         $employee->statutoryProfile()->create([
+            'epf_member_no' => $request->input('epf_member_no'),
+            'socso_member_no' => $request->input('socso_member_no'),
+            'income_tax_no' => $request->input('income_tax_no'),
             'epf_rate_type' => $request->input('epf_rate_type', 'standard_11'),
             'epf_employee_custom_rate' => $request->filled('epf_employee_custom_rate') ? (float) $request->input('epf_employee_custom_rate') : null,
             'socso_category' => 'category_1_full',
@@ -161,10 +164,13 @@ class EmployeeController extends Controller
         $oldValues = $employee->only(array_keys($validated));
         $employee->update($validated);
 
-        // Update statutory profile toggles and EPF rate
+        // Update statutory profile toggles, IDs, and EPF rate
         $employee->statutoryProfile()->updateOrCreate(
             ['employee_id' => $employee->id],
             [
+                'epf_member_no' => $request->input('epf_member_no'),
+                'socso_member_no' => $request->input('socso_member_no'),
+                'income_tax_no' => $request->input('income_tax_no'),
                 'epf_rate_type' => $request->input('epf_rate_type', 'standard_11'),
                 'epf_employee_custom_rate' => $request->filled('epf_employee_custom_rate') ? (float) $request->input('epf_employee_custom_rate') : null,
                 'is_skbbk_contributed' => $request->boolean('is_skbbk_contributed'),

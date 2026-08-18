@@ -444,6 +444,13 @@
                     </div>
                 </div>
 
+                <!-- Statutory Account & Member Numbers -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                    <x-input label="KWSP / EPF Member No." name="epf_member_no" placeholder="e.g. 12345678" icon="bx-shield-quarter" />
+                    <x-input label="PERKESO / SOCSO No." name="socso_member_no" placeholder="e.g. A12345678" icon="bx-check-shield" />
+                    <x-input label="LHDN Income Tax No." name="income_tax_no" placeholder="e.g. SG 123456780" icon="bx-calculator" />
+                </div>
+
                 <!-- SKBBK & EIS Checkboxes -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-indigo-50/20 transition cursor-pointer">
@@ -656,6 +663,13 @@
                             <x-input label="Custom Employee EPF Rate (%)" name="epf_employee_custom_rate" id="edit-emp-epf-custom-rate" type="number" step="0.5" placeholder="e.g. 13.0" icon="bx-percentage" />
                         </div>
                     </div>
+                </div>
+
+                <!-- Statutory Account & Member Numbers -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                    <x-input label="KWSP / EPF Member No." name="epf_member_no" id="edit-emp-epf-no" placeholder="e.g. 12345678" icon="bx-shield-quarter" />
+                    <x-input label="PERKESO / SOCSO No." name="socso_member_no" id="edit-emp-socso-no" placeholder="e.g. A12345678" icon="bx-check-shield" />
+                    <x-input label="LHDN Income Tax No." name="income_tax_no" id="edit-emp-tax-no" placeholder="e.g. SG 123456780" icon="bx-calculator" />
                 </div>
 
                 <!-- SKBBK & EIS Checkboxes -->
@@ -934,6 +948,11 @@
                         }
                     });
                 }
+
+                // Statutory Numbers & Registration
+                document.getElementById('edit-emp-epf-no').value = emp.statutory_profile ? (emp.statutory_profile.epf_member_no || '') : '';
+                document.getElementById('edit-emp-socso-no').value = emp.statutory_profile ? (emp.statutory_profile.socso_member_no || '') : '';
+                document.getElementById('edit-emp-tax-no').value = emp.statutory_profile ? (emp.statutory_profile.income_tax_no || '') : '';
 
                 // Statutory EPF Rate & Checkboxes
                 const epfType = emp.statutory_profile ? emp.statutory_profile.epf_rate_type : 'standard_11';
