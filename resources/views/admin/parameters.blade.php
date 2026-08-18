@@ -301,7 +301,7 @@
                     <span class="text-[10px] text-slate-400">Standard statutory bracket</span>
                 </div>
                 <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Senior Citizen (Age &ge; 60)</span>
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Senior Citizen (Age 60+)</span>
                     <span class="text-xl font-bold text-emerald-600 dark:text-emerald-400 font-mono mt-1 block">{{ ($epfParams['senior_citizen_employer_rate'] ?? 0.04) * 100 }}% (ER) / {{ ($epfParams['senior_citizen_employee_rate'] ?? 0) * 100 }}% (EE)</span>
                     <span class="text-[10px] text-slate-400">Malaysian Citizens</span>
                 </div>
@@ -341,7 +341,7 @@
                         <span class="text-[10px] text-purple-600 dark:text-purple-400 font-medium">100% Employee Borne</span>
                     </div>
                     <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                        <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">SOCSO Category 2 (Age &ge; 60)</span>
+                        <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">SOCSO Category 2 (Age 60+)</span>
                         <span class="text-lg font-bold text-slate-900 dark:text-white font-mono mt-1 block">{{ ($socsoParams['category_2']['employer_rate_percentage'] ?? 0.0125) * 100 }}% ER / RM7.00 SKBBK</span>
                         <span class="text-[10px] text-slate-400">Employment Injury Only</span>
                     </div>
@@ -610,16 +610,16 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <x-input label="Low Wage Threshold (RM)" name="value_payload[salary_threshold]" type="number" step="100" value="{{ $epfParams['salary_threshold'] ?? 5000 }}" required />
-                <x-input label="Employer Low Wage Rate (%) (&le; RM5k)" name="value_payload[employer_rate_low_wage]" type="number" step="0.5" value="{{ ($epfParams['employer_rate_low_wage'] ?? 0.13) * 100 }}" required />
+                <x-input label="Employer Low Wage Rate (%) (<= RM5,000)" name="value_payload[employer_rate_low_wage]" type="number" step="0.5" value="{{ ($epfParams['employer_rate_low_wage'] ?? 0.13) * 100 }}" required />
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <x-input label="Employer Standard Rate (%) (> RM5k)" name="value_payload[employer_rate_high_wage]" type="number" step="0.5" value="{{ ($epfParams['employer_rate_high_wage'] ?? 0.12) * 100 }}" required />
-                <x-input label="Senior Citizen ER Rate (%) (&ge; 60)" name="value_payload[senior_citizen_employer_rate]" type="number" step="0.5" value="{{ ($epfParams['senior_citizen_employer_rate'] ?? 0.04) * 100 }}" required />
+                <x-input label="Employer Standard Rate (%) (> RM5,000)" name="value_payload[employer_rate_high_wage]" type="number" step="0.5" value="{{ ($epfParams['employer_rate_high_wage'] ?? 0.12) * 100 }}" required />
+                <x-input label="Senior Citizen ER Rate (%) (Age 60+)" name="value_payload[senior_citizen_employer_rate]" type="number" step="0.5" value="{{ ($epfParams['senior_citizen_employer_rate'] ?? 0.04) * 100 }}" required />
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <x-input label="Senior Citizen EE Rate (%) (&ge; 60)" name="value_payload[senior_citizen_employee_rate]" type="number" step="0.5" value="{{ ($epfParams['senior_citizen_employee_rate'] ?? 0.00) * 100 }}" required />
+                <x-input label="Senior Citizen EE Rate (%) (Age 60+)" name="value_payload[senior_citizen_employee_rate]" type="number" step="0.5" value="{{ ($epfParams['senior_citizen_employee_rate'] ?? 0.00) * 100 }}" required />
                 <div></div>
             </div>
 
