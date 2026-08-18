@@ -197,17 +197,25 @@
                                     RM {{ number_format($item->net_salary, 2) }}
                                 </td>
 
-                                <!-- Col 9: Circular Action Button -->
+                                <!-- Col 9: Action Buttons -->
                                 <td class="p-3.5 text-right">
-                                    <div class="flex items-center justify-end">
+                                    <div class="flex items-center justify-end gap-1.5">
                                         <button 
                                             type="button" 
-                                            onclick="openPayslipModal({{ json_encode($item) }}, {{ json_encode($item->employee) }}, '{{ $payrollRun->batch_no }}', '{{ date("F Y", mktime(0, 0, 0, (int)$payrollRun->period_month, 1, (int)$payrollRun->period_year)) }}')" 
+                                            onclick="openPayslipModal({{ json_encode($item) }}, {{ json_encode($item->employee) }}, '{{ $payrollRun->batch_no }}', '{{ date("F Y", mktime(0, 0, 0, (int)$payrollRun->period_month, 1, (int)$payrollRun->period_year)) }}', '{{ route('admin.payroll.payslip', [$payrollRun, $item]) }}')" 
                                             class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-indigo-50 hover:text-indigo-600 dark:hover:bg-indigo-950 dark:hover:text-indigo-300 flex items-center justify-center transition cursor-pointer" 
-                                            title="View Detailed Payslip"
+                                            title="Quick View Payslip"
                                         >
                                             <i class="bx bx-receipt text-base"></i>
                                         </button>
+                                        <a 
+                                            href="{{ route('admin.payroll.payslip', [$payrollRun, $item]) }}" 
+                                            target="_blank"
+                                            class="w-8 h-8 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-600 hover:text-white dark:hover:bg-indigo-600 dark:hover:text-white flex items-center justify-center transition cursor-pointer shadow-xs" 
+                                            title="Open Printable PDF Payslip"
+                                        >
+                                            <i class="bx bx-printer text-base"></i>
+                                        </a>
                                     </div>
                                 </td>
                             </tr>
@@ -302,7 +310,11 @@
 
             </div>
 
-            <div class="flex justify-end gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+            <div class="flex items-center justify-between gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+                <a id="ps-pdf-link" href="#" target="_blank" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-sm shadow-indigo-600/20 transition cursor-pointer">
+                    <i class="bx bx-printer text-sm"></i>
+                    <span>Print / Save PDF</span>
+                </a>
                 <x-button variant="secondary" size="sm" type="button" onclick="closeModal('payslip-modal')">
                     Close Payslip
                 </x-button>
@@ -327,12 +339,15 @@
                 });
             }
 
-            function openPayslipModal(item, employee, batchNo, periodText) {
+            function openPayslipModal(item, employee, batchNo, periodText, pdfUrl) {
                 const fullName = employee?.full_name || 'Staff';
                 document.getElementById('ps-emp-avatar').textContent = fullName.substring(0, 2).toUpperCase();
                 document.getElementById('ps-emp-name').textContent = fullName;
                 document.getElementById('ps-emp-no').textContent = (employee?.employee_no || '—') + ' • ' + (employee?.designation || 'Staff');
                 document.getElementById('ps-period').textContent = periodText;
+                if (pdfUrl) {
+                    document.getElementById('ps-pdf-link').href = pdfUrl;
+                }
 
                 document.getElementById('ps-basic').textContent = 'RM ' + parseFloat(item.basic_salary || 0).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 document.getElementById('ps-allowances').textContent = 'RM ' + parseFloat(item.allowances_total || 0).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });

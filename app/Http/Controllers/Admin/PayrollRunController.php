@@ -224,4 +224,16 @@ class PayrollRunController extends Controller
 
         return redirect()->back()->with('status', 'Payroll batch approved and ready for bank disbursement.');
     }
+
+    /**
+     * Preview and print official individual employee payslip statement.
+     */
+    public function payslip(PayrollRun $payrollRun, \App\Models\PayrollItem $item)
+    {
+        $payrollRun->load('company');
+        $item->load(['employee.department']);
+        $company = $payrollRun->company ?? \App\Models\Company::first();
+
+        return view('admin.payroll.payslip', compact('payrollRun', 'item', 'company'));
+    }
 }
