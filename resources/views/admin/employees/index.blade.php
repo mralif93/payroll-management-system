@@ -388,14 +388,17 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     @foreach($availableAllowances as $allowance)
-                        <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40">
-                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 truncate" title="{{ $allowance->name }}">{{ $allowance->name }}</label>
-                            <div class="relative">
-                                <input type="number" step="0.01" min="0" name="allowances[{{ $allowance->id }}]" placeholder="0.00" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-slate-900 dark:text-white font-mono">
+                        <div>
+                            <div class="flex items-center justify-between mb-1.5">
+                                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 truncate" title="{{ $allowance->name }}">{{ $allowance->name }}</label>
+                                <span class="text-[10px] font-medium {{ $allowance->is_epf_subject ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400' }}">
+                                    {{ $allowance->is_epf_subject ? 'EPF/SOCSO' : 'Tax Exempt' }}
+                                </span>
                             </div>
-                            <span class="text-[10px] text-slate-400 block mt-1">
-                                {{ $allowance->is_epf_subject ? 'Subject to EPF & SOCSO' : 'Tax Exempt Allowance' }}
-                            </span>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-xs font-bold text-slate-400">RM</span>
+                                <input type="number" step="0.01" min="0" name="allowances[{{ $allowance->id }}]" placeholder="0.00" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 pl-10 pr-3.5 py-2.5 text-slate-900 dark:text-white font-mono placeholder:text-slate-400 focus:bg-white dark:focus:bg-slate-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition">
+                            </div>
                         </div>
                     @endforeach
                 </div>
@@ -422,25 +425,23 @@
                 </div>
 
                 <!-- EPF Rate Configuration -->
-                <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 space-y-3">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">KWSP / EPF Employee Rate</label>
-                            <div class="relative">
-                                <select name="epf_rate_type" id="create-emp-epf-rate-type" onchange="toggleCustomEpfFields(this.value, 'create')" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
-                                    <option value="standard_11">Standard Statutory (11.0% EE)</option>
-                                    <option value="reduced_9">Voluntary Reduced Rate (9.0% EE)</option>
-                                    <option value="custom">Custom Specified Rate (%)</option>
-                                </select>
-                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
-                                    <i class="bx bx-chevron-down text-base"></i>
-                                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">KWSP / EPF Employee Rate</label>
+                        <div class="relative">
+                            <select name="epf_rate_type" id="create-emp-epf-rate-type" onchange="toggleCustomEpfFields(this.value, 'create')" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
+                                <option value="standard_11">Standard Statutory (11.0% EE)</option>
+                                <option value="reduced_9">Voluntary Reduced Rate (9.0% EE)</option>
+                                <option value="custom">Custom Specified Rate (%)</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+                                <i class="bx bx-chevron-down text-base"></i>
                             </div>
                         </div>
+                    </div>
 
-                        <div id="create-custom-epf-container" class="hidden">
-                            <x-input label="Custom Employee EPF Rate (%)" name="epf_employee_custom_rate" id="create-emp-epf-custom-rate" type="number" step="0.5" placeholder="e.g. 13.0" icon="bx-percentage" />
-                        </div>
+                    <div id="create-custom-epf-container" class="hidden">
+                        <x-input label="Custom Employee EPF Rate (%)" name="epf_employee_custom_rate" id="create-emp-epf-custom-rate" type="number" step="0.5" placeholder="e.g. 13.0" icon="bx-percentage" />
                     </div>
                 </div>
 
@@ -611,14 +612,17 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     @foreach($availableAllowances as $allowance)
-                        <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40">
-                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 truncate" title="{{ $allowance->name }}">{{ $allowance->name }}</label>
-                            <div class="relative">
-                                <input type="number" step="0.01" min="0" name="allowances[{{ $allowance->id }}]" id="edit-emp-allowance-{{ $allowance->id }}" placeholder="0.00" class="edit-emp-allowance-input w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-slate-900 dark:text-white font-mono">
+                        <div>
+                            <div class="flex items-center justify-between mb-1.5">
+                                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 truncate" title="{{ $allowance->name }}">{{ $allowance->name }}</label>
+                                <span class="text-[10px] font-medium {{ $allowance->is_epf_subject ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400' }}">
+                                    {{ $allowance->is_epf_subject ? 'EPF/SOCSO' : 'Tax Exempt' }}
+                                </span>
                             </div>
-                            <span class="text-[10px] text-slate-400 block mt-1">
-                                {{ $allowance->is_epf_subject ? 'Subject to EPF & SOCSO' : 'Tax Exempt Allowance' }}
-                            </span>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-xs font-bold text-slate-400">RM</span>
+                                <input type="number" step="0.01" min="0" name="allowances[{{ $allowance->id }}]" id="edit-emp-allowance-{{ $allowance->id }}" placeholder="0.00" class="edit-emp-allowance-input w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 pl-10 pr-3.5 py-2.5 text-slate-900 dark:text-white font-mono placeholder:text-slate-400 focus:bg-white dark:focus:bg-slate-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition">
+                            </div>
                         </div>
                     @endforeach
                 </div>
@@ -645,25 +649,23 @@
                 </div>
 
                 <!-- EPF Rate Configuration -->
-                <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 space-y-3">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">KWSP / EPF Employee Rate</label>
-                            <div class="relative">
-                                <select name="epf_rate_type" id="edit-emp-epf-rate-type" onchange="toggleCustomEpfFields(this.value, 'edit')" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
-                                    <option value="standard_11">Standard Statutory (11.0% EE)</option>
-                                    <option value="reduced_9">Voluntary Reduced Rate (9.0% EE)</option>
-                                    <option value="custom">Custom Specified Rate (%)</option>
-                                </select>
-                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
-                                    <i class="bx bx-chevron-down text-base"></i>
-                                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">KWSP / EPF Employee Rate</label>
+                        <div class="relative">
+                            <select name="epf_rate_type" id="edit-emp-epf-rate-type" onchange="toggleCustomEpfFields(this.value, 'edit')" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
+                                <option value="standard_11">Standard Statutory (11.0% EE)</option>
+                                <option value="reduced_9">Voluntary Reduced Rate (9.0% EE)</option>
+                                <option value="custom">Custom Specified Rate (%)</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+                                <i class="bx bx-chevron-down text-base"></i>
                             </div>
                         </div>
+                    </div>
 
-                        <div id="edit-custom-epf-container" class="hidden">
-                            <x-input label="Custom Employee EPF Rate (%)" name="epf_employee_custom_rate" id="edit-emp-epf-custom-rate" type="number" step="0.5" placeholder="e.g. 13.0" icon="bx-percentage" />
-                        </div>
+                    <div id="edit-custom-epf-container" class="hidden">
+                        <x-input label="Custom Employee EPF Rate (%)" name="epf_employee_custom_rate" id="edit-emp-epf-custom-rate" type="number" step="0.5" placeholder="e.g. 13.0" icon="bx-percentage" />
                     </div>
                 </div>
 
