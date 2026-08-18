@@ -386,15 +386,15 @@
                     <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Fixed Monthly Allowances (RM)</h4>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     @foreach($availableAllowances as $allowance)
                         <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40">
-                            <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1 truncate" title="{{ $allowance->name }}">{{ $allowance->name }}</label>
+                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 truncate" title="{{ $allowance->name }}">{{ $allowance->name }}</label>
                             <div class="relative">
-                                <input type="number" step="0.01" min="0" name="allowances[{{ $allowance->id }}]" placeholder="0.00" class="w-full text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-2 text-slate-900 dark:text-white font-mono">
+                                <input type="number" step="0.01" min="0" name="allowances[{{ $allowance->id }}]" placeholder="0.00" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-slate-900 dark:text-white font-mono">
                             </div>
-                            <span class="text-[9px] text-slate-400 block mt-1">
-                                {{ $allowance->is_epf_subject ? 'EPF/SOCSO' : 'Exempt' }}
+                            <span class="text-[10px] text-slate-400 block mt-1">
+                                {{ $allowance->is_epf_subject ? 'Subject to EPF & SOCSO' : 'Tax Exempt Allowance' }}
                             </span>
                         </div>
                     @endforeach
@@ -444,11 +444,13 @@
                     </div>
                 </div>
 
-                <!-- Statutory Account & Member Numbers -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                <!-- Statutory Account & Member Numbers (Clean 2-Column Grid) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <x-input label="KWSP / EPF Member No." name="epf_member_no" placeholder="e.g. 12345678" icon="bx-shield-quarter" />
                     <x-input label="PERKESO / SOCSO No." name="socso_member_no" placeholder="e.g. A12345678" icon="bx-check-shield" />
-                    <x-input label="LHDN Income Tax No." name="income_tax_no" placeholder="e.g. SG 123456780" icon="bx-calculator" />
+                    <div class="sm:col-span-2">
+                        <x-input label="LHDN Income Tax No." name="income_tax_no" placeholder="e.g. SG 123456780" icon="bx-calculator" />
+                    </div>
                 </div>
 
                 <!-- SKBBK & EIS Checkboxes -->
@@ -607,15 +609,15 @@
                     <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Fixed Monthly Allowances (RM)</h4>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     @foreach($availableAllowances as $allowance)
                         <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40">
-                            <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1 truncate" title="{{ $allowance->name }}">{{ $allowance->name }}</label>
+                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 truncate" title="{{ $allowance->name }}">{{ $allowance->name }}</label>
                             <div class="relative">
-                                <input type="number" step="0.01" min="0" name="allowances[{{ $allowance->id }}]" id="edit-emp-allowance-{{ $allowance->id }}" placeholder="0.00" class="edit-emp-allowance-input w-full text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-2 text-slate-900 dark:text-white font-mono">
+                                <input type="number" step="0.01" min="0" name="allowances[{{ $allowance->id }}]" id="edit-emp-allowance-{{ $allowance->id }}" placeholder="0.00" class="edit-emp-allowance-input w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-slate-900 dark:text-white font-mono">
                             </div>
-                            <span class="text-[9px] text-slate-400 block mt-1">
-                                {{ $allowance->is_epf_subject ? 'EPF/SOCSO' : 'Exempt' }}
+                            <span class="text-[10px] text-slate-400 block mt-1">
+                                {{ $allowance->is_epf_subject ? 'Subject to EPF & SOCSO' : 'Tax Exempt Allowance' }}
                             </span>
                         </div>
                     @endforeach
@@ -665,11 +667,13 @@
                     </div>
                 </div>
 
-                <!-- Statutory Account & Member Numbers -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                <!-- Statutory Account & Member Numbers (Clean 2-Column Grid) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <x-input label="KWSP / EPF Member No." name="epf_member_no" id="edit-emp-epf-no" placeholder="e.g. 12345678" icon="bx-shield-quarter" />
                     <x-input label="PERKESO / SOCSO No." name="socso_member_no" id="edit-emp-socso-no" placeholder="e.g. A12345678" icon="bx-check-shield" />
-                    <x-input label="LHDN Income Tax No." name="income_tax_no" id="edit-emp-tax-no" placeholder="e.g. SG 123456780" icon="bx-calculator" />
+                    <div class="sm:col-span-2">
+                        <x-input label="LHDN Income Tax No." name="income_tax_no" id="edit-emp-tax-no" placeholder="e.g. SG 123456780" icon="bx-calculator" />
+                    </div>
                 </div>
 
                 <!-- SKBBK & EIS Checkboxes -->
