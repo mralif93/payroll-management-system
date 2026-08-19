@@ -109,58 +109,87 @@
         </div>
 
         @if($activeTab === 'applications')
-        <!-- Filter & Search Toolbar -->
-        <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
-            <form method="GET" action="{{ route('admin.leaves.index') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                <input type="hidden" name="tab" value="applications">
-                <div>
-                    <div class="relative">
-                        <i class="bx bx-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-base"></i>
-                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search employee name / staff ID..." class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 pl-10 pr-3.5 py-2.5 text-slate-900 dark:text-white placeholder:text-slate-400 focus:bg-white dark:focus:bg-slate-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition">
-                    </div>
-                </div>
-
-                <div>
-                    <div class="relative">
-                        <select name="leave_type_id" onchange="this.form.submit()" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
-                            <option value="">All Leave Categories</option>
-                            @foreach($leaveTypes as $type)
-                                <option value="{{ $type->id }}" {{ request('leave_type_id') == $type->id ? 'selected' : '' }}>
-                                    {{ $type->name }} ({{ $type->code }})
-                                </option>
-                            @endforeach
-                        </select>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
-                            <i class="bx bx-chevron-down text-base"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="relative">
-                        <select name="status" onchange="this.form.submit()" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
-                            <option value="">All Application Statuses</option>
-                            <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending Review</option>
-                            <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>Approved</option>
-                            <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>Rejected</option>
-                        </select>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
-                            <i class="bx bx-chevron-down text-base"></i>
-                        </div>
-                    </div>
-                </div>
-
+        <!-- Executive Search & Filter Command Suite for Leave Applications -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
+            <div class="p-3.5 sm:p-4 bg-slate-50/50 dark:bg-slate-850/40 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
                 <div class="flex items-center gap-2">
-                    <x-button variant="secondary" size="md" type="submit" class="w-full">
-                        Filter
-                    </x-button>
-                    @if(request()->hasAny(['search', 'leave_type_id', 'status', 'department_id']))
-                        <a href="{{ route('admin.leaves.index') }}" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white text-xs font-semibold flex items-center justify-center">
-                            <i class="bx bx-reset text-base"></i>
-                        </a>
-                    @endif
+                    <span class="w-6 h-6 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xs">
+                        <i class="bx bx-slider-alt"></i>
+                    </span>
+                    <span class="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">Search &amp; Filter Applications</span>
                 </div>
-            </form>
+                @if(request()->hasAny(['search', 'leave_type_id', 'status']))
+                    <a href="{{ route('admin.leaves.index', ['tab' => 'applications']) }}" class="text-[11px] font-semibold text-rose-600 dark:text-rose-400 hover:underline flex items-center gap-1">
+                        <i class="bx bx-reset"></i>
+                        <span>Clear All Filters</span>
+                    </a>
+                @endif
+            </div>
+
+            <div class="p-3.5 sm:p-4">
+                <form method="GET" action="{{ route('admin.leaves.index') }}" class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+                    <input type="hidden" name="tab" value="applications">
+
+                    <!-- Search Input -->
+                    <div class="relative flex-1">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
+                            <i class="bx bx-search text-base"></i>
+                        </div>
+                        <input 
+                            type="text" 
+                            name="search" 
+                            value="{{ request('search') }}" 
+                            placeholder="Search by staff name or ID..." 
+                            class="w-full pl-10 pr-10 py-2 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 dark:focus:border-indigo-400 transition"
+                        >
+                        @if(request('search'))
+                            <a href="{{ route('admin.leaves.index', request()->except('search')) }}" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600">
+                                <i class="bx bx-x-circle text-base"></i>
+                            </a>
+                        @endif
+                    </div>
+
+                    <!-- Dropdowns & Actions Group -->
+                    <div class="flex flex-wrap items-center gap-2">
+                        <!-- Leave Category Filter -->
+                        <div class="relative">
+                            <select 
+                                name="leave_type_id" 
+                                onchange="this.form.submit()" 
+                                class="py-2 pl-3 pr-8 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer"
+                            >
+                                <option value="">All Leave Categories</option>
+                                @foreach($leaveTypes as $type)
+                                    <option value="{{ $type->id }}" {{ request('leave_type_id') == $type->id ? 'selected' : '' }}>
+                                        {{ $type->name }} ({{ $type->code }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Status Filter -->
+                        <div class="relative">
+                            <select 
+                                name="status" 
+                                onchange="this.form.submit()" 
+                                class="py-2 pl-3 pr-8 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer"
+                            >
+                                <option value="">All Statuses</option>
+                                <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending Review</option>
+                                <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>Approved</option>
+                                <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>Rejected</option>
+                            </select>
+                        </div>
+
+                        <!-- Filter Button -->
+                        <button type="submit" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs cursor-pointer">
+                            <i class="bx bx-filter-alt"></i>
+                            <span>Filter</span>
+                        </button>
+                    </div>
+
+                </form>
+            </div>
         </div>
 
         <!-- Leave Records Table -->

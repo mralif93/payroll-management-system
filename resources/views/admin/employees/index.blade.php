@@ -87,79 +87,70 @@
             />
         </div>
 
-        <!-- Modern Search & Filter Command Bar -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs p-3 sm:p-4">
-            <form method="GET" action="{{ route('admin.employees.index') }}" class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
-                
-                <!-- Main Search Input with Clear Button -->
-                <div class="relative flex-1">
-                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
-                        <i class="bx bx-search text-lg"></i>
-                    </div>
-                    <input 
-                        type="text" 
-                        name="search" 
-                        value="{{ request('search') }}" 
-                        placeholder="Search employees by name, staff ID (e.g. EMP-00104), designation, or NRIC..." 
-                        class="w-full pl-10 pr-10 py-2.5 rounded-xl text-xs bg-slate-50/80 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 dark:focus:border-indigo-400 transition-all font-sans"
-                    >
-                    @if(request('search'))
-                        <a href="{{ route('admin.employees.index', request()->except('search')) }}" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
-                            <i class="bx bx-x-circle text-base"></i>
-                        </a>
-                    @endif
+        <!-- Executive Search & Filter Command Suite for Employees -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
+            <div class="p-3.5 sm:p-4 bg-slate-50/50 dark:bg-slate-850/40 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xs">
+                        <i class="bx bx-slider-alt"></i>
+                    </span>
+                    <span class="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">Search &amp; Filter Staff Directory</span>
                 </div>
+                @if(request()->hasAny(['search', 'department_id', 'status', 'type']))
+                    <a href="{{ route('admin.employees.index') }}" class="text-[11px] font-semibold text-rose-600 dark:text-rose-400 hover:underline flex items-center gap-1">
+                        <i class="bx bx-reset"></i>
+                        <span>Clear All Filters</span>
+                    </a>
+                @endif
+            </div>
 
-                <!-- Filter Dropdowns & Actions -->
-                <div class="flex flex-wrap items-center gap-2.5">
+            <div class="p-3.5 sm:p-4">
+                <form method="GET" action="{{ route('admin.employees.index') }}" class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
                     
-                    <!-- Department Filter -->
-                    <div class="relative min-w-[160px] flex-1 sm:flex-initial">
-                        <select name="department_id" onchange="this.form.submit()" class="w-full text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700/80 bg-slate-50/80 dark:bg-slate-800/60 pl-3 pr-8 py-2.5 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 cursor-pointer appearance-none">
-                            <option value="">Dept: All Departments</option>
-                            @foreach($departments as $dept)
-                                <option value="{{ $dept->id }}" {{ request('department_id') == $dept->id ? 'selected' : '' }}>{{ $dept->name }}</option>
-                            @endforeach
-                        </select>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
-                            <i class="bx bx-chevron-down text-base"></i>
+                    <!-- Search Input -->
+                    <div class="relative flex-1">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
+                            <i class="bx bx-search text-base"></i>
                         </div>
+                        <input 
+                            type="text" 
+                            name="search" 
+                            value="{{ request('search') }}" 
+                            placeholder="Search by employee name, staff ID (e.g. MY-EMP-001), designation, or NRIC..." 
+                            class="w-full pl-10 pr-10 py-2 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 dark:focus:border-indigo-400 transition"
+                        >
+                        @if(request('search'))
+                            <a href="{{ route('admin.employees.index', request()->except('search')) }}" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600">
+                                <i class="bx bx-x-circle text-base"></i>
+                            </a>
+                        @endif
                     </div>
 
-                    <x-button variant="primary" size="md" type="submit" icon="bx-filter-alt">
-                        Filter
-                    </x-button>
+                    <!-- Dropdowns & Actions Group -->
+                    <div class="flex flex-wrap items-center gap-2">
+                        <!-- Department Filter -->
+                        <div class="relative">
+                            <select 
+                                name="department_id" 
+                                onchange="this.form.submit()" 
+                                class="py-2 pl-3 pr-8 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer"
+                            >
+                                <option value="">All Departments</option>
+                                @foreach($departments as $dept)
+                                    <option value="{{ $dept->id }}" {{ request('department_id') == $dept->id ? 'selected' : '' }}>{{ $dept->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                    @if(request()->hasAny(['search', 'department_id']))
-                        <a href="{{ route('admin.employees.index') }}" class="inline-flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/50 hover:bg-rose-100 dark:hover:bg-rose-900/60 transition">
-                            <i class="bx bx-reset"></i>
-                            Reset
-                        </a>
-                    @endif
-                </div>
-            </form>
+                        <!-- Filter Button -->
+                        <button type="submit" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs cursor-pointer">
+                            <i class="bx bx-filter-alt"></i>
+                            <span>Filter</span>
+                        </button>
+                    </div>
 
-            <!-- Active Filter Badges -->
-            @if(request()->hasAny(['search', 'department_id']))
-                <div class="flex items-center gap-2 mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-[11px] flex-wrap">
-                    <span class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Active Filters:</span>
-                    @if(request('search'))
-                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-medium">
-                            Keyword: "{{ request('search') }}"
-                            <a href="{{ route('admin.employees.index', request()->except('search')) }}" class="hover:text-indigo-900 dark:hover:text-white"><i class="bx bx-x"></i></a>
-                        </span>
-                    @endif
-                    @if(request('department_id'))
-                        @php $activeDept = $departments->firstWhere('id', request('department_id')); @endphp
-                        @if($activeDept)
-                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300 font-medium">
-                                Department: {{ $activeDept->name }}
-                                <a href="{{ route('admin.employees.index', request()->except('department_id')) }}" class="hover:text-purple-900 dark:hover:text-white"><i class="bx bx-x"></i></a>
-                            </span>
-                        @endif
-                    @endif
-                </div>
-            @endif
+                </form>
+            </div>
         </div>
 
         <!-- Employees Table -->
