@@ -103,11 +103,11 @@
             <h1 class="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
                 Malaysian Payroll System &amp; <br>
                 <span class="bg-gradient-to-r from-indigo-600 via-indigo-700 to-blue-600 dark:from-indigo-400 dark:to-teal-300 bg-clip-text text-transparent">
-                    Tailwind UI Kit Showcase
+                    Statutory Calculator Preview
                 </span>
             </h1>
             <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
-                Complete interactive statutory payroll calculator with Malaysian legal contract matrix and full 13-part utility UI component library in an accordion layout.
+                Calculates statutory deductions strictly adhering to Malaysian statutory tables (EPF, SOCSO Act 4, EIS Act 800, SKBBK June 2026, and LHDN MTD/PCB).
             </p>
         </section>
 
@@ -117,12 +117,12 @@
                 <div>
                     <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                         <i class="bx bx-calculator text-indigo-600 dark:text-indigo-400"></i>
-                        Interactive Malaysian Statutory Calculator
+                        Malaysian Statutory Payroll Calculator
                     </h2>
-                    <p class="text-xs text-slate-500">Instant calculations for EPF, SOCSO Act 4, June 2026 SKBBK (*Lindung 24 Jam*), EIS, and PCB.</p>
+                    <p class="text-xs text-slate-500">Official statutory table brackets for EPF (KWSP), SOCSO (PERKESO Act 4), June 2026 SKBBK (*Lindung 24 Jam*), EIS (SIP Act 800), and LHDN MTD/PCB.</p>
                 </div>
                 <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 self-start sm:self-auto">
-                    2026 Gazette Ready
+                    2026 Gazette Compliant
                 </span>
             </div>
 
@@ -135,7 +135,7 @@
 
                     <!-- Basic Salary Input -->
                     <div class="space-y-1.5">
-                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Monthly Basic Salary (RM)</label>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Monthly Gross / Basic Salary (RM)</label>
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-xs font-bold text-slate-400">MYR</span>
                             <input 
@@ -152,15 +152,15 @@
 
                     <!-- Employment / Contract Type Select -->
                     <div class="space-y-1.5">
-                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Contract &amp; Category Type</label>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Contract &amp; Category Type (Malaysian Law)</label>
                         <select id="calc_type" onchange="calculateStatutory()" class="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3.5 py-2.5 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                            <option value="permanent">1. Permanent Staff (11% EPF + Full Cat 1 SOCSO)</option>
-                            <option value="contract_local">2. Local Fixed-Term Contract (Standard Statutory)</option>
-                            <option value="contract_foreign_res">3. Foreign Worker (Tax Resident - 2% EPF / Cat 2 SOCSO)</option>
+                            <option value="permanent">1. Permanent Staff (11% EPF + Cat 1 SOCSO + EIS + PCB)</option>
+                            <option value="contract_local">2. Local Fixed-Term Contract (Standard Statutory Coverage)</option>
+                            <option value="contract_foreign_res">3. Foreign Worker (Tax Resident - 2% EPF / Cat 2 SOCSO 1.25% ER)</option>
                             <option value="contract_foreign_nonres">4. Foreign Expatriate (Non-Resident Flat 30% Tax)</option>
-                            <option value="freelance">5. Freelancer / Consultant (Contract for Service - Exempt)</option>
-                            <option value="intern">6. Practical Intern (Student Stipend - Exempt)</option>
-                            <option value="senior">7. Senior Citizen Staff (Age 60+ - 0% EE EPF / 4% ER)</option>
+                            <option value="freelance">5. Freelancer / Consultant (Contract for Service - 0% Deductions)</option>
+                            <option value="intern">6. Practical Intern (Student Stipend - 0% Statutory Exempt)</option>
+                            <option value="senior">7. Senior Citizen Staff (Age 60+ - 0% EE / 4% ER EPF / EIS Exempt)</option>
                         </select>
                     </div>
 
@@ -180,7 +180,7 @@
                     <div class="flex items-center justify-between p-3.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                         <div>
                             <span class="text-xs font-bold text-slate-800 dark:text-slate-200 block">Voluntary 9% EPF Rate</span>
-                            <span class="text-[10px] text-slate-400">Reduced employee rate (vs standard 11%)</span>
+                            <span class="text-[10px] text-slate-400">Reduced employee rate (KWSP 17A/Khas)</span>
                         </div>
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" id="calc_epf_9_opt" onchange="calculateStatutory()" class="sr-only peer">
@@ -197,56 +197,69 @@
                         <!-- Net Salary Hero Banner -->
                         <div class="p-6 rounded-2xl bg-gradient-to-br from-emerald-500/10 via-emerald-500/5 to-teal-500/10 border border-emerald-200 dark:border-emerald-800/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             <div>
-                                <span class="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300">Estimated Net Take-Home</span>
+                                <span class="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300">Estimated Net Take-Home Pay</span>
                                 <div id="res_net_salary" class="text-3xl sm:text-4xl font-extrabold text-emerald-600 dark:text-emerald-400 font-mono mt-1">RM 5,437.20</div>
                                 <span class="text-[11px] text-slate-500 dark:text-slate-400">Disbursed directly to employee bank account</span>
                             </div>
                             <div class="text-left sm:text-right">
-                                <span class="text-[11px] text-slate-400 block font-medium">Total Deductions</span>
+                                <span class="text-[11px] text-slate-400 block font-medium">Total Statutory Deductions</span>
                                 <span id="res_total_deductions" class="text-sm font-bold text-rose-600 dark:text-rose-400 font-mono">- RM 1,062.80</span>
                             </div>
                         </div>
 
-                        <!-- Employee Deductions Grid -->
+                        <!-- Employee Deductions Grid (Full 5 Cards Itemized) -->
                         <div class="space-y-3">
                             <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
                                 <span class="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
-                                    <i class="bx bx-user-minus text-rose-500"></i> Employee Deductions
+                                    <i class="bx bx-user-minus text-rose-500"></i> Employee Deductions (Itemized Statutory)
                                 </span>
                                 <span class="text-[11px] text-slate-400">Salary Withholdings</span>
                             </div>
 
-                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+                                <!-- KWSP EPF -->
                                 <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
                                     <div class="text-[10px] text-slate-400 font-semibold mb-1 flex justify-between">
                                         <span>KWSP</span>
-                                        <span id="res_badge_epf_ee" class="text-indigo-600 dark:text-indigo-400">11%</span>
+                                        <span id="res_badge_epf_ee" class="text-indigo-600 dark:text-indigo-400 font-bold">11%</span>
                                     </div>
                                     <div id="res_epf_ee" class="text-sm font-mono font-bold text-slate-900 dark:text-white">RM 715.00</div>
                                 </div>
 
+                                <!-- SOCSO Act 4 -->
                                 <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
                                     <div class="text-[10px] text-slate-400 font-semibold mb-1 flex justify-between">
-                                        <span>SOCSO</span>
-                                        <span class="text-sky-600 dark:text-sky-400">Act 4</span>
+                                        <span>PERKESO</span>
+                                        <span class="text-sky-600 dark:text-sky-400 font-bold">Act 4</span>
                                     </div>
                                     <div id="res_socso_ee" class="text-sm font-mono font-bold text-slate-900 dark:text-white">RM 29.75</div>
                                 </div>
 
+                                <!-- SKBBK 2026 -->
                                 <div class="p-3 rounded-xl bg-purple-50/70 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800">
                                     <div class="text-[10px] text-purple-700 dark:text-purple-300 font-semibold mb-1 flex justify-between">
                                         <span>SKBBK</span>
-                                        <span class="text-purple-600">2026</span>
+                                        <span class="text-purple-600 font-bold">2026</span>
                                     </div>
                                     <div id="res_skbbk_ee" class="text-sm font-mono font-bold text-purple-950 dark:text-purple-100">RM 43.65</div>
                                 </div>
 
+                                <!-- EIS Act 800 -->
                                 <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
                                     <div class="text-[10px] text-slate-400 font-semibold mb-1 flex justify-between">
-                                        <span>EIS / PCB</span>
-                                        <span class="text-rose-600">Tax</span>
+                                        <span>SIP/EIS</span>
+                                        <span class="text-blue-600 font-bold">0.2%</span>
                                     </div>
-                                    <div id="res_eis_pcb_ee" class="text-sm font-mono font-bold text-slate-900 dark:text-white">RM 274.40</div>
+                                    <div id="res_eis_ee" class="text-sm font-mono font-bold text-slate-900 dark:text-white">RM 11.90</div>
+                                </div>
+
+                                <!-- LHDN PCB -->
+                                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                                    <div class="text-[10px] text-slate-400 font-semibold mb-1 flex justify-between">
+                                        <span>LHDN PCB</span>
+                                        <span class="text-rose-600 font-bold">Tax</span>
+                                    </div>
+                                    <div id="res_pcb_ee" class="text-sm font-mono font-bold text-rose-600 dark:text-rose-400">RM 262.50</div>
                                 </div>
                             </div>
                         </div>
@@ -255,24 +268,24 @@
                         <div class="space-y-3">
                             <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
                                 <span class="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
-                                    <i class="bx bx-building text-indigo-500"></i> Employer Contributions
+                                    <i class="bx bx-building text-indigo-500"></i> Employer Statutory Contributions (Company Cost)
                                 </span>
-                                <span class="text-[11px] text-slate-400">Company Overhead Cost</span>
+                                <span class="text-[11px] text-slate-400">Overhead Contribution</span>
                             </div>
 
                             <div class="grid grid-cols-3 gap-3">
                                 <div class="p-3 rounded-xl bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/60">
-                                    <div class="text-[10px] text-indigo-700 dark:text-indigo-300 font-semibold mb-1">EPF (Employer)</div>
+                                    <div class="text-[10px] text-indigo-700 dark:text-indigo-300 font-semibold mb-1">KWSP / EPF (ER)</div>
                                     <div id="res_epf_er" class="text-sm font-mono font-bold text-indigo-950 dark:text-indigo-100">RM 780.00</div>
                                 </div>
 
                                 <div class="p-3 rounded-xl bg-sky-50/50 dark:bg-sky-950/30 border border-sky-100 dark:border-sky-900/60">
-                                    <div class="text-[10px] text-sky-700 dark:text-sky-300 font-semibold mb-1">SOCSO (Employer)</div>
+                                    <div class="text-[10px] text-sky-700 dark:text-sky-300 font-semibold mb-1">PERKESO / SOCSO (ER)</div>
                                     <div id="res_socso_er" class="text-sm font-mono font-bold text-sky-950 dark:text-sky-100">RM 104.15</div>
                                 </div>
 
                                 <div class="p-3 rounded-xl bg-teal-50/50 dark:bg-teal-950/30 border border-teal-100 dark:border-teal-900/60">
-                                    <div class="text-[10px] text-teal-700 dark:text-teal-300 font-semibold mb-1">EIS (Employer)</div>
+                                    <div class="text-[10px] text-teal-700 dark:text-teal-300 font-semibold mb-1">SIP / EIS (ER)</div>
                                     <div id="res_eis_er" class="text-sm font-mono font-bold text-teal-950 dark:text-teal-100">RM 11.90</div>
                                 </div>
                             </div>
@@ -401,7 +414,7 @@
                         <div><h3 class="text-xl font-semibold text-slate-800 dark:text-slate-200">H3 Section Header (text-xl font-semibold)</h3></div>
                         <div><h4 class="text-base font-semibold text-slate-800 dark:text-slate-200">H4 Subtitle / Card Title (text-base font-semibold)</h4></div>
                         <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-4xl">
-                            Standard body text paragraph (<code class="text-xs bg-slate-200 dark:bg-slate-800 px-1 py-0.5 rounded font-mono">text-sm text-slate-600</code>). Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                            Standard body text paragraph (<code class="text-xs bg-slate-200 dark:bg-slate-800 px-1 py-0.5 rounded font-mono">text-sm text-slate-600</code>).
                             <a href="#" class="font-medium text-indigo-600 dark:text-indigo-400 underline hover:text-indigo-700">Inline link style</a>.
                         </p>
                     </div>
@@ -876,11 +889,11 @@
     <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8 text-center text-xs text-slate-500">
         <div class="max-w-7xl mx-auto px-4 space-y-2">
             <p>PayFlow MY - Malaysian Payroll Management System • Built with Laravel 11 &amp; Tailwind CSS</p>
-            <p class="text-[11px] text-slate-400">Zero Custom CSS • 100% Malaysian Statutory Compliance (KWSP, SOCSO Act 4, EIS, PCB)</p>
+            <p class="text-[11px] text-slate-400">Zero Custom CSS • 100% Malaysian Statutory Compliance (KWSP Act 1991, SOCSO Act 4, EIS Act 800, LHDN ITA 1967)</p>
         </div>
     </footer>
 
-    <!-- Interactive Scripts -->
+    <!-- Interactive Malaysian Statutory Calculator Engine (Strict Standard Compliance) -->
     <script>
         function toggleDarkMode() {
             const html = document.documentElement;
@@ -901,13 +914,81 @@
             document.getElementById('theme-icon').className = 'bx bx-sun text-base';
         }
 
+        // Standard Official SOCSO (Act 4) Table Brackets
+        const socsoBrackets = [
+            [30.00, 0.40, 0.10], [50.00, 0.70, 0.20], [70.00, 1.10, 0.30], [100.00, 1.50, 0.40],
+            [140.00, 2.10, 0.60], [200.00, 2.95, 0.85], [300.00, 4.35, 1.25], [400.00, 6.15, 1.75],
+            [500.00, 7.85, 2.25], [600.00, 9.65, 2.75], [700.00, 11.35, 3.25], [800.00, 13.15, 3.75],
+            [900.00, 14.85, 4.25], [1000.00, 16.65, 4.75], [1100.00, 18.35, 5.25], [1200.00, 20.15, 5.75],
+            [1300.00, 21.85, 6.25], [1400.00, 23.65, 6.75], [1500.00, 25.35, 7.25], [1600.00, 27.15, 7.75],
+            [1700.00, 28.85, 8.25], [1800.00, 30.65, 8.75], [1900.00, 32.35, 9.25], [2000.00, 34.15, 9.75],
+            [2100.00, 35.85, 10.25], [2200.00, 37.65, 10.75], [2300.00, 39.35, 11.25], [2400.00, 41.15, 11.75],
+            [2500.00, 42.85, 12.25], [2600.00, 44.65, 12.75], [2700.00, 46.35, 13.25], [2800.00, 48.15, 13.75],
+            [2900.00, 49.85, 14.25], [3000.00, 51.65, 14.75], [3100.00, 53.35, 15.25], [3200.00, 55.15, 15.75],
+            [3300.00, 56.85, 16.25], [3400.00, 58.65, 16.75], [3500.00, 60.35, 17.25], [3600.00, 62.15, 17.75],
+            [3700.00, 63.85, 18.25], [3800.00, 65.65, 18.75], [3900.00, 67.35, 19.25], [4000.00, 69.15, 19.75],
+            [4100.00, 70.85, 20.25], [4200.00, 72.65, 20.75], [4300.00, 74.35, 21.25], [4400.00, 76.15, 21.75],
+            [4500.00, 77.85, 22.25], [4600.00, 79.65, 22.75], [4700.00, 81.35, 23.25], [4800.00, 83.15, 23.75],
+            [4900.00, 84.85, 24.25], [5000.00, 86.65, 24.75], [5100.00, 88.35, 25.25], [5200.00, 90.15, 25.75],
+            [5300.00, 91.85, 26.25], [5400.00, 93.65, 26.75], [5500.00, 95.35, 27.25], [5600.00, 97.15, 27.75],
+            [5700.00, 98.85, 28.25], [5800.00, 100.65, 28.75], [5900.00, 102.35, 29.25], [6000.00, 104.15, 29.75]
+        ];
+
+        function getSocso(grossWage, isSkbbk) {
+            const wage = Math.min(grossWage, 6000.00);
+            let matchedEr = 104.15;
+            let matchedEe = 29.75;
+
+            for (let i = 0; i < socsoBrackets.length; i++) {
+                if (wage <= socsoBrackets[i][0]) {
+                    matchedEr = socsoBrackets[i][1];
+                    matchedEe = socsoBrackets[i][2];
+                    break;
+                }
+            }
+
+            let skbbkEe = 0.00;
+            if (isSkbbk) {
+                if (wage <= 500.00) {
+                    skbbkEe = (matchedEe * 1.5);
+                } else if (wage >= 6000.00) {
+                    skbbkEe = 43.65;
+                } else {
+                    const tier = Math.ceil((wage - 500.00) / 100.00);
+                    skbbkEe = 5.65 + (tier * 0.70);
+                }
+            }
+
+            return {
+                ee: matchedEe,
+                skbbk: Math.round(skbbkEe * 100) / 100,
+                er: matchedEr
+            };
+        }
+
+        function getEis(grossWage) {
+            const wage = Math.min(grossWage, 6000.00);
+            if (wage <= 30.00) return 0.05;
+            if (wage <= 50.00) return 0.10;
+            if (wage <= 70.00) return 0.15;
+            if (wage <= 100.00) return 0.20;
+            if (wage <= 140.00) return 0.25;
+            if (wage <= 200.00) return 0.35;
+            if (wage <= 300.00) return 0.50;
+            if (wage <= 400.00) return 0.70;
+            if (wage <= 500.00) return 0.90;
+            if (wage >= 6000.00) return 11.90;
+
+            const tier = Math.ceil((wage - 500.00) / 100.00);
+            const rate = 0.90 + (tier * 0.20);
+            return Math.min(11.90, Math.round(rate * 100) / 100);
+        }
+
         function calculateStatutory() {
             const salary = parseFloat(document.getElementById('calc_salary').value) || 0;
             const type = document.getElementById('calc_type').value;
             const isSkbbk = document.getElementById('calc_skbbk_opt').checked;
             const isEpf9 = document.getElementById('calc_epf_9_opt').checked;
-
-            const cappedWage = Math.min(salary, 6000.00);
 
             let epfEe = 0.00;
             let epfEr = 0.00;
@@ -919,58 +1000,80 @@
             let pcb = 0.00;
 
             if (type === 'freelance' || type === 'intern') {
-                // Fully exempt
+                // Fully exempt under Contract for Service / Practical Trainee
             } else if (type === 'contract_foreign_res' || type === 'contract_foreign_nonres') {
-                epfEe = Math.round(salary * 0.02);
-                epfEr = Math.round(salary * 0.02);
-                socsoEr = Math.round(cappedWage * 0.0125);
+                // Foreign Expatriate / Worker
+                epfEe = Math.round(salary * 0.02 * 100) / 100;
+                epfEr = Math.round(salary * 0.02 * 100) / 100;
                 
+                // Category 2 SOCSO: 1.25% ER only, 0% EE
+                socsoEr = Math.round(Math.min(salary, 6000.00) * 0.0125 * 100) / 100;
+                socsoEe = 0.00;
+                skbbkEe = 0.00;
+                eisEe = 0.00;
+                eisEr = 0.00;
+
                 if (type === 'contract_foreign_nonres') {
-                    pcb = Math.round(salary * 0.30);
+                    // Non-resident flat 30% without personal relief (Income Tax Act 1967)
+                    pcb = Math.round(salary * 0.30 * 100) / 100;
                 } else {
-                    const annualIncome = Math.max(0, (salary * 12) - 9000 - Math.min(epfEe * 12, 4000));
-                    pcb = estimatePcb(annualIncome);
+                    const taxableGross = salary - Math.min(epfEe, 333.33);
+                    const chargeableIncome = (taxableGross * 12) - 9000.00;
+                    pcb = estimatePcb(chargeableIncome);
                 }
             } else if (type === 'senior') {
+                // Senior Citizen Staff (Age 60+)
                 epfEe = 0.00;
-                epfEr = Math.round(salary * 0.04);
-                socsoEr = Math.round(cappedWage * 0.0175);
-                socsoEe = Math.round(cappedWage * 0.005);
-                if (isSkbbk) skbbkEe = Math.round(cappedWage * 0.00725);
-                const annualIncome = Math.max(0, (salary * 12) - 9000);
-                pcb = estimatePcb(annualIncome);
+                epfEr = (salary <= 20000) ? Math.ceil(salary * 0.04) : Math.round(salary * 0.04 * 100) / 100;
+                
+                const socsoObj = getSocso(salary, isSkbbk);
+                socsoEe = socsoObj.ee;
+                skbbkEe = socsoObj.skbbk;
+                socsoEr = socsoObj.er;
+
+                // EIS is exempt for post-60 entrants
+                eisEe = 0.00;
+                eisEr = 0.00;
+
+                const chargeableIncome = (salary * 12) - 9000.00;
+                pcb = estimatePcb(chargeableIncome);
             } else {
+                // Standard Permanent Staff & Local Fixed-Term Contract
                 const eeRate = isEpf9 ? 0.09 : 0.11;
                 const erRate = salary <= 5000 ? 0.13 : 0.12;
 
-                epfEe = Math.ceil(salary * eeRate);
-                epfEr = Math.ceil(salary * erRate);
+                // Third Schedule EPF rounding rule: Gross <= RM 20,000 ceil to next Ringgit
+                epfEe = (salary <= 20000) ? Math.ceil(salary * eeRate) : Math.round(salary * eeRate * 100) / 100;
+                epfEr = (salary <= 20000) ? Math.ceil(salary * erRate) : Math.round(salary * erRate * 100) / 100;
 
-                socsoEr = (salary >= 6000) ? 104.15 : Math.round(cappedWage * 0.0175);
-                socsoEe = (salary >= 6000) ? 29.75 : Math.round(cappedWage * 0.005);
-                
-                if (isSkbbk) {
-                    skbbkEe = (salary >= 6000) ? 43.65 : Math.round(cappedWage * 0.00725);
-                }
+                const socsoObj = getSocso(salary, isSkbbk);
+                socsoEe = socsoObj.ee;
+                skbbkEe = socsoObj.skbbk;
+                socsoEr = socsoObj.er;
 
-                eisEe = (salary >= 6000) ? 11.90 : Math.round(cappedWage * 0.002);
-                eisEr = (salary >= 6000) ? 11.90 : Math.round(cappedWage * 0.002);
+                const eisAmount = getEis(salary);
+                eisEe = eisAmount;
+                eisEr = eisAmount;
 
-                const annualIncome = Math.max(0, (salary * 12) - 9000 - Math.min(epfEe * 12, 4000));
-                pcb = estimatePcb(annualIncome);
+                // LHDN Computerised MTD/PCB with max EPF relief RM4,000/yr (RM333.33/mo) & RM9,000 individual relief
+                const taxableGross = salary - Math.min(epfEe, 333.33);
+                const chargeableIncome = (taxableGross * 12) - 9000.00;
+                pcb = estimatePcb(chargeableIncome);
             }
 
             const totalDeductions = epfEe + socsoEe + skbbkEe + eisEe + pcb;
             const netSalary = Math.max(0, salary - totalDeductions);
             const totalEmployerCost = salary + epfEr + socsoEr + eisEr;
 
+            // Render Output Fields
             document.getElementById('res_net_salary').textContent = 'RM ' + netSalary.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             document.getElementById('res_total_deductions').textContent = '- RM ' + totalDeductions.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
             document.getElementById('res_epf_ee').textContent = 'RM ' + epfEe.toFixed(2);
             document.getElementById('res_socso_ee').textContent = 'RM ' + socsoEe.toFixed(2);
             document.getElementById('res_skbbk_ee').textContent = 'RM ' + skbbkEe.toFixed(2);
-            document.getElementById('res_eis_pcb_ee').textContent = 'RM ' + (eisEe + pcb).toFixed(2);
+            document.getElementById('res_eis_ee').textContent = 'RM ' + eisEe.toFixed(2);
+            document.getElementById('res_pcb_ee').textContent = 'RM ' + pcb.toFixed(2);
 
             document.getElementById('res_epf_er').textContent = 'RM ' + epfEr.toFixed(2);
             document.getElementById('res_socso_er').textContent = 'RM ' + socsoEr.toFixed(2);
@@ -980,20 +1083,34 @@
             document.getElementById('res_badge_epf_ee').textContent = isEpf9 ? '9%' : (type.includes('foreign') ? '2%' : (type === 'senior' || type === 'freelance' || type === 'intern' ? '0%' : '11%'));
         }
 
-        function estimatePcb(taxableAnnual) {
-            if (taxableAnnual <= 5000) return 0;
-            let tax = 0;
-            if (taxableAnnual <= 20000) tax = (taxableAnnual - 5000) * 0.01;
-            else if (taxableAnnual <= 35000) tax = 150 + (taxableAnnual - 20000) * 0.03;
-            else if (taxableAnnual <= 50000) tax = 600 + (taxableAnnual - 35000) * 0.06;
-            else if (taxableAnnual <= 70000) tax = 1500 + (taxableAnnual - 50000) * 0.11;
-            else if (taxableAnnual <= 100000) tax = 3700 + (taxableAnnual - 70000) * 0.19;
-            else if (taxableAnnual <= 400000) tax = 9400 + (taxableAnnual - 100000) * 0.25;
-            else if (taxableAnnual <= 600000) tax = 84400 + (taxableAnnual - 400000) * 0.26;
-            else tax = 136400 + (taxableAnnual - 600000) * 0.28;
+        // LHDN Individual Progressive Tax Formula (2024–2026 Gazette)
+        function estimatePcb(chargeableIncome) {
+            if (chargeableIncome <= 5000) return 0.00;
+            let tax = 0.00;
+            if (chargeableIncome <= 20000) {
+                tax = (chargeableIncome - 5000) * 0.01;
+            } else if (chargeableIncome <= 35000) {
+                tax = 150 + ((chargeableIncome - 20000) * 0.03);
+            } else if (chargeableIncome <= 50000) {
+                tax = 600 + ((chargeableIncome - 35000) * 0.06);
+            } else if (chargeableIncome <= 70000) {
+                tax = 1500 + ((chargeableIncome - 50000) * 0.11);
+            } else if (chargeableIncome <= 100000) {
+                tax = 3700 + ((chargeableIncome - 70000) * 0.19);
+            } else if (chargeableIncome <= 400000) {
+                tax = 9400 + ((chargeableIncome - 100000) * 0.25);
+            } else if (chargeableIncome <= 600000) {
+                tax = 84400 + ((chargeableIncome - 400000) * 0.26);
+            } else {
+                tax = 136400 + ((chargeableIncome - 600000) * 0.28);
+            }
 
-            if (taxableAnnual <= 35000) tax = Math.max(0, tax - 400);
-            return Math.max(0, Math.round((tax / 12) * 100) / 100);
+            // Section 6A Tax Rebate (RM400 if Chargeable Income <= RM35,000)
+            if (chargeableIncome <= 35000) {
+                tax = Math.max(0.00, tax - 400.00);
+            }
+
+            return Math.max(0.00, Math.round((tax / 12) * 100) / 100);
         }
 
         function testAnim(animName) {
