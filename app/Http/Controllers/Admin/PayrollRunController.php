@@ -263,22 +263,47 @@ class PayrollRunController extends Controller
     /**
      * List all monthly payroll processing batches.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $payrollRuns = PayrollRun::with(['company', 'creator', 'approver'])
+        $query = PayrollRun::with(['company', 'creator', 'approver']);
+
+        // Filter: Search Batch No
+        if ($search = $request->input('search')) {
+            $query->where('batch_no', 'like', "%{$search}%");
+        }
+
+        // Filter: Year
+        if ($year = $request->input('year')) {
+            $query->where('period_year', $year);
+        }
+
+        // Filter: Month
+        if ($month = $request->input('month')) {
+            $query->where('period_month', sprintf('%02d', (int) $month));
+        }
+
+        // Filter: Status
+        if ($status = $request->input('status')) {
+            $query->where('status', $status);
+        }
+
+        $payrollRuns = $query
             ->latest('period_year')
             ->latest('period_month')
-            ->paginate(12);
+            ->paginate(12)
+            ->withQueryString();
 
         $companies = Company::all();
         $activeEmployeesCount = Employee::where('employment_status', 'active')->count();
 
         // Real-time calculated stat card aggregations
         $latestRun = $payrollRuns->first();
-        $totalNetPool = $payrollRuns->sum('total_net_disbursement');
-        $totalGrossPool = $payrollRuns->sum('total_gross_amount');
-        $totalEmployeeStatutory = $payrollRuns->sum('total_statutory_employee');
-        $totalEmployerStatutory = $payrollRuns->sum('total_statutory_employer');
+        $totalNetPool = PayrollRun::sum('total_net_disbursement');
+        $totalGrossPool = PayrollRun::sum('total_gross_amount');
+        $totalEmployeeStatutory = PayrollRun::sum('total_statutory_employee');
+        $totalEmployerStatutory = PayrollRun::sum('total_statutory_employer');
+
+        $availableYears = PayrollRun::distinct()->orderByDesc('period_year')->pluck('period_year');
 
         return view('admin.payroll.index', compact(
             'payrollRuns',
@@ -288,7 +313,8 @@ class PayrollRunController extends Controller
             'totalNetPool',
             'totalGrossPool',
             'totalEmployeeStatutory',
-            'totalEmployerStatutory'
+            'totalEmployerStatutory',
+            'availableYears'
         ));
     }
 

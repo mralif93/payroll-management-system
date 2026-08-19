@@ -16,9 +16,23 @@ class TaxFormEaController extends Controller
     public function index(Request $request)
     {
         $taxYear = $request->input('tax_year', date('Y'));
-        $eaRecords = TaxFormEaRecord::with('employee')
-            ->where('tax_year', $taxYear)
-            ->paginate(15);
+        $search = $request->input('search');
+
+        $query = TaxFormEaRecord::with('employee')
+            ->where('tax_year', $taxYear);
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('serial_no', 'like', "%{$search}%")
+                  ->orWhereHas('employee', function ($empQ) use ($search) {
+                      $empQ->where('full_name', 'like', "%{$search}%")
+                           ->orWhere('employee_no', 'like', "%{$search}%")
+                           ->orWhere('nric_passport', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $eaRecords = $query->paginate(15)->withQueryString();
 
         $totalAccumulatedPcb = TaxFormEaRecord::where('tax_year', $taxYear)->sum('total_pcb_mtd');
         $totalKwspEe = TaxFormEaRecord::where('tax_year', $taxYear)->sum('total_epf_employee');

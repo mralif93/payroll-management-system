@@ -81,6 +81,46 @@
                 color="emerald"
             />
         </div>
+ 
+        <!-- Modern Search Command Bar for Form EA Records -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs p-3 sm:p-4">
+            <form method="GET" action="{{ route('admin.tax-ea.index') }}" class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                <input type="hidden" name="tax_year" value="{{ $taxYear ?? date('Y') }}">
+                
+                <!-- Main Search Input -->
+                <div class="relative flex-1">
+                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
+                        <i class="bx bx-search text-lg"></i>
+                    </div>
+                    <input 
+                        type="text" 
+                        name="search" 
+                        value="{{ request('search') }}" 
+                        placeholder="Search compiled EA forms by employee name, staff ID (e.g. MY-EMP-001), or serial no..." 
+                        class="w-full pl-10 pr-10 py-2.5 rounded-xl text-xs bg-slate-50/80 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 dark:focus:border-indigo-400 transition-all font-sans"
+                    >
+                    @if(request('search'))
+                        <a href="{{ route('admin.tax-ea.index', ['tax_year' => $taxYear ?? date('Y')]) }}" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                            <i class="bx bx-x-circle text-base"></i>
+                        </a>
+                    @endif
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button type="submit" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs cursor-pointer">
+                        <i class="bx bx-filter-alt text-sm"></i>
+                        <span>Search</span>
+                    </button>
+
+                    @if(request('search'))
+                        <a href="{{ route('admin.tax-ea.index', ['tax_year' => $taxYear ?? date('Y')]) }}" class="px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-600 dark:text-slate-300 text-xs font-semibold transition flex items-center gap-1">
+                            <i class="bx bx-reset text-sm"></i>
+                            <span>Reset</span>
+                        </a>
+                    @endif
+                </div>
+            </form>
+        </div>
 
         <!-- Compiled Form EA Records Table -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
