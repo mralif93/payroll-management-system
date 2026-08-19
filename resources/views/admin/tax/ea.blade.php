@@ -113,9 +113,15 @@
                                     RM {{ number_format($record->total_socso_employee, 2) }}
                                 </td>
                                 <td class="p-3.5 text-right">
-                                    <x-action-button variant="rose" icon="bx-download">
-                                        Download PDF
-                                    </x-action-button>
+                                    <a 
+                                        href="{{ route('admin.tax-ea.print', $record) }}" 
+                                        target="_blank"
+                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 hover:bg-rose-600 hover:text-white dark:hover:bg-rose-600 dark:hover:text-white transition text-xs font-bold shadow-xs cursor-pointer"
+                                        title="Print Official Borang EA Statement (PDF)"
+                                    >
+                                        <i class="bx bx-printer text-base"></i>
+                                        <span>Print EA (PDF)</span>
+                                    </a>
                                 </td>
                             </tr>
                         @empty

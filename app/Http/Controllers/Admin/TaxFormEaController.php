@@ -83,4 +83,15 @@ class TaxFormEaController extends Controller
 
         return redirect()->back()->with('status', "Compiled {$compiledCount} Form EA records for Tax Year {$validated['tax_year']}.");
     }
+
+    /**
+     * Preview and print official LHDN Borang EA (C.P.8A) statement.
+     */
+    public function print(TaxFormEaRecord $record)
+    {
+        $record->load(['employee.department', 'employee.statutoryProfile', 'employee.company']);
+        $company = $record->employee?->company ?? \App\Models\Company::first();
+
+        return view('admin.tax.ea-statement', compact('record', 'company'));
+    }
 }

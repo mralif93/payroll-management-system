@@ -68,6 +68,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     // 5. Year-End Tax Form EA
     Route::get('/tax-ea', [TaxFormEaController::class, 'index'])->name('tax-ea.index');
     Route::post('/tax-ea/compile', [TaxFormEaController::class, 'compileAnnual'])->name('tax-ea.compile');
+    Route::get('/tax-ea/{record}/print', [TaxFormEaController::class, 'print'])->name('tax-ea.print');
 
     // 7. System Governance, Statutory Parameters & Allowances
     Route::get('/parameters', [StatutoryParameterController::class, 'index'])->name('parameters');
