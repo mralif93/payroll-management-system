@@ -43,6 +43,7 @@ class DatabaseSeeder extends Seeder
             StatutoryParameterSeeder::class,
             RoleAndPermissionSeeder::class,
             LeaveTypeSeeder::class,
+            EmployeeSeeder::class,
             AuditTrailSeeder::class,
         ]);
     }
