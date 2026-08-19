@@ -44,6 +44,7 @@ class DatabaseSeeder extends Seeder
             RoleAndPermissionSeeder::class,
             LeaveTypeSeeder::class,
             EmployeeSeeder::class,
+            LeaveApplicationSeeder::class,
             AuditTrailSeeder::class,
         ]);
     }
