@@ -168,7 +168,7 @@
             </div>
 
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs text-slate-600 dark:text-slate-300 min-w-[780px]">
+                <table class="w-full text-left text-xs text-slate-600 dark:text-slate-300 min-w-[960px]">
                     <thead class="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200/80 dark:border-slate-800 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
                         <tr>
                             <th class="py-3.5 px-4 whitespace-nowrap">Employee</th>
@@ -183,9 +183,9 @@
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
                         @forelse($leaves as $leave)
                             <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
-                                <td class="py-3.5 px-4">
+                                <td class="py-3.5 px-4 whitespace-nowrap">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center text-white text-xs font-bold shadow-sm shrink-0">
                                             {{ strtoupper(substr($leave->employee?->full_name ?? 'EM', 0, 2)) }}
                                         </div>
                                         <div>
@@ -194,55 +194,55 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="py-3.5 px-4">
+                                <td class="py-3.5 px-4 whitespace-nowrap">
                                     <div class="flex items-center gap-1.5">
                                         @if($leave->leaveType?->is_paid)
-                                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800">
+                                            <span class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800">
                                                 {{ $leave->leaveType?->name }}
                                             </span>
                                         @else
-                                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-50 dark:bg-rose-950 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800">
+                                            <span class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-rose-50 dark:bg-rose-950 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800">
                                                 {{ $leave->leaveType?->name }} (Unpaid)
                                             </span>
                                         @endif
                                     </div>
                                 </td>
-                                <td class="py-3.5 px-4 font-mono text-[11px]">
+                                <td class="py-3.5 px-4 font-mono text-[11px] whitespace-nowrap">
                                     {{ $leave->start_date ? date('d M Y', strtotime($leave->start_date)) : '—' }} 
                                     @if($leave->start_date != $leave->end_date)
                                         &rarr; {{ $leave->end_date ? date('d M Y', strtotime($leave->end_date)) : '' }}
                                     @endif
                                 </td>
-                                <td class="py-3.5 px-4">
+                                <td class="py-3.5 px-4 whitespace-nowrap">
                                     <span class="font-bold text-slate-900 dark:text-white font-mono">{{ number_format($leave->total_days, 1) }}</span>
                                     <span class="text-[10px] text-slate-400">day(s)</span>
                                 </td>
-                                <td class="py-3.5 px-4 max-w-xs truncate" title="{{ $leave->reason }}">
-                                    {{ $leave->reason ?? '—' }}
+                                <td class="py-3.5 px-4 whitespace-nowrap">
+                                    <span class="text-xs text-slate-700 dark:text-slate-300">{{ $leave->reason ?? '—' }}</span>
                                 </td>
-                                <td class="py-3.5 px-4">
+                                <td class="py-3.5 px-4 whitespace-nowrap">
                                     @if($leave->status === 'approved')
-                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950 text-emerald-600 border border-emerald-200 dark:border-emerald-800">
-                                            <span class="w-1 h-1 rounded-full bg-emerald-500"></span> Approved
+                                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 dark:bg-emerald-950 text-emerald-600 border border-emerald-200 dark:border-emerald-800">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Approved
                                         </span>
                                     @elseif($leave->status === 'pending')
-                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 dark:bg-amber-950 text-amber-600 border border-amber-200 dark:border-amber-800">
-                                            <span class="w-1 h-1 rounded-full bg-amber-500"></span> Pending
+                                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 dark:bg-amber-950 text-amber-600 border border-amber-200 dark:border-amber-800">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Pending
                                         </span>
                                     @else
-                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 dark:bg-rose-950 text-rose-600 border border-rose-200 dark:border-rose-800">
-                                            <span class="w-1 h-1 rounded-full bg-rose-500"></span> {{ ucfirst($leave->status) }}
+                                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-50 dark:bg-rose-950 text-rose-600 border border-rose-200 dark:border-rose-800">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> {{ ucfirst($leave->status) }}
                                         </span>
                                     @endif
                                 </td>
-                                <td class="py-3.5 px-4 text-right">
-                                    <div class="flex items-center justify-end gap-1.5">
+                                <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                                    <div class="inline-flex items-center justify-end gap-1.5">
                                         @if($leave->status === 'pending')
                                             <form method="POST" action="{{ route('admin.leaves.update-status', $leave) }}" class="inline">
                                                 @csrf
                                                 @method('PATCH')
                                                 <input type="hidden" name="status" value="approved">
-                                                <button type="submit" title="Approve Leave" class="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-600 hover:bg-emerald-100 transition cursor-pointer">
+                                                <button type="submit" title="Approve Leave" class="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-600 hover:bg-emerald-100 dark:hover:bg-emerald-900 transition cursor-pointer">
                                                     <i class="bx bx-check text-base"></i>
                                                 </button>
                                             </form>
@@ -250,7 +250,7 @@
                                                 @csrf
                                                 @method('PATCH')
                                                 <input type="hidden" name="status" value="rejected">
-                                                <button type="submit" title="Reject Leave" class="p-1.5 rounded-lg bg-rose-50 dark:bg-rose-950 text-rose-600 hover:bg-rose-100 transition cursor-pointer">
+                                                <button type="submit" title="Reject Leave" class="p-1.5 rounded-lg bg-rose-50 dark:bg-rose-950 text-rose-600 hover:bg-rose-100 dark:hover:bg-rose-900 transition cursor-pointer">
                                                     <i class="bx bx-x text-base"></i>
                                                 </button>
                                             </form>
@@ -258,7 +258,7 @@
                                         <form method="POST" action="{{ route('admin.leaves.destroy', $leave) }}" onsubmit="return confirm('Remove this leave record?')" class="inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" title="Delete Record" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 transition cursor-pointer">
+                                            <button type="submit" title="Delete Record" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950 transition cursor-pointer">
                                                 <i class="bx bx-trash text-base"></i>
                                             </button>
                                         </form>
