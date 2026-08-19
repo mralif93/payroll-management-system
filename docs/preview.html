@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PayFlow MY - Malaysian Payroll System Preview & Statutory Calculator</title>
-    <meta name="description" content="Standalone GitHub Preview for PayFlow MY Malaysian Payroll Management System. Interactive statutory deduction calculator, live payslip generator, and UI component kit.">
+    <title>PayFlow MY - Malaysian Payroll System & UI Kit Showcase</title>
+    <meta name="description" content="Standalone preview of PayFlow MY Malaysian Payroll Management System. Interactive statutory deduction calculator, contract matrix, and complete 13-part UI kit accordion reference.">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,6 +13,9 @@
 
     <!-- Boxicons CDN -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+    <!-- Animate.css CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -41,8 +44,6 @@
     </script>
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .glass-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); }
-        .dark .glass-card { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); }
     </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
@@ -63,7 +64,7 @@
                     </div>
                 </div>
 
-                <!-- Navigation Tabs -->
+                <!-- Navigation Links -->
                 <nav class="hidden md:flex items-center gap-6 text-xs font-semibold text-slate-600 dark:text-slate-300">
                     <a href="#calculator" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-1.5">
                         <i class="bx bx-calculator text-sm"></i> Statutory Calculator
@@ -71,45 +72,42 @@
                     <a href="#matrix" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-1.5">
                         <i class="bx bx-table text-sm"></i> Contract Matrix
                     </a>
-                    <a href="#payslip-preview" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-1.5">
-                        <i class="bx bx-receipt text-sm"></i> Sample Payslips
-                    </a>
                     <a href="#ui-kit" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-1.5">
-                        <i class="bx bx-layer text-sm"></i> UI Components
+                        <i class="bx bx-layer text-sm"></i> UI Component Kit (13 Accordions)
                     </a>
                 </nav>
 
                 <!-- Actions / Dark Mode -->
                 <div class="flex items-center gap-3">
-                    <button onclick="toggleDarkMode()" type="button" class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Toggle Theme">
+                    <button onclick="toggleDarkMode()" type="button" class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer" title="Toggle Dark/Light Mode">
                         <i id="theme-icon" class="bx bx-moon text-base"></i>
                     </button>
                     <a href="https://github.com/mralif93/payroll-management-system" target="_blank" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-xs hover:bg-indigo-600 dark:hover:bg-indigo-300 transition shadow-xs">
                         <i class="bx bxl-github text-base"></i>
-                        <span>GitHub Repo</span>
+                        <span>GitHub</span>
                     </a>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Content Area -->
+    <!-- Main Content Container -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-16">
 
-        <!-- HERO SECTION -->
+        <!-- HERO BANNER -->
         <section class="text-center space-y-4 max-w-3xl mx-auto">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/80 border border-indigo-200 dark:border-indigo-800 text-xs font-semibold text-indigo-700 dark:text-indigo-300">
                 <span class="w-2 h-2 rounded-full bg-indigo-600 animate-pulse"></span>
                 <span>Malaysia Employment Act 1955 • EPF Act 1991 • SOCSO Act 4 • June 2026 SKBBK</span>
             </div>
             <h1 class="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
-                Enterprise Malaysian Payroll &amp; <br>
+                Malaysian Payroll System &amp; <br>
                 <span class="bg-gradient-to-r from-indigo-600 via-indigo-700 to-blue-600 dark:from-indigo-400 dark:to-teal-300 bg-clip-text text-transparent">
-                    Statutory Compliance Engine
+                    Tailwind UI Kit Showcase
                 </span>
             </h1>
             <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
-                Live interactive showcase for all contract classifications: Local Staff, Foreign Expatriates (Cat 2 SOCSO), Freelance Contractors, Interns, and Senior Citizens.
+                Complete interactive statutory payroll calculator with Malaysian legal contract matrix and full 13-part utility UI component library in an accordion layout.
             </p>
         </section>
 
@@ -119,24 +117,21 @@
                 <div>
                     <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                         <i class="bx bx-calculator text-indigo-600 dark:text-indigo-400"></i>
-                        Live Malaysian Statutory Calculator
+                        Interactive Malaysian Statutory Calculator
                     </h2>
-                    <p class="text-xs text-slate-500">Calculate real-time EPF, SOCSO Act 4, June 2026 SKBBK (*Lindung 24 Jam*), EIS, and PCB.</p>
+                    <p class="text-xs text-slate-500">Instant calculations for EPF, SOCSO Act 4, June 2026 SKBBK (*Lindung 24 Jam*), EIS, and PCB.</p>
                 </div>
-                <div class="flex items-center gap-2">
-                    <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
-                        2026 Statutory Gazette
-                    </span>
-                </div>
+                <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 self-start sm:self-auto">
+                    2026 Gazette Ready
+                </span>
             </div>
 
-            <!-- Calculator Layout Grid -->
+            <!-- Calculator Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
                 
                 <!-- Left Input Controls -->
                 <div class="p-6 sm:p-8 lg:col-span-5 bg-slate-50/70 dark:bg-slate-900/60 border-b lg:border-b-0 lg:border-r border-slate-200 dark:border-slate-800 space-y-5">
-                    
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Salary &amp; Profile Parameters</h3>
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Salary &amp; Profile Inputs</h3>
 
                     <!-- Basic Salary Input -->
                     <div class="space-y-1.5">
@@ -159,7 +154,7 @@
                     <div class="space-y-1.5">
                         <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Contract &amp; Category Type</label>
                         <select id="calc_type" onchange="calculateStatutory()" class="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3.5 py-2.5 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                            <option value="permanent">1. Permanent Staff (Standard 11% EPF + Full SOCSO)</option>
+                            <option value="permanent">1. Permanent Staff (11% EPF + Full Cat 1 SOCSO)</option>
                             <option value="contract_local">2. Local Fixed-Term Contract (Standard Statutory)</option>
                             <option value="contract_foreign_res">3. Foreign Worker (Tax Resident - 2% EPF / Cat 2 SOCSO)</option>
                             <option value="contract_foreign_nonres">4. Foreign Expatriate (Non-Resident Flat 30% Tax)</option>
@@ -181,7 +176,7 @@
                         </label>
                     </div>
 
-                    <!-- Voluntary Reduced 9% EPF Toggle -->
+                    <!-- Voluntary 9% EPF Toggle -->
                     <div class="flex items-center justify-between p-3.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                         <div>
                             <span class="text-xs font-bold text-slate-800 dark:text-slate-200 block">Voluntary 9% EPF Rate</span>
@@ -195,9 +190,8 @@
 
                 </div>
 
-                <!-- Right Calculation Breakdown & Results -->
+                <!-- Right Calculation Breakdown -->
                 <div class="p-6 sm:p-8 lg:col-span-7 flex flex-col justify-between space-y-6">
-                    
                     <div class="space-y-6">
                         
                         <!-- Net Salary Hero Banner -->
@@ -223,7 +217,6 @@
                             </div>
 
                             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                                <!-- EPF EE -->
                                 <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
                                     <div class="text-[10px] text-slate-400 font-semibold mb-1 flex justify-between">
                                         <span>KWSP</span>
@@ -232,7 +225,6 @@
                                     <div id="res_epf_ee" class="text-sm font-mono font-bold text-slate-900 dark:text-white">RM 715.00</div>
                                 </div>
 
-                                <!-- SOCSO EE -->
                                 <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
                                     <div class="text-[10px] text-slate-400 font-semibold mb-1 flex justify-between">
                                         <span>SOCSO</span>
@@ -241,7 +233,6 @@
                                     <div id="res_socso_ee" class="text-sm font-mono font-bold text-slate-900 dark:text-white">RM 29.75</div>
                                 </div>
 
-                                <!-- SKBBK EE -->
                                 <div class="p-3 rounded-xl bg-purple-50/70 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800">
                                     <div class="text-[10px] text-purple-700 dark:text-purple-300 font-semibold mb-1 flex justify-between">
                                         <span>SKBBK</span>
@@ -250,7 +241,6 @@
                                     <div id="res_skbbk_ee" class="text-sm font-mono font-bold text-purple-950 dark:text-purple-100">RM 43.65</div>
                                 </div>
 
-                                <!-- EIS & PCB -->
                                 <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
                                     <div class="text-[10px] text-slate-400 font-semibold mb-1 flex justify-between">
                                         <span>EIS / PCB</span>
@@ -369,75 +359,528 @@
             </div>
         </section>
 
-        <!-- SECTION 3: UI KIT COMPONENT GALLERY -->
+        <!-- SECTION 3: COMPLETE 13-PART UI KIT (ACCORDION DESIGN) -->
         <section id="ui-kit" class="scroll-mt-24 space-y-6">
-            <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
-                <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <i class="bx bx-layer text-indigo-600 dark:text-indigo-400"></i>
-                    Component Library Showcase
-                </h2>
-                <p class="text-xs text-slate-500">Zero-custom-CSS pure utility UI components used across the platform.</p>
+            
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-3">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                        <i class="bx bx-layer text-indigo-600 dark:text-indigo-400"></i>
+                        Complete UI Component Kit &amp; Pattern Library
+                    </h2>
+                    <p class="text-xs text-slate-500">Interactive 13-part pure Tailwind CSS component reference in accordion containers.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button type="button" onclick="document.querySelectorAll('.kit-accordion').forEach(d => d.open = true)" class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer">
+                        Expand All
+                    </button>
+                    <button type="button" onclick="document.querySelectorAll('.kit-accordion').forEach(d => d.open = false)" class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer">
+                        Collapse All
+                    </button>
+                </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Card 1: Buttons & Badges -->
-                <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Buttons &amp; Badges</h3>
-                    <div class="flex flex-wrap gap-2">
-                        <button class="px-3.5 py-1.5 rounded-xl bg-indigo-600 text-white font-bold text-xs shadow-sm hover:bg-indigo-700">Primary</button>
-                        <button class="px-3.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold text-xs hover:bg-slate-200">Secondary</button>
-                        <button class="px-3.5 py-1.5 rounded-xl bg-rose-600 text-white font-bold text-xs hover:bg-rose-700">Danger</button>
-                    </div>
-                    <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-                        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">Active</span>
-                        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border border-amber-200 dark:border-amber-800">Probation</span>
-                        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-50 text-purple-700 dark:bg-purple-950 dark:text-purple-300 border border-purple-200 dark:border-purple-800">SKBBK</span>
-                    </div>
-                </div>
+            <!-- ACCORDIONS CONTAINER -->
+            <div class="space-y-4">
 
-                <!-- Card 2: Form Inputs & Toggles -->
-                <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Form Elements</h3>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><i class="bx bx-envelope text-sm"></i></span>
-                        <input type="text" placeholder="payroll@company.my" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 pl-9 pr-3 py-2 text-slate-900 dark:text-white">
+                <!-- 1. TYPOGRAPHY & HEADINGS -->
+                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden" open>
+                    <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
+                        <div class="flex items-center gap-3">
+                            <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">1</span>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-900 dark:text-white">Typography &amp; Text Hierarchy</h3>
+                                <p class="text-xs text-slate-500">Headings (H1–H4), body text, inline codes, muted text, and link states.</p>
+                            </div>
+                        </div>
+                        <i class="bx bx-chevron-down text-slate-400 group-open:rotate-180 transition-transform text-xl"></i>
+                    </summary>
+                    <div class="p-6 space-y-4 bg-slate-50/50 dark:bg-slate-900/40">
+                        <div><h1 class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">H1 Display Heading (text-3xl font-extrabold)</h1></div>
+                        <div><h2 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">H2 Page Title (text-2xl font-bold)</h2></div>
+                        <div><h3 class="text-xl font-semibold text-slate-800 dark:text-slate-200">H3 Section Header (text-xl font-semibold)</h3></div>
+                        <div><h4 class="text-base font-semibold text-slate-800 dark:text-slate-200">H4 Subtitle / Card Title (text-base font-semibold)</h4></div>
+                        <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-4xl">
+                            Standard body text paragraph (<code class="text-xs bg-slate-200 dark:bg-slate-800 px-1 py-0.5 rounded font-mono">text-sm text-slate-600</code>). Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                            <a href="#" class="font-medium text-indigo-600 dark:text-indigo-400 underline hover:text-indigo-700">Inline link style</a>.
+                        </p>
                     </div>
-                    <div class="flex items-center justify-between text-xs pt-1">
-                        <span class="font-medium text-slate-700 dark:text-slate-300">Auto-Approve Batches</span>
-                        <span class="w-9 h-5 bg-indigo-600 rounded-full relative inline-block"><span class="w-4 h-4 bg-white rounded-full absolute top-0.5 right-0.5"></span></span>
-                    </div>
-                </div>
+                </details>
 
-                <!-- Card 3: Metric Stat Card -->
-                <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Stat KPI Widget</h3>
-                    <div class="flex items-center justify-between">
+                <!-- 2. BUTTONS & ACTIONS -->
+                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden" open>
+                    <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
+                        <div class="flex items-center gap-3">
+                            <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">2</span>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-900 dark:text-white">Buttons &amp; Action Controls</h3>
+                                <p class="text-xs text-slate-500">Color themes, sizes (xs to lg), icons, loading spinner, and button groups.</p>
+                            </div>
+                        </div>
+                        <i class="bx bx-chevron-down text-slate-400 group-open:rotate-180 transition-transform text-xl"></i>
+                    </summary>
+                    <div class="p-6 space-y-6 bg-slate-50/50 dark:bg-slate-900/40">
                         <div>
-                            <span class="text-2xl font-extrabold font-mono text-slate-900 dark:text-white">RM 84,250</span>
-                            <span class="text-[11px] text-slate-400 block mt-0.5">August 2026 Batch</span>
+                            <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Color Variants</h4>
+                            <div class="flex flex-wrap items-center gap-3">
+                                <button type="button" class="px-4 py-2 text-xs font-semibold rounded-xl bg-indigo-600 text-white shadow-xs hover:bg-indigo-700 transition cursor-pointer">Primary Indigo</button>
+                                <button type="button" class="px-4 py-2 text-xs font-semibold rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-xs hover:bg-slate-800 cursor-pointer">Dark / Light Contrast</button>
+                                <button type="button" class="px-4 py-2 text-xs font-semibold rounded-xl bg-emerald-600 text-white shadow-xs hover:bg-emerald-700 cursor-pointer">Success Emerald</button>
+                                <button type="button" class="px-4 py-2 text-xs font-semibold rounded-xl bg-amber-500 text-white shadow-xs hover:bg-amber-600 cursor-pointer">Warning Amber</button>
+                                <button type="button" class="px-4 py-2 text-xs font-semibold rounded-xl bg-rose-600 text-white shadow-xs hover:bg-rose-700 cursor-pointer">Danger Red</button>
+                                <button type="button" class="px-4 py-2 text-xs font-semibold rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 cursor-pointer">Secondary Outline</button>
+                            </div>
                         </div>
-                        <div class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xl">
-                            <i class="bx bx-wallet"></i>
+                        <div class="pt-4 border-t border-slate-200 dark:border-slate-800">
+                            <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Icons, Loading &amp; Groups</h4>
+                            <div class="flex flex-wrap items-center gap-3">
+                                <button type="button" class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 cursor-pointer">
+                                    <i class="bx bx-plus text-sm"></i> Add Employee
+                                </button>
+                                <button type="button" class="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-xl bg-indigo-500 text-white opacity-80 cursor-wait">
+                                    <i class="bx bx-loader-alt animate-spin text-sm"></i> Processing...
+                                </button>
+                                <div class="inline-flex rounded-xl shadow-xs border border-slate-300 dark:border-slate-700 overflow-hidden">
+                                    <button type="button" class="px-3 py-1.5 text-xs font-semibold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-r border-slate-300 dark:border-slate-700 hover:bg-slate-50">Year</button>
+                                    <button type="button" class="px-3 py-1.5 text-xs font-semibold bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border-r border-slate-300 dark:border-slate-700">Month</button>
+                                    <button type="button" class="px-3 py-1.5 text-xs font-semibold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50">Day</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="pt-2 text-[10px] text-emerald-600 font-bold flex items-center gap-1">
-                        <i class="bx bx-up-arrow-alt"></i> 100% Reconciled to Maybank2e
+                </details>
+
+                <!-- 3. BADGES & STATUS INDICATORS -->
+                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden" open>
+                    <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
+                        <div class="flex items-center gap-3">
+                            <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">3</span>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-900 dark:text-white">Badges, Status Tags &amp; Pulsing Dots</h3>
+                                <p class="text-xs text-slate-500">Pills, dot indicators, statutory tags, and dismissible chips.</p>
+                            </div>
+                        </div>
+                        <i class="bx bx-chevron-down text-slate-400 group-open:rotate-180 transition-transform text-xl"></i>
+                    </summary>
+                    <div class="p-6 space-y-4 bg-slate-50/50 dark:bg-slate-900/40">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">EPF 11%</span>
+                            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-50 text-purple-700 dark:bg-purple-950 dark:text-purple-300 border border-purple-200 dark:border-purple-800">SKBBK 2026</span>
+                            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-sky-50 text-sky-700 dark:bg-sky-950 dark:text-sky-300 border border-sky-200 dark:border-sky-800">EIS Active</span>
+                            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">Tax Resident</span>
+                            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-300 border border-rose-200 dark:border-rose-800">Non-Resident Flat 30%</span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-slate-200 dark:border-slate-800">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Active Employee
+                            </span>
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Probation
+                            </span>
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
+                                <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Resigned / Inactive
+                            </span>
+                        </div>
                     </div>
-                </div>
+                </details>
+
+                <!-- 4. FORM INPUTS & SELECTS -->
+                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
+                    <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
+                        <div class="flex items-center gap-3">
+                            <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">4</span>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-900 dark:text-white">Form Inputs, Currency Fields &amp; Validation</h3>
+                                <p class="text-xs text-slate-500">Text inputs, selects, currency prefixes, and error states.</p>
+                            </div>
+                        </div>
+                        <i class="bx bx-chevron-down text-slate-400 group-open:rotate-180 transition-transform text-xl"></i>
+                    </summary>
+                    <div class="p-6 bg-slate-50/50 dark:bg-slate-900/40">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Employee Full Name</label>
+                                <input type="text" placeholder="Muhammad Alif" class="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-2.5 text-slate-900 dark:text-white">
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Currency (Prefix Addon)</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-xs font-bold text-slate-400">MYR</span>
+                                    <input type="number" value="6500.00" class="w-full text-xs font-mono font-bold rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 pl-12 pr-3 py-2.5 text-slate-900 dark:text-white">
+                                </div>
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-semibold text-rose-600">Error Validation State</label>
+                                <input type="text" value="invalid-email" class="w-full text-xs rounded-xl border border-rose-300 bg-rose-50/40 p-2.5 text-rose-900">
+                                <span class="text-[10px] text-rose-600 font-medium">Please enter a valid official email address.</span>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- 5. METRIC STAT CARDS -->
+                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
+                    <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
+                        <div class="flex items-center gap-3">
+                            <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">5</span>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-900 dark:text-white">Metric KPI Stat Cards</h3>
+                                <p class="text-xs text-slate-500">KPI counter cards with icons, trend indicators, and subtitle badges.</p>
+                            </div>
+                        </div>
+                        <i class="bx bx-chevron-down text-slate-400 group-open:rotate-180 transition-transform text-xl"></i>
+                    </summary>
+                    <div class="p-6 bg-slate-50/50 dark:bg-slate-900/40">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs">
+                                <div class="flex items-center justify-between text-slate-500 text-xs font-semibold uppercase">
+                                    <span>Total Headcount</span>
+                                    <div class="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-950 flex items-center justify-center text-indigo-600 dark:text-indigo-400 text-lg"><i class="bx bx-user"></i></div>
+                                </div>
+                                <div class="mt-2 text-2xl font-bold text-slate-900 dark:text-white font-mono">148</div>
+                                <div class="mt-1 text-xs text-emerald-600 font-semibold flex items-center gap-1"><i class="bx bx-up-arrow-alt"></i> +6 new hires this month</div>
+                            </div>
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs">
+                                <div class="flex items-center justify-between text-slate-500 text-xs font-semibold uppercase">
+                                    <span>Gross Payroll</span>
+                                    <div class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950 flex items-center justify-center text-emerald-600 dark:text-emerald-400 text-lg"><i class="bx bx-wallet"></i></div>
+                                </div>
+                                <div class="mt-2 text-2xl font-bold text-slate-900 dark:text-white font-mono">RM 748,250</div>
+                                <div class="mt-1 text-xs text-slate-400">August 2026 Batch</div>
+                            </div>
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs">
+                                <div class="flex items-center justify-between text-slate-500 text-xs font-semibold uppercase">
+                                    <span>Total Statutory</span>
+                                    <div class="w-8 h-8 rounded-lg bg-purple-50 dark:bg-purple-950 flex items-center justify-center text-purple-600 dark:text-purple-400 text-lg"><i class="bx bx-shield-quarter"></i></div>
+                                </div>
+                                <div class="mt-2 text-2xl font-bold text-slate-900 dark:text-white font-mono">RM 168,400</div>
+                                <div class="mt-1 text-xs text-purple-600 font-semibold">KWSP, SOCSO &amp; LHDN</div>
+                            </div>
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs">
+                                <div class="flex items-center justify-between text-slate-500 text-xs font-semibold uppercase">
+                                    <span>Bank Autopay Status</span>
+                                    <div class="w-8 h-8 rounded-lg bg-sky-50 dark:bg-sky-950 flex items-center justify-center text-sky-600 dark:text-sky-400 text-lg"><i class="bx bx-check-circle"></i></div>
+                                </div>
+                                <div class="mt-2 text-2xl font-bold text-emerald-600 font-mono">Ready</div>
+                                <div class="mt-1 text-xs text-slate-400">Maybank2e Batch Built</div>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- 6. DATA TABLES -->
+                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
+                    <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
+                        <div class="flex items-center gap-3">
+                            <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">6</span>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-900 dark:text-white">Data Tables &amp; Actions</h3>
+                                <p class="text-xs text-slate-500">Employee lists, column headers, row hovers, action links, and pagination.</p>
+                            </div>
+                        </div>
+                        <i class="bx bx-chevron-down text-slate-400 group-open:rotate-180 transition-transform text-xl"></i>
+                    </summary>
+                    <div class="p-6 bg-slate-50/50 dark:bg-slate-900/40">
+                        <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-x-auto shadow-xs">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-slate-50 dark:bg-slate-900 text-slate-500 font-bold uppercase tracking-wider text-[10px]">
+                                    <tr>
+                                        <th class="p-3.5">Employee</th>
+                                        <th class="p-3.5">Basic</th>
+                                        <th class="p-3.5">EPF (Ee)</th>
+                                        <th class="p-3.5">SOCSO &amp; SKBBK</th>
+                                        <th class="p-3.5">Net Pay</th>
+                                        <th class="p-3.5 text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
+                                    <tr class="hover:bg-slate-50/70 dark:hover:bg-slate-700/40">
+                                        <td class="p-3.5 font-bold text-slate-900 dark:text-white">Muhammad Alif</td>
+                                        <td class="p-3.5 font-mono">RM 6,500.00</td>
+                                        <td class="p-3.5 font-mono text-indigo-600">RM 715.00</td>
+                                        <td class="p-3.5 font-mono text-purple-600">RM 73.40</td>
+                                        <td class="p-3.5 font-mono font-bold text-emerald-600">RM 5,437.20</td>
+                                        <td class="p-3.5 text-right space-x-2">
+                                            <a href="#" class="font-bold text-indigo-600 hover:underline">View</a>
+                                            <a href="#" class="font-bold text-purple-600 hover:underline">Edit</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- 7. ALERTS & NOTICES -->
+                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
+                    <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
+                        <div class="flex items-center gap-3">
+                            <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">7</span>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-900 dark:text-white">Alerts, Banners &amp; Callouts</h3>
+                                <p class="text-xs text-slate-500">Feedback states for info, success, warning, and error notifications.</p>
+                            </div>
+                        </div>
+                        <i class="bx bx-chevron-down text-slate-400 group-open:rotate-180 transition-transform text-xl"></i>
+                    </summary>
+                    <div class="p-6 bg-slate-50/50 dark:bg-slate-900/40">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex p-4 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-300 gap-3">
+                                <i class="bx bx-info-circle text-xl text-blue-600 shrink-0"></i>
+                                <div class="text-xs space-y-0.5">
+                                    <span class="font-bold block">Statutory Reminder</span>
+                                    <span>LHDN CP39 file must be submitted before the 15th of the month.</span>
+                                </div>
+                            </div>
+                            <div class="flex p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 gap-3">
+                                <i class="bx bx-check-circle text-xl text-emerald-600 shrink-0"></i>
+                                <div class="text-xs space-y-0.5">
+                                    <span class="font-bold block">Batch Finalized</span>
+                                    <span>August 2026 batch has been successfully locked and approved.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- 8. NAVIGATION, TABS & BREADCRUMBS -->
+                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
+                    <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
+                        <div class="flex items-center gap-3">
+                            <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">8</span>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-900 dark:text-white">Navigation, Tabs &amp; Breadcrumbs</h3>
+                                <p class="text-xs text-slate-500">Underline tabs, pill switches, and hierarchical trail breadcrumbs.</p>
+                            </div>
+                        </div>
+                        <i class="bx bx-chevron-down text-slate-400 group-open:rotate-180 transition-transform text-xl"></i>
+                    </summary>
+                    <div class="p-6 space-y-4 bg-slate-50/50 dark:bg-slate-900/40">
+                        <nav class="flex items-center space-x-2 text-xs text-slate-500">
+                            <a href="#" class="hover:text-indigo-600">Home</a>
+                            <span>/</span>
+                            <a href="#" class="hover:text-indigo-600">Monthly Payroll</a>
+                            <span>/</span>
+                            <span class="font-bold text-slate-800 dark:text-slate-200">August 2026 Run</span>
+                        </nav>
+                        <div class="flex space-x-2 pt-2">
+                            <button type="button" class="px-3.5 py-1.5 rounded-xl bg-indigo-600 text-white text-xs font-bold">All Employees</button>
+                            <button type="button" class="px-3.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold hover:bg-slate-200">Statutory Deductions</button>
+                            <button type="button" class="px-3.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold hover:bg-slate-200">Bank Export</button>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- 9. MODALS & SLIDEOVERS -->
+                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden" open>
+                    <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
+                        <div class="flex items-center gap-3">
+                            <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">9</span>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-900 dark:text-white">Modals, Dialogs &amp; Slide-over Drawers</h3>
+                                <p class="text-xs text-slate-500">Live popup modal triggers, confirmation dialogs, and slideover drawer.</p>
+                            </div>
+                        </div>
+                        <i class="bx bx-chevron-down text-slate-400 group-open:rotate-180 transition-transform text-xl"></i>
+                    </summary>
+                    <div class="p-6 bg-slate-50/50 dark:bg-slate-900/40 space-y-4">
+                        <div class="flex flex-wrap gap-3">
+                            <button type="button" onclick="document.getElementById('demo-modal-dialog').classList.remove('hidden')" class="px-4 py-2 text-xs font-bold rounded-xl bg-indigo-600 text-white shadow-xs hover:bg-indigo-700 cursor-pointer">
+                                🚀 Open Form Dialog Modal
+                            </button>
+                            <button type="button" onclick="document.getElementById('demo-danger-dialog').classList.remove('hidden')" class="px-4 py-2 text-xs font-bold rounded-xl bg-rose-600 text-white shadow-xs hover:bg-rose-700 cursor-pointer">
+                                ⚠️ Open Confirmation Dialog
+                            </button>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- 10. AVATARS & USER STACKS -->
+                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
+                    <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
+                        <div class="flex items-center gap-3">
+                            <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">10</span>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-900 dark:text-white">Avatars &amp; User Stacks</h3>
+                                <p class="text-xs text-slate-500">Avatar sizes (XS to LG), active status rings, and stacked team lists.</p>
+                            </div>
+                        </div>
+                        <i class="bx bx-chevron-down text-slate-400 group-open:rotate-180 transition-transform text-xl"></i>
+                    </summary>
+                    <div class="p-6 bg-slate-50/50 dark:bg-slate-900/40">
+                        <div class="flex flex-wrap items-center gap-4">
+                            <div class="w-6 h-6 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center">XS</div>
+                            <div class="w-8 h-8 rounded-full bg-sky-600 text-white text-xs font-bold flex items-center justify-center">SM</div>
+                            <div class="w-10 h-10 rounded-full bg-emerald-600 text-white text-sm font-bold flex items-center justify-center">MD</div>
+                            <div class="relative">
+                                <div class="w-12 h-12 rounded-full bg-purple-600 text-white text-base font-bold flex items-center justify-center">LG</div>
+                                <span class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-emerald-500 ring-2 ring-white"></span>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- 11. ANIMATE.CSS PLAYGROUND -->
+                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden" open>
+                    <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
+                        <div class="flex items-center gap-3">
+                            <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">11</span>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-900 dark:text-white">Animate.css Effects &amp; Sandbox</h3>
+                                <p class="text-xs text-slate-500">Live animation triggers for entrances, attention seekers, and pulse effects.</p>
+                            </div>
+                        </div>
+                        <i class="bx bx-chevron-down text-slate-400 group-open:rotate-180 transition-transform text-xl"></i>
+                    </summary>
+                    <div class="p-6 bg-slate-50/50 dark:bg-slate-900/40 space-y-6">
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-6">
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Live Animation Target</h4>
+                                <p class="text-xs text-slate-500">Click any animation button below to test effect.</p>
+                            </div>
+                            <div id="anim-box" class="w-48 h-16 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white font-bold text-xs flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                                Target Element
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="testAnim('animate__bounce')" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-indigo-50 hover:text-indigo-600 transition">Bounce</button>
+                            <button onclick="testAnim('animate__pulse')" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-indigo-50 hover:text-indigo-600 transition">Pulse</button>
+                            <button onclick="testAnim('animate__tada')" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-indigo-50 hover:text-indigo-600 transition">Tada 🎉</button>
+                            <button onclick="testAnim('animate__rubberBand')" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-indigo-50 hover:text-indigo-600 transition">RubberBand</button>
+                            <button onclick="testAnim('animate__heartBeat')" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-indigo-50 hover:text-indigo-600 transition">HeartBeat</button>
+                            <button onclick="testAnim('animate__shakeX')" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-indigo-50 hover:text-indigo-600 transition">ShakeX</button>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- 12. BOXICONS ICON SET REFERENCE -->
+                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
+                    <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
+                        <div class="flex items-center gap-3">
+                            <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">12</span>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-900 dark:text-white">Boxicons Icon Grid &amp; Sizing Reference</h3>
+                                <p class="text-xs text-slate-500">Regular and solid icon collections with utility color pairings.</p>
+                            </div>
+                        </div>
+                        <i class="bx bx-chevron-down text-slate-400 group-open:rotate-180 transition-transform text-xl"></i>
+                    </summary>
+                    <div class="p-6 bg-slate-50/50 dark:bg-slate-900/40">
+                        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3 text-center text-xs">
+                            <div class="p-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700"><i class="bx bx-receipt text-2xl text-indigo-600"></i><span class="block text-[10px] text-slate-400 mt-1">bx-receipt</span></div>
+                            <div class="p-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700"><i class="bx bxs-institution text-2xl text-purple-600"></i><span class="block text-[10px] text-slate-400 mt-1">bxs-institution</span></div>
+                            <div class="p-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700"><i class="bx bx-shield-quarter text-2xl text-emerald-600"></i><span class="block text-[10px] text-slate-400 mt-1">bx-shield</span></div>
+                            <div class="p-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700"><i class="bx bx-calculator text-2xl text-sky-600"></i><span class="block text-[10px] text-slate-400 mt-1">bx-calculator</span></div>
+                            <div class="p-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700"><i class="bx bx-building-house text-2xl text-amber-600"></i><span class="block text-[10px] text-slate-400 mt-1">bx-building</span></div>
+                            <div class="p-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700"><i class="bx bx-lock-alt text-2xl text-rose-600"></i><span class="block text-[10px] text-slate-400 mt-1">bx-lock-alt</span></div>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- 13. TOGGLE SWITCHES & SLIDERS -->
+                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden" open>
+                    <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
+                        <div class="flex items-center gap-3">
+                            <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">13</span>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-900 dark:text-white">Toggle Switches &amp; Theme Sliders</h3>
+                                <p class="text-xs text-slate-500">Pure Tailwind CSS peer-based switches with sizes, colors, and active states.</p>
+                            </div>
+                        </div>
+                        <i class="bx bx-chevron-down text-slate-400 group-open:rotate-180 transition-transform text-xl"></i>
+                    </summary>
+                    <div class="p-6 bg-slate-50/50 dark:bg-slate-900/40 space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <!-- Toggle 1 -->
+                            <div class="flex items-center justify-between p-3.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                                <div>
+                                    <span class="text-xs font-bold text-slate-900 dark:text-white block">Auto-Sync Autopay</span>
+                                    <span class="text-[10px] text-slate-400">Maybank2e Integration</span>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" checked class="sr-only peer">
+                                    <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
+                                </label>
+                            </div>
+                            <!-- Toggle 2 -->
+                            <div class="flex items-center justify-between p-3.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                                <div>
+                                    <span class="text-xs font-bold text-slate-900 dark:text-white block">Lock Approved Batches</span>
+                                    <span class="text-[10px] text-slate-400">7-Year Audit Immutable</span>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" checked class="sr-only peer">
+                                    <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+                                </label>
+                            </div>
+                            <!-- Toggle 3 -->
+                            <div class="flex items-center justify-between p-3.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                                <div>
+                                    <span class="text-xs font-bold text-slate-900 dark:text-white block">Email Digital Payslips</span>
+                                    <span class="text-[10px] text-slate-400">PDF &amp; Password Protected</span>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer">
+                                    <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-purple-600"></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+
             </div>
         </section>
 
     </main>
 
+    <!-- LIVE MODAL POPUP DIALOGS -->
+    <div id="demo-modal-dialog" class="hidden fixed inset-0 z-50 overflow-y-auto">
+        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity" onclick="document.getElementById('demo-modal-dialog').classList.add('hidden')"></div>
+        <div class="flex min-h-full items-center justify-center p-4">
+            <div class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-slate-900 text-left shadow-2xl transition-all sm:w-full sm:max-w-lg border border-slate-200 dark:border-slate-800 p-6 space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                    <h3 class="text-sm font-bold text-slate-900 dark:text-white">Sample Form Modal</h3>
+                    <button onclick="document.getElementById('demo-modal-dialog').classList.add('hidden')" class="text-slate-400 hover:text-slate-600"><i class="bx bx-x text-xl"></i></button>
+                </div>
+                <div class="space-y-3 text-xs text-slate-600 dark:text-slate-300">
+                    <p>This is a live responsive popup dialog with background backdrop blur and focus trapping.</p>
+                </div>
+                <div class="flex justify-end gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+                    <button onclick="document.getElementById('demo-modal-dialog').classList.add('hidden')" class="px-3.5 py-2 text-xs font-semibold rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Close</button>
+                    <button onclick="document.getElementById('demo-modal-dialog').classList.add('hidden')" class="px-4 py-2 text-xs font-semibold rounded-xl bg-indigo-600 text-white">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="demo-danger-dialog" class="hidden fixed inset-0 z-50 overflow-y-auto">
+        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity" onclick="document.getElementById('demo-danger-dialog').classList.add('hidden')"></div>
+        <div class="flex min-h-full items-center justify-center p-4">
+            <div class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-slate-900 text-left shadow-2xl transition-all sm:w-full sm:max-w-md border border-slate-200 dark:border-slate-800 p-6 space-y-4">
+                <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-xl shrink-0"><i class="bx bx-error-alt"></i></div>
+                    <div class="space-y-1">
+                        <h3 class="text-sm font-bold text-slate-900 dark:text-white">Delete Record Confirmation</h3>
+                        <p class="text-xs text-slate-500">Are you sure you want to delete this employee record? This action cannot be reversed.</p>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                    <button onclick="document.getElementById('demo-danger-dialog').classList.add('hidden')" class="px-3.5 py-2 text-xs font-semibold rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Cancel</button>
+                    <button onclick="document.getElementById('demo-danger-dialog').classList.add('hidden')" class="px-4 py-2 text-xs font-semibold rounded-xl bg-rose-600 text-white">Confirm Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8 text-center text-xs text-slate-500">
         <div class="max-w-7xl mx-auto px-4 space-y-2">
             <p>PayFlow MY - Malaysian Payroll Management System • Built with Laravel 11 &amp; Tailwind CSS</p>
-            <p class="text-[11px] text-slate-400">Compliant with Employment Act 1955, KWSP 1991, PERKESO Act 4, EIS Act 800, and LHDN ITA 1967.</p>
+            <p class="text-[11px] text-slate-400">Zero Custom CSS • 100% Malaysian Statutory Compliance (KWSP, SOCSO Act 4, EIS, PCB)</p>
         </div>
     </footer>
 
-    <!-- Interactive Calculator Script -->
+    <!-- Interactive Scripts -->
     <script>
         function toggleDarkMode() {
             const html = document.documentElement;
@@ -453,7 +896,6 @@
             }
         }
 
-        // Check system preference
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
             document.getElementById('theme-icon').className = 'bx bx-sun text-base';
@@ -479,20 +921,17 @@
             if (type === 'freelance' || type === 'intern') {
                 // Fully exempt
             } else if (type === 'contract_foreign_res' || type === 'contract_foreign_nonres') {
-                // Foreign Expatriate
                 epfEe = Math.round(salary * 0.02);
                 epfEr = Math.round(salary * 0.02);
-                socsoEr = Math.round(cappedWage * 0.0125); // Category 2
+                socsoEr = Math.round(cappedWage * 0.0125);
                 
                 if (type === 'contract_foreign_nonres') {
-                    pcb = Math.round(salary * 0.30); // Flat 30% Non-Resident Tax
+                    pcb = Math.round(salary * 0.30);
                 } else {
-                    // Resident Formula
                     const annualIncome = Math.max(0, (salary * 12) - 9000 - Math.min(epfEe * 12, 4000));
                     pcb = estimatePcb(annualIncome);
                 }
             } else if (type === 'senior') {
-                // Senior Citizen (Age 60+)
                 epfEe = 0.00;
                 epfEr = Math.round(salary * 0.04);
                 socsoEr = Math.round(cappedWage * 0.0175);
@@ -501,7 +940,6 @@
                 const annualIncome = Math.max(0, (salary * 12) - 9000);
                 pcb = estimatePcb(annualIncome);
             } else {
-                // Standard Permanent or Local Contract
                 const eeRate = isEpf9 ? 0.09 : 0.11;
                 const erRate = salary <= 5000 ? 0.13 : 0.12;
 
@@ -526,7 +964,6 @@
             const netSalary = Math.max(0, salary - totalDeductions);
             const totalEmployerCost = salary + epfEr + socsoEr + eisEr;
 
-            // Render Output
             document.getElementById('res_net_salary').textContent = 'RM ' + netSalary.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             document.getElementById('res_total_deductions').textContent = '- RM ' + totalDeductions.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
@@ -555,11 +992,17 @@
             else if (taxableAnnual <= 600000) tax = 84400 + (taxableAnnual - 400000) * 0.26;
             else tax = 136400 + (taxableAnnual - 600000) * 0.28;
 
-            if (taxableAnnual <= 35000) tax = Math.max(0, tax - 400); // Sec 6A rebate
+            if (taxableAnnual <= 35000) tax = Math.max(0, tax - 400);
             return Math.max(0, Math.round((tax / 12) * 100) / 100);
         }
 
-        // Initialize on load
+        function testAnim(animName) {
+            const el = document.getElementById('anim-box');
+            el.className = 'w-48 h-16 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white font-bold text-xs flex items-center justify-center shadow-lg shadow-indigo-500/20';
+            void el.offsetWidth;
+            el.className += ' animate__animated ' + animName;
+        }
+
         document.addEventListener('DOMContentLoaded', calculateStatutory);
     </script>
 </body>
