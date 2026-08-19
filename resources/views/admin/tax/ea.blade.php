@@ -26,6 +26,16 @@
                 </div>
 
                 <div class="flex items-center gap-2.5 sm:gap-3 flex-wrap shrink-0">
+                    <!-- Tax Year Selector Switcher -->
+                    <div class="flex items-center bg-white/10 backdrop-blur-md p-1 rounded-xl border border-white/10 text-xs font-bold">
+                        <a href="{{ route('admin.tax-ea.index', ['tax_year' => '2025']) }}" class="px-3 py-1.5 rounded-lg transition {{ ($taxYear ?? date('Y')) == '2025' ? 'bg-indigo-600 text-white shadow-xs' : 'text-indigo-200 hover:text-white' }}">
+                            2025 (Last Year)
+                        </a>
+                        <a href="{{ route('admin.tax-ea.index', ['tax_year' => '2026']) }}" class="px-3 py-1.5 rounded-lg transition {{ ($taxYear ?? date('Y')) == '2026' ? 'bg-indigo-600 text-white shadow-xs' : 'text-indigo-200 hover:text-white' }}">
+                            2026 (Current)
+                        </a>
+                    </div>
+
                     <form method="POST" action="{{ route('admin.tax-ea.compile') }}">
                         @csrf
                         <input type="hidden" name="tax_year" value="{{ $taxYear ?? date('Y') }}">
