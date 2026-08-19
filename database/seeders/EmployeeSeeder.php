@@ -6,14 +6,16 @@ use App\Models\Company;
 use App\Models\Department;
 use App\Models\Employee;
 use App\Models\EmployeeLeaveBalance;
+use App\Models\EmployeeSalaryComponent;
 use App\Models\EmployeeStatutoryProfile;
 use App\Models\LeaveType;
+use App\Models\SalaryComponent;
 use Illuminate\Database\Seeder;
 
 class EmployeeSeeder extends Seeder
 {
     /**
-     * Seed realistic Malaysian employees covering all contract classifications and statutory profiles.
+     * Seed realistic Malaysian employees covering all contract classifications, statutory profiles, and monthly recurring allowances.
      */
     public function run(): void
     {
@@ -28,8 +30,16 @@ class EmployeeSeeder extends Seeder
         $sbdDept = Department::where('company_id', $company->id)->where('code', 'SBD')->first();
         $execDept = Department::where('company_id', $company->id)->where('code', 'EXEC')->first();
 
+        // Fetch standard salary components
+        $attAllow = SalaryComponent::where('code', 'ATT_ALLOW')->first();
+        $housingAllow = SalaryComponent::where('code', 'HOUSING_ALLOW')->first();
+        $travelAllow = SalaryComponent::where('code', 'TRAVEL_ALLOW')->first();
+        $phoneAllow = SalaryComponent::where('code', 'PHONE_ALLOW')->first();
+        $mealAllow = SalaryComponent::where('code', 'MEAL_ALLOW')->first();
+
         $employeesData = [
-            // 1. Permanent Senior Local Employee (Standard Statutory: 11% EPF / 12% ER, Cat 1 SOCSO, SKBBK, EIS, PCB)
+            // 1. Permanent Senior Local Employee
+            // Basic: RM6,500 + Housing: RM500 + Mobile: RM150 = Gross: RM7,150
             [
                 'employee' => [
                     'company_id' => $company->id,
@@ -62,9 +72,14 @@ class EmployeeSeeder extends Seeder
                     'is_skbbk_contributed' => true,
                     'is_tax_resident' => true,
                 ],
+                'allowances' => [
+                    ['component_id' => $housingAllow?->id, 'amount' => 500.00, 'notes' => 'Monthly Living & Housing Allowance (COLA)'],
+                    ['component_id' => $phoneAllow?->id, 'amount' => 150.00, 'notes' => 'Mobile & Data Allowance'],
+                ],
             ],
 
-            // 2. Local Fixed-Term Contract Employee (Standard Statutory: 11% EPF / 13% ER, Cat 1 SOCSO, SKBBK, EIS, PCB)
+            // 2. Local Fixed-Term Contract Employee
+            // Basic: RM4,200 + Attendance: RM300 + Meal: RM200 = Gross: RM4,700
             [
                 'employee' => [
                     'company_id' => $company->id,
@@ -97,9 +112,14 @@ class EmployeeSeeder extends Seeder
                     'is_skbbk_contributed' => true,
                     'is_tax_resident' => true,
                 ],
+                'allowances' => [
+                    ['component_id' => $attAllow?->id, 'amount' => 300.00, 'notes' => 'Perfect Monthly Attendance Allowance'],
+                    ['component_id' => $mealAllow?->id, 'amount' => 200.00, 'notes' => 'Subsidized Meal Allowance'],
+                ],
             ],
 
-            // 3. Foreign Contract Expatriate (2% EPF, Cat 2 SOCSO 1.25% ER only, EIS Exempt, Flat 30% Non-Resident Tax)
+            // 3. Foreign Contract Expatriate
+            // Basic: RM8,500 + Expat Housing: RM1,200 + Transport: RM400 = Gross: RM10,100
             [
                 'employee' => [
                     'company_id' => $company->id,
@@ -134,9 +154,14 @@ class EmployeeSeeder extends Seeder
                     'is_skbbk_contributed' => false,
                     'is_tax_resident' => false, // Flat 30% Non-Resident Tax
                 ],
+                'allowances' => [
+                    ['component_id' => $housingAllow?->id, 'amount' => 1200.00, 'notes' => 'Expatriate Executive Housing Subsidy'],
+                    ['component_id' => $travelAllow?->id, 'amount' => 400.00, 'notes' => 'Petrol & Travel Concession'],
+                ],
             ],
 
-            // 4. Freelancer / Independent Consultant (Contract for Service - Gross Invoiced, Zero Statutory Withholdings)
+            // 4. Freelancer / Independent Consultant
+            // Basic Fee: RM5,500 (Contract for Service - zero statutory)
             [
                 'employee' => [
                     'company_id' => $company->id,
@@ -169,9 +194,11 @@ class EmployeeSeeder extends Seeder
                     'is_skbbk_contributed' => false,
                     'is_tax_resident' => true,
                 ],
+                'allowances' => [],
             ],
 
-            // 5. Practical Intern (Student Trainee Stipend - Statutory Exempt)
+            // 5. Practical Intern
+            // Basic: RM1,200 + Transport Support: RM200 = Total Stipend: RM1,400
             [
                 'employee' => [
                     'company_id' => $company->id,
@@ -204,9 +231,13 @@ class EmployeeSeeder extends Seeder
                     'is_skbbk_contributed' => false,
                     'is_tax_resident' => true,
                 ],
+                'allowances' => [
+                    ['component_id' => $travelAllow?->id, 'amount' => 200.00, 'notes' => 'Internship Travel & Commute Support'],
+                ],
             ],
 
-            // 6. Senior Citizen Advisor (Age 60+ Senior: 0% EE / 4% ER EPF, Cat 1 SOCSO, EIS Exempt)
+            // 6. Senior Citizen Advisor (Age 60+)
+            // Basic: RM12,000 + Advisory Director Allowance: RM2,000 + Transport: RM500 = Gross: RM14,500
             [
                 'employee' => [
                     'company_id' => $company->id,
@@ -237,9 +268,13 @@ class EmployeeSeeder extends Seeder
                     'income_tax_no' => 'SG 109283740',
                     'tax_category' => 'married_non_working',
                     'number_of_children' => 0,
-                    'is_eis_contributed' => false, // Exempt for age 60+ post-entrants
+                    'is_eis_contributed' => false,
                     'is_skbbk_contributed' => true,
                     'is_tax_resident' => true,
+                ],
+                'allowances' => [
+                    ['component_id' => $housingAllow?->id, 'amount' => 2000.00, 'notes' => 'Executive Director Retainer Allowance'],
+                    ['component_id' => $travelAllow?->id, 'amount' => 500.00, 'notes' => 'Executive Chauffeur / Fuel Allowance'],
                 ],
             ],
         ];
@@ -256,6 +291,27 @@ class EmployeeSeeder extends Seeder
                 ['employee_id' => $employee->id],
                 $data['statutory']
             );
+
+            // Attach mapped allowances
+            if (!empty($data['allowances'])) {
+                foreach ($data['allowances'] as $allowance) {
+                    if (!empty($allowance['component_id'])) {
+                        EmployeeSalaryComponent::updateOrCreate(
+                            [
+                                'employee_id' => $employee->id,
+                                'salary_component_id' => $allowance['component_id'],
+                            ],
+                            [
+                                'amount' => $allowance['amount'],
+                                'effective_from' => '2026-01-01',
+                                'effective_to' => '9999-12-31',
+                                'is_recurring' => true,
+                                'notes' => $allowance['notes'] ?? null,
+                            ]
+                        );
+                    }
+                }
+            }
 
             // Initialize default leave balances for current year
             foreach ($leaveTypes as $type) {

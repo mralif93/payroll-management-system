@@ -534,7 +534,7 @@ class PayrollRunController extends Controller
         $periodStart = Carbon::createFromDate($payrollRun->period_year, $payrollRun->period_month, 1)->startOfMonth()->toDateString();
         $periodEnd = Carbon::createFromDate($payrollRun->period_year, $payrollRun->period_month, 1)->endOfMonth()->toDateString();
 
-        $employees = Employee::with(['salaryComponents', 'statutoryProfile', 'department'])
+        $employees = Employee::with(['salaryComponents.salaryComponent', 'statutoryProfile', 'department'])
             ->where('employment_status', '!=', 'resigned')
             ->get();
 
@@ -548,7 +548,7 @@ class PayrollRunController extends Controller
 
         foreach ($employees as $employee) {
             $basic = (float) $employee->basic_salary;
-            $allowances = (float) $employee->salaryComponents->where('type', 'allowance')->sum('pivot.amount');
+            $allowances = (float) $employee->salaryComponents->where('salaryComponent.type', 'allowance')->sum('amount');
             $empType = strtolower($employee->employment_type ?? 'permanent');
 
             // Unpaid Leave Deduction (ORP)
