@@ -277,25 +277,28 @@
                     <div class="text-right font-mono font-bold text-slate-900 dark:text-white" id="ps-basic">RM 0.00</div>
                 </div>
 
-                <!-- Allowances Summary Header & Container -->
-                <div class="p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition space-y-2">
+                <!-- Allowances & Claims Section (Clean Card Layout) -->
+                <div class="p-3.5 bg-slate-50/70 dark:bg-slate-800/40 space-y-2.5 transition">
                     <div class="flex items-center justify-between">
-                        <div class="font-semibold text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
-                            <span>Allowances &amp; Claims</span>
-                            <span id="ps-allowance-count-badge" class="px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">0 items</span>
+                        <div class="flex items-center gap-2">
+                            <span class="font-semibold text-slate-700 dark:text-slate-300">Allowances &amp; Claims</span>
+                            <span id="ps-allowance-count-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/60">0 items</span>
                         </div>
                         <div class="text-right font-mono font-bold text-indigo-600 dark:text-indigo-400" id="ps-allowances">RM 0.00</div>
                     </div>
                     
-                    <!-- Itemized Allowance Breakdown List -->
-                    <div id="ps-allowance-items-list" class="space-y-1.5 pl-3 border-l-2 border-indigo-200 dark:border-indigo-800">
+                    <!-- Itemized Allowance Breakdown Cards -->
+                    <div id="ps-allowance-items-list" class="space-y-1.5 pt-1">
                         <!-- Populated via JS dynamically -->
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 p-3 bg-slate-50/80 dark:bg-slate-800/50 hover:bg-slate-100/60 transition items-center">
-                    <div class="font-bold text-slate-900 dark:text-white">Gross Wages Computed</div>
-                    <div class="text-right font-mono font-extrabold text-slate-900 dark:text-white text-sm" id="ps-gross">RM 0.00</div>
+                <div class="grid grid-cols-2 p-3.5 bg-indigo-50/40 dark:bg-indigo-950/20 hover:bg-indigo-50/60 transition items-center border-t border-slate-100 dark:border-slate-800">
+                    <div class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                        <i class="bx bx-calculator text-indigo-600 dark:text-indigo-400"></i>
+                        <span>Gross Wages Computed</span>
+                    </div>
+                    <div class="text-right font-mono font-black text-slate-900 dark:text-white text-base" id="ps-gross">RM 0.00</div>
                 </div>
             </div>
 
@@ -443,7 +446,7 @@
                 document.getElementById('ps-allowances').textContent = fmt(allowances);
                 document.getElementById('ps-gross').textContent = fmt(gross);
 
-                // Render Itemized Allowance Breakdown
+                // Render Itemized Allowance Breakdown with Clean Cards
                 const allowanceListEl = document.getElementById('ps-allowance-items-list');
                 const allowanceBadgeEl = document.getElementById('ps-allowance-count-badge');
                 allowanceListEl.innerHTML = '';
@@ -453,23 +456,24 @@
 
                 if (allowanceComponents.length > 0) {
                     allowanceBadgeEl.textContent = `${allowanceComponents.length} items`;
-                    allowanceBadgeEl.className = 'px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400';
+                    allowanceBadgeEl.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/60';
                     allowanceListEl.style.display = 'block';
 
                     allowanceComponents.forEach(comp => {
                         const name = comp.salary_component?.name || comp.name || 'Allowance';
-                        const note = comp.notes || (comp.salary_component?.is_epf_subject ? 'Statutory-subject' : 'Tax/Statutory Exempt');
+                        const note = comp.notes || (comp.salary_component?.is_epf_subject ? 'Subject to EPF/SOCSO' : 'Tax Exempt');
                         const amt = parseFloat(comp.amount || 0);
 
                         const rowDiv = document.createElement('div');
-                        rowDiv.className = 'flex items-center justify-between text-[11px]';
+                        rowDiv.className = 'flex items-center justify-between p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-2xs hover:border-indigo-200 dark:hover:border-indigo-800 transition';
                         rowDiv.innerHTML = `
-                            <div class="flex items-center gap-1.5">
-                                <i class="bx bx-check-circle text-xs text-indigo-500"></i>
-                                <span class="font-medium text-slate-700 dark:text-slate-300">${name}</span>
-                                <span class="text-[9.5px] text-slate-400">(${note})</span>
+                            <div class="min-w-0 pr-2">
+                                <div class="flex items-center gap-1.5 flex-wrap">
+                                    <span class="font-bold text-slate-800 dark:text-slate-200 text-xs">${name}</span>
+                                    <span class="px-1.5 py-0.2 rounded text-[9.5px] font-medium bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">${note}</span>
+                                </div>
                             </div>
-                            <span class="font-mono font-semibold text-slate-800 dark:text-slate-200">+ ${fmt(amt)}</span>
+                            <span class="font-mono font-bold text-slate-900 dark:text-white text-xs shrink-0">+ ${fmt(amt)}</span>
                         `;
                         allowanceListEl.appendChild(rowDiv);
                     });
@@ -477,17 +481,14 @@
                     allowanceBadgeEl.textContent = '1 item';
                     allowanceListEl.style.display = 'block';
                     allowanceListEl.innerHTML = `
-                        <div class="flex items-center justify-between text-[11px]">
-                            <div class="flex items-center gap-1.5">
-                                <i class="bx bx-check-circle text-xs text-indigo-500"></i>
-                                <span class="font-medium text-slate-700 dark:text-slate-300">Total Fixed Allowances</span>
-                            </div>
-                            <span class="font-mono font-semibold text-slate-800 dark:text-slate-200">+ ${fmt(allowances)}</span>
+                        <div class="flex items-center justify-between p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-2xs">
+                            <div class="font-bold text-slate-800 dark:text-slate-200 text-xs">Total Fixed Allowances</div>
+                            <span class="font-mono font-bold text-slate-900 dark:text-white text-xs shrink-0">+ ${fmt(allowances)}</span>
                         </div>
                     `;
                 } else {
                     allowanceBadgeEl.textContent = 'None';
-                    allowanceBadgeEl.className = 'px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-400';
+                    allowanceBadgeEl.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-200/60 dark:bg-slate-800 text-slate-400 border border-transparent';
                     allowanceListEl.style.display = 'none';
                 }
 
