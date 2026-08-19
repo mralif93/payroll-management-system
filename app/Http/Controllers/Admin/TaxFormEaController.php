@@ -20,7 +20,11 @@ class TaxFormEaController extends Controller
             ->where('tax_year', $taxYear)
             ->paginate(15);
 
-        return view('admin.tax.ea', compact('eaRecords', 'taxYear'));
+        $totalAccumulatedPcb = TaxFormEaRecord::where('tax_year', $taxYear)->sum('total_pcb_mtd');
+        $totalKwspEe = TaxFormEaRecord::where('tax_year', $taxYear)->sum('total_epf_employee');
+        $totalGrossEarnings = TaxFormEaRecord::where('tax_year', $taxYear)->sum('gross_salary_wages');
+
+        return view('admin.tax.ea', compact('eaRecords', 'taxYear', 'totalAccumulatedPcb', 'totalKwspEe', 'totalGrossEarnings'));
     }
 
     /**
@@ -35,7 +39,7 @@ class TaxFormEaController extends Controller
         $employees = Employee::with(['payrollItems' => function ($q) use ($validated) {
             $q->whereHas('payrollRun', function ($runQuery) use ($validated) {
                 $runQuery->where('period_year', $validated['tax_year'])
-                         ->whereIn('status', ['approved', 'paid', 'locked']);
+                         ->whereIn('status', ['approved', 'paid', 'locked', 'draft']);
             });
         }])->get();
 

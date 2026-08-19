@@ -46,23 +46,23 @@
             <x-stat-card 
                 title="Total Compiled Forms"
                 value="{{ $eaRecords->total() ?? 0 }}"
-                change="Tax Year {{ $taxYear ?? date('Y') }}"
+                change="Tax Assessment Year {{ $taxYear ?? date('Y') }}"
                 changeType="neutral"
                 icon="bx-file"
                 color="rose"
             />
             <x-stat-card 
                 title="Accumulated PCB (MTD)"
-                value="RM 202,685.40"
-                change="Direct LHDN reconcilation"
+                value="RM {{ number_format($totalAccumulatedPcb ?? 0, 2) }}"
+                change="Direct LHDN Form EA Sec D1"
                 changeType="positive"
                 icon="bx-receipt"
                 color="indigo"
             />
             <x-stat-card 
                 title="Total KWSP Employee"
-                value="RM 461,040.00"
-                change="Form EA Section E1"
+                value="RM {{ number_format($totalKwspEe ?? 0, 2) }}"
+                change="Form EA Section E1 (Max RM4,000)"
                 changeType="positive"
                 icon="bx-shield-quarter"
                 color="emerald"
