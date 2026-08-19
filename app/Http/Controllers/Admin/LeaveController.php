@@ -71,28 +71,8 @@ class LeaveController extends Controller
         $departments = Department::all();
         $employees = Employee::where('employment_status', '!=', 'resigned')->orderBy('full_name')->get();
 
-        // 2. Employee Balances Roster for Tab 2
-        $employeeBalancesQuery = Employee::with(['department', 'leaveBalances.leaveType'])
-            ->where('employment_status', '!=', 'resigned')
-            ->orderBy('full_name');
-
-        if ($request->filled('balance_search')) {
-            $bSearch = $request->input('balance_search');
-            $employeeBalancesQuery->where(function ($q) use ($bSearch) {
-                $q->where('full_name', 'like', "%{$bSearch}%")
-                  ->orWhere('employee_no', 'like', "%{$bSearch}%");
-            });
-        }
-
-        if ($request->filled('balance_dept')) {
-            $employeeBalancesQuery->where('department_id', $request->input('balance_dept'));
-        }
-
-        $employeeBalances = $employeeBalancesQuery->paginate(10, ['*'], 'balance_page')->withQueryString();
-
         return view('admin.leaves.index', compact(
             'leaves',
-            'employeeBalances',
             'totalPending',
             'totalApprovedMonth',
             'activeOnLeaveToday',

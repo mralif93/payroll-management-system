@@ -90,7 +90,14 @@ class LeaveManagementTest extends TestCase
     {
         $response = $this->actingAs($this->user)->get(route('admin.leaves.index'));
         $response->assertStatus(200);
-        $response->assertSee('Leave &amp; Attendance Management', false);
+        $response->assertSee('Leave Applications &amp; Approvals', false);
+    }
+
+    public function test_admin_can_access_leave_entitlements_dashboard(): void
+    {
+        $response = $this->actingAs($this->user)->get(route('admin.leave-entitlements.index'));
+        $response->assertStatus(200);
+        $response->assertSee('Leave Entitlements &amp; Quotas', false);
     }
 
     public function test_admin_can_record_approved_leave_and_update_balance(): void

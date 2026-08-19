@@ -43,12 +43,16 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('employees', EmployeeController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     Route::post('employees/{employee}/toggle-status', [EmployeeController::class, 'toggleStatus'])->name('employees.toggle-status');
 
-    // 2b. Leave Management Subsystem
+    // 2b. Leave Management Subsystem (Applications)
     Route::get('/leaves', [\App\Http\Controllers\Admin\LeaveController::class, 'index'])->name('leaves.index');
     Route::post('/leaves', [\App\Http\Controllers\Admin\LeaveController::class, 'store'])->name('leaves.store');
     Route::patch('/leaves/{leave}/status', [\App\Http\Controllers\Admin\LeaveController::class, 'updateStatus'])->name('leaves.update-status');
     Route::delete('/leaves/{leave}', [\App\Http\Controllers\Admin\LeaveController::class, 'destroy'])->name('leaves.destroy');
     Route::put('/leaves/balances/{balance}', [\App\Http\Controllers\Admin\LeaveController::class, 'updateBalance'])->name('leaves.balances.update');
+
+    // 2c. Employee Leave Entitlements & Quotas
+    Route::get('/leave-entitlements', [\App\Http\Controllers\Admin\LeaveEntitlementController::class, 'index'])->name('leave-entitlements.index');
+    Route::put('/leave-entitlements/{balance}', [\App\Http\Controllers\Admin\LeaveEntitlementController::class, 'updateBalance'])->name('leave-entitlements.update');
 
     // 3. Monthly Payroll Runs
     Route::get('/payroll', [PayrollRunController::class, 'index'])->name('payroll.index');
