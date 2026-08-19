@@ -142,40 +142,40 @@
             </div>
 
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs">
+                <table class="w-full text-left text-xs min-w-[780px]">
                     <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]">
                         <tr>
-                            <th class="p-3.5">Serial No</th>
-                            <th class="p-3.5">Employee Name</th>
-                            <th class="p-3.5">Gross Wages (Sec B1)</th>
-                            <th class="p-3.5">PCB MTD (Sec D1)</th>
-                            <th class="p-3.5">KWSP EE (Sec E1)</th>
-                            <th class="p-3.5">PERKESO EE (Sec E2)</th>
-                            <th class="p-3.5 text-right">Actions</th>
+                            <th class="p-3.5 whitespace-nowrap">Serial No</th>
+                            <th class="p-3.5 whitespace-nowrap">Employee Name</th>
+                            <th class="p-3.5 whitespace-nowrap">Gross Wages (Sec B1)</th>
+                            <th class="p-3.5 whitespace-nowrap">PCB MTD (Sec D1)</th>
+                            <th class="p-3.5 whitespace-nowrap">KWSP EE (Sec E1)</th>
+                            <th class="p-3.5 whitespace-nowrap">PERKESO EE (Sec E2)</th>
+                            <th class="p-3.5 text-right whitespace-nowrap">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-sans">
                         @forelse($eaRecords as $record)
                             <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
-                                <td class="p-3.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">
+                                <td class="p-3.5 font-mono font-bold text-indigo-600 dark:text-indigo-400 whitespace-nowrap">
                                     {{ $record->serial_no }}
                                 </td>
-                                <td class="p-3.5 font-semibold text-slate-900 dark:text-white">
+                                <td class="p-3.5 font-semibold text-slate-900 dark:text-white whitespace-nowrap">
                                     {{ $record->employee?->full_name }}
                                 </td>
-                                <td class="p-3.5 font-mono font-bold">
+                                <td class="p-3.5 font-mono font-bold whitespace-nowrap">
                                     RM {{ number_format($record->gross_salary_wages, 2) }}
                                 </td>
-                                <td class="p-3.5 font-mono text-rose-600 dark:text-rose-400 font-bold">
+                                <td class="p-3.5 font-mono text-rose-600 dark:text-rose-400 font-bold whitespace-nowrap">
                                     RM {{ number_format($record->total_pcb_mtd, 2) }}
                                 </td>
-                                <td class="p-3.5 font-mono">
+                                <td class="p-3.5 font-mono whitespace-nowrap">
                                     RM {{ number_format($record->total_epf_employee, 2) }}
                                 </td>
-                                <td class="p-3.5 font-mono">
+                                <td class="p-3.5 font-mono whitespace-nowrap">
                                     RM {{ number_format($record->total_socso_employee, 2) }}
                                 </td>
-                                <td class="p-3.5 text-right">
+                                <td class="p-3.5 text-right whitespace-nowrap">
                                     <a 
                                         href="{{ route('admin.tax-ea.print', $record) }}" 
                                         target="_blank"

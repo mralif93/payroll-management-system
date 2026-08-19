@@ -147,37 +147,37 @@
             </div>
 
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs">
+                <table class="w-full text-left text-xs min-w-[780px]">
                     <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]">
                         <tr>
-                            <th class="p-3.5">Role Name</th>
-                            <th class="p-3.5">Role Key</th>
-                            <th class="p-3.5">Description</th>
-                            <th class="p-3.5">Users Assigned</th>
-                            <th class="p-3.5">Granted Permissions</th>
-                            <th class="p-3.5">Type</th>
-                            <th class="p-3.5 text-right">Actions</th>
+                            <th class="p-3.5 whitespace-nowrap">Role Name</th>
+                            <th class="p-3.5 whitespace-nowrap">Role Key</th>
+                            <th class="p-3.5 whitespace-nowrap">Description</th>
+                            <th class="p-3.5 whitespace-nowrap">Users Assigned</th>
+                            <th class="p-3.5 whitespace-nowrap">Granted Permissions</th>
+                            <th class="p-3.5 whitespace-nowrap">Type</th>
+                            <th class="p-3.5 text-right whitespace-nowrap">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-sans">
                         @forelse($roles as $role)
                             <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
-                                <td class="p-3.5 font-bold text-slate-900 dark:text-white">
+                                <td class="p-3.5 font-bold text-slate-900 dark:text-white whitespace-nowrap">
                                     {{ $role->display_name }}
                                 </td>
-                                <td class="p-3.5 font-mono text-indigo-600 dark:text-indigo-400 font-bold">
+                                <td class="p-3.5 font-mono text-indigo-600 dark:text-indigo-400 font-bold whitespace-nowrap">
                                     {{ $role->name }}
                                 </td>
-                                <td class="p-3.5 text-slate-500 dark:text-slate-400 max-w-xs truncate">
+                                <td class="p-3.5 text-slate-500 dark:text-slate-400 max-w-xs truncate whitespace-nowrap">
                                     {{ $role->description ?? '—' }}
                                 </td>
-                                <td class="p-3.5 font-mono">
+                                <td class="p-3.5 font-mono whitespace-nowrap">
                                     <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
                                         {{ $role->users->count() }} users
                                     </span>
                                 </td>
-                                <td class="p-3.5">
-                                    <div class="flex flex-wrap gap-1 max-w-xs">
+                                <td class="p-3.5 whitespace-nowrap">
+                                    <div class="flex items-center gap-1">
                                         @foreach($role->permissions->take(4) as $perm)
                                             <span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
                                                 {{ $perm->name }}
@@ -185,20 +185,20 @@
                                         @endforeach
                                         @if($role->permissions->count() > 4)
                                             <span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 dark:bg-slate-800 text-slate-500">
-                                                +{{ $role->permissions->count() - 4 }} more
+                                                +{{ $role->permissions->count() - 4 }}
                                             </span>
                                         @endif
                                     </div>
                                 </td>
-                                <td class="p-3.5">
+                                <td class="p-3.5 whitespace-nowrap">
                                     @if($role->is_system)
                                         <x-badge variant="rose" size="xs">System</x-badge>
                                     @else
                                         <x-badge variant="emerald" size="xs">Custom</x-badge>
                                     @endif
                                 </td>
-                                <td class="p-3.5 text-right">
-                                    <div class="flex items-center justify-end gap-1.5">
+                                <td class="p-3.5 text-right whitespace-nowrap">
+                                    <div class="inline-flex items-center justify-end gap-1.5">
                                         <x-action-button variant="purple" icon="bx-pencil" title="Edit Role" onclick="openEditRoleModal({{ json_encode($role) }}, {{ json_encode($role->permissions->pluck('id')->toArray()) }})">
                                             Edit
                                         </x-action-button>

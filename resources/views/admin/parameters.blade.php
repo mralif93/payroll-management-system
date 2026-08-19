@@ -129,35 +129,35 @@
                     </div>
 
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs">
+                        <table class="w-full text-left text-xs min-w-[700px]">
                             <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]">
                                 <tr>
-                                    <th class="p-3.5">Department Name</th>
-                                    <th class="p-3.5">Code / Acronym</th>
-                                    <th class="p-3.5">Assigned Staff</th>
-                                    <th class="p-3.5">Created Date</th>
-                                    <th class="p-3.5 text-right">Actions</th>
+                                    <th class="p-3.5 whitespace-nowrap">Department Name</th>
+                                    <th class="p-3.5 whitespace-nowrap">Code / Acronym</th>
+                                    <th class="p-3.5 whitespace-nowrap">Assigned Staff</th>
+                                    <th class="p-3.5 whitespace-nowrap">Created Date</th>
+                                    <th class="p-3.5 text-right whitespace-nowrap">Actions</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-sans">
                                 @forelse($departments as $dept)
                                     <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
-                                        <td class="p-3.5 font-bold text-slate-900 dark:text-white">
+                                        <td class="p-3.5 font-bold text-slate-900 dark:text-white whitespace-nowrap">
                                             {{ $dept->name }}
                                         </td>
-                                        <td class="p-3.5 font-mono text-indigo-600 dark:text-indigo-400 font-bold">
+                                        <td class="p-3.5 font-mono text-indigo-600 dark:text-indigo-400 font-bold whitespace-nowrap">
                                             {{ $dept->code ?? '—' }}
                                         </td>
-                                        <td class="p-3.5 font-mono">
+                                        <td class="p-3.5 font-mono whitespace-nowrap">
                                             <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
                                                 {{ $dept->employees_count }} staff
                                             </span>
                                         </td>
-                                        <td class="p-3.5 text-slate-400">
+                                        <td class="p-3.5 text-slate-400 whitespace-nowrap">
                                             {{ $dept->created_at ? $dept->created_at->format('d M Y') : '—' }}
                                         </td>
-                                        <td class="p-3.5 text-right">
-                                            <div class="flex items-center justify-end gap-1.5 flex-wrap">
+                                        <td class="p-3.5 text-right whitespace-nowrap">
+                                            <div class="inline-flex items-center justify-end gap-1.5">
                                                 <x-action-button variant="purple" icon="bx-pencil" title="Edit Department" onclick="openEditDepartmentModal({{ json_encode($dept) }})">
                                                     Edit
                                                 </x-action-button>
@@ -214,26 +214,26 @@
                     </div>
 
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs">
+                        <table class="w-full text-left text-xs min-w-[760px]">
                             <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]">
                                 <tr>
-                                    <th class="p-3.5">Allowance Name</th>
-                                    <th class="p-3.5">Component Code</th>
-                                    <th class="p-3.5">Statutory Rules (EPF / SOCSO / EIS / PCB)</th>
-                                    <th class="p-3.5">Assigned Staff</th>
-                                    <th class="p-3.5 text-right">Actions</th>
+                                    <th class="p-3.5 whitespace-nowrap">Allowance Name</th>
+                                    <th class="p-3.5 whitespace-nowrap">Component Code</th>
+                                    <th class="p-3.5 whitespace-nowrap">Statutory Rules (EPF / SOCSO / EIS / PCB)</th>
+                                    <th class="p-3.5 whitespace-nowrap">Assigned Staff</th>
+                                    <th class="p-3.5 text-right whitespace-nowrap">Actions</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-sans">
                                 @forelse($salaryComponents as $comp)
                                     <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
-                                        <td class="p-3.5 font-bold text-slate-900 dark:text-white">
+                                        <td class="p-3.5 font-bold text-slate-900 dark:text-white whitespace-nowrap">
                                             {{ $comp->name }}
                                         </td>
-                                        <td class="p-3.5 font-mono text-teal-600 dark:text-teal-400 font-bold">
+                                        <td class="p-3.5 font-mono text-teal-600 dark:text-teal-400 font-bold whitespace-nowrap">
                                             {{ $comp->code }}
                                         </td>
-                                        <td class="p-3.5">
+                                        <td class="p-3.5 whitespace-nowrap">
                                             <div class="flex items-center gap-1.5 flex-wrap text-[10px]">
                                                 @if($comp->is_epf_subject)
                                                     <span class="px-1.5 py-0.5 rounded font-bold bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">EPF</span>
@@ -252,13 +252,13 @@
                                                 @endif
                                             </div>
                                         </td>
-                                        <td class="p-3.5 font-mono">
+                                        <td class="p-3.5 font-mono whitespace-nowrap">
                                             <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
                                                 {{ $comp->employee_salary_components_count }} staff
                                             </span>
                                         </td>
-                                        <td class="p-3.5 text-right">
-                                            <div class="flex items-center justify-end gap-1.5 flex-wrap">
+                                        <td class="p-3.5 text-right whitespace-nowrap">
+                                            <div class="inline-flex items-center justify-end gap-1.5">
                                                 <x-action-button variant="purple" icon="bx-pencil" title="Edit Allowance Rules" onclick="openEditAllowanceModal({{ json_encode($comp) }})">
                                                     Edit
                                                 </x-action-button>

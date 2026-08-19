@@ -199,36 +199,36 @@
             </div>
 
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs">
+                <table class="w-full text-left text-xs min-w-[760px]">
                     <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]">
                         <tr>
-                            <th class="p-3.5">Statutory Agency</th>
-                            <th class="p-3.5">Submission Type</th>
-                            <th class="p-3.5">Payroll Batch</th>
-                            <th class="p-3.5">Total Payable</th>
-                            <th class="p-3.5">Exported At</th>
-                            <th class="p-3.5">Status</th>
+                            <th class="p-3.5 whitespace-nowrap">Statutory Agency</th>
+                            <th class="p-3.5 whitespace-nowrap">Submission Type</th>
+                            <th class="p-3.5 whitespace-nowrap">Payroll Batch</th>
+                            <th class="p-3.5 whitespace-nowrap">Total Payable</th>
+                            <th class="p-3.5 whitespace-nowrap">Exported At</th>
+                            <th class="p-3.5 whitespace-nowrap">Status</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-sans">
                         @forelse($statutorySubmissions as $s)
                             <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
-                                <td class="p-3.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">
+                                <td class="p-3.5 font-mono font-bold text-indigo-600 dark:text-indigo-400 whitespace-nowrap uppercase">
                                     {{ $s->statutory_body }}
                                 </td>
-                                <td class="p-3.5 font-semibold text-slate-900 dark:text-white uppercase text-[11px]">
+                                <td class="p-3.5 font-semibold text-slate-900 dark:text-white uppercase text-[11px] whitespace-nowrap">
                                     {{ str_replace('_', ' ', $s->submission_type) }}
                                 </td>
-                                <td class="p-3.5 font-mono text-slate-600 dark:text-slate-400">
+                                <td class="p-3.5 font-mono text-slate-600 dark:text-slate-400 whitespace-nowrap">
                                     {{ $s->payrollRun?->batch_no ?? '—' }}
                                 </td>
-                                <td class="p-3.5 font-mono font-bold text-purple-600 dark:text-purple-400">
+                                <td class="p-3.5 font-mono font-bold text-purple-600 dark:text-purple-400 whitespace-nowrap">
                                     RM {{ number_format($s->total_payable_amount, 2) }}
                                 </td>
-                                <td class="p-3.5 text-slate-500 dark:text-slate-400">
+                                <td class="p-3.5 text-slate-500 dark:text-slate-400 whitespace-nowrap">
                                     {{ $s->created_at->format('d M Y, h:i A') }}
                                 </td>
-                                <td class="p-3.5">
+                                <td class="p-3.5 whitespace-nowrap">
                                     <x-badge variant="purple" dot="true">Exported</x-badge>
                                 </td>
                             </tr>

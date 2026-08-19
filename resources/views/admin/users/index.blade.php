@@ -178,21 +178,21 @@
             </div>
 
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs">
+                <table class="w-full text-left text-xs min-w-[760px]">
                     <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]">
                         <tr>
-                            <th class="p-3.5">User Identity</th>
-                            <th class="p-3.5">Staff ID</th>
-                            <th class="p-3.5">Assigned Roles</th>
-                            <th class="p-3.5">Account Status</th>
-                            <th class="p-3.5">Last Login</th>
-                            <th class="p-3.5 text-right">Actions</th>
+                            <th class="p-3.5 whitespace-nowrap">User Identity</th>
+                            <th class="p-3.5 whitespace-nowrap">Staff ID</th>
+                            <th class="p-3.5 whitespace-nowrap">Assigned Roles</th>
+                            <th class="p-3.5 whitespace-nowrap">Account Status</th>
+                            <th class="p-3.5 whitespace-nowrap">Last Login</th>
+                            <th class="p-3.5 text-right whitespace-nowrap">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-sans">
                         @forelse($users as $user)
                             <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
-                                <td class="p-3.5">
+                                <td class="p-3.5 whitespace-nowrap">
                                     <div class="flex items-center gap-3">
                                         <div class="w-8 h-8 rounded-full bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 font-bold flex items-center justify-center text-xs shadow-xs">
                                             {{ substr($user->name, 0, 2) }}
@@ -203,10 +203,10 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="p-3.5 font-mono text-slate-600 dark:text-slate-300">
+                                <td class="p-3.5 font-mono text-slate-600 dark:text-slate-300 whitespace-nowrap">
                                     {{ $user->staff_id ?? '—' }}
                                 </td>
-                                <td class="p-3.5">
+                                <td class="p-3.5 whitespace-nowrap">
                                     <div class="flex items-center gap-1.5 flex-wrap">
                                         @forelse($user->roles as $role)
                                             <x-badge variant="indigo" size="sm">{{ $role->display_name }}</x-badge>
@@ -215,7 +215,7 @@
                                         @endforelse
                                     </div>
                                 </td>
-                                <td class="p-3.5">
+                                <td class="p-3.5 whitespace-nowrap">
                                     @if($user->status === 'active')
                                         <x-badge variant="emerald" dot="true">Active</x-badge>
                                     @elseif($user->status === 'inactive')
@@ -224,7 +224,7 @@
                                         <x-badge variant="rose" dot="true">Suspended</x-badge>
                                     @endif
                                 </td>
-                                <td class="p-3.5 text-slate-500 dark:text-slate-400">
+                                <td class="p-3.5 text-slate-500 dark:text-slate-400 whitespace-nowrap">
                                     @if($user->last_login_at)
                                         <span class="block">{{ $user->last_login_at->format('d M Y, H:i') }}</span>
                                         <span class="text-[10px] font-mono text-slate-400">{{ $user->last_login_ip }}</span>
@@ -232,7 +232,7 @@
                                         <span class="text-slate-400 italic">Never</span>
                                     @endif
                                 </td>
-                                <td class="p-3.5 text-right">
+                                <td class="p-3.5 text-right whitespace-nowrap">
                                     <div class="flex items-center justify-end gap-1.5 flex-wrap">
                                         <!-- View / Show Profile Action -->
                                         <x-action-button variant="indigo" icon="bx-show" title="View Profile" onclick="openShowModal({{ json_encode($user) }}, {{ json_encode($user->roles) }})">

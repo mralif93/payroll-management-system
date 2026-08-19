@@ -199,36 +199,36 @@
             </div>
 
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs">
+                <table class="w-full text-left text-xs min-w-[760px]">
                     <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]">
                         <tr>
-                            <th class="p-3.5">Reference / Batch</th>
-                            <th class="p-3.5">Format Standard</th>
-                            <th class="p-3.5">Payroll Batch</th>
-                            <th class="p-3.5">Disbursement Total</th>
-                            <th class="p-3.5">Generated At</th>
-                            <th class="p-3.5">Status</th>
+                            <th class="p-3.5 whitespace-nowrap">Reference / Batch</th>
+                            <th class="p-3.5 whitespace-nowrap">Format Standard</th>
+                            <th class="p-3.5 whitespace-nowrap">Payroll Batch</th>
+                            <th class="p-3.5 whitespace-nowrap">Disbursement Total</th>
+                            <th class="p-3.5 whitespace-nowrap">Generated At</th>
+                            <th class="p-3.5 whitespace-nowrap">Status</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-sans">
                         @forelse($bankBatches as $b)
                             <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
-                                <td class="p-3.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">
+                                <td class="p-3.5 font-mono font-bold text-indigo-600 dark:text-indigo-400 whitespace-nowrap">
                                     {{ $b->batch_reference_no }}
                                 </td>
-                                <td class="p-3.5 font-semibold text-slate-900 dark:text-white uppercase text-[11px]">
+                                <td class="p-3.5 font-semibold text-slate-900 dark:text-white uppercase text-[11px] whitespace-nowrap">
                                     {{ str_replace('_', ' ', $b->format_type) }}
                                 </td>
-                                <td class="p-3.5 font-mono text-slate-600 dark:text-slate-400">
+                                <td class="p-3.5 font-mono text-slate-600 dark:text-slate-400 whitespace-nowrap">
                                     {{ $b->payrollRun?->batch_no ?? '—' }}
                                 </td>
-                                <td class="p-3.5 font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                                <td class="p-3.5 font-mono font-bold text-emerald-600 dark:text-emerald-400 whitespace-nowrap">
                                     RM {{ number_format($b->total_disbursement_amount, 2) }}
                                 </td>
-                                <td class="p-3.5 text-slate-500 dark:text-slate-400">
+                                <td class="p-3.5 text-slate-500 dark:text-slate-400 whitespace-nowrap">
                                     {{ $b->created_at->format('d M Y, h:i A') }}
                                 </td>
-                                <td class="p-3.5">
+                                <td class="p-3.5 whitespace-nowrap">
                                     <x-badge variant="emerald" dot="true">Generated</x-badge>
                                 </td>
                             </tr>

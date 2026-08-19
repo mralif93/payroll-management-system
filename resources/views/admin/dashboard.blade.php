@@ -111,16 +111,16 @@
 
         <!-- Employee Table -->
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-left text-xs">
+            <table class="w-full min-w-[780px] divide-y divide-slate-200 dark:divide-slate-800 text-left text-xs">
                 <thead class="bg-slate-50 dark:bg-slate-950/60 text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">
                     <tr>
-                        <th class="py-3.5 px-6">Employee</th>
-                        <th class="py-3.5 px-6">Basic Pay</th>
-                        <th class="py-3.5 px-6">KWSP EPF (EE / ER)</th>
-                        <th class="py-3.5 px-6">SOCSO & EIS</th>
-                        <th class="py-3.5 px-6">PCB (MTD)</th>
-                        <th class="py-3.5 px-6">Net Take-Home</th>
-                        <th class="py-3.5 px-6 text-right">Actions</th>
+                        <th class="py-3.5 px-6 whitespace-nowrap">Employee</th>
+                        <th class="py-3.5 px-6 whitespace-nowrap">Basic Pay</th>
+                        <th class="py-3.5 px-6 whitespace-nowrap">KWSP EPF (EE / ER)</th>
+                        <th class="py-3.5 px-6 whitespace-nowrap">SOCSO &amp; EIS</th>
+                        <th class="py-3.5 px-6 whitespace-nowrap">PCB (MTD)</th>
+                        <th class="py-3.5 px-6 whitespace-nowrap">Net Take-Home</th>
+                        <th class="py-3.5 px-6 text-right whitespace-nowrap">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
