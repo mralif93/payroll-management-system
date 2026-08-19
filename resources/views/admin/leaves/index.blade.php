@@ -177,7 +177,7 @@
                             <th class="py-3.5 px-4 whitespace-nowrap">Days</th>
                             <th class="py-3.5 px-4 whitespace-nowrap">Reason / Notes</th>
                             <th class="py-3.5 px-4 whitespace-nowrap">Status</th>
-                            <th class="py-3.5 px-4 text-right whitespace-nowrap">Actions</th>
+                            <th class="py-3.5 px-4 pr-6 text-right whitespace-nowrap w-36">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
@@ -235,8 +235,8 @@
                                         </span>
                                     @endif
                                 </td>
-                                <td class="py-3.5 px-4 text-right whitespace-nowrap">
-                                    <div class="inline-flex items-center justify-end gap-1.5">
+                                <td class="py-3.5 px-4 pr-6 text-right whitespace-nowrap w-36">
+                                    <div class="inline-flex items-center justify-end w-full gap-1.5">
                                         @if($leave->status === 'pending')
                                             <form method="POST" action="{{ route('admin.leaves.update-status', $leave) }}" class="inline">
                                                 @csrf
