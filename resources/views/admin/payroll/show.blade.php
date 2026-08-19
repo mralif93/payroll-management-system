@@ -38,12 +38,9 @@
                     <span>Batches Roster</span>
                 </a>
 
-                <form method="POST" action="{{ route('admin.payroll.recalculate', $payrollRun) }}" onsubmit="return confirm('Recalculate this payroll batch with the latest statutory rates and employee records?')">
-                    @csrf
-                    <x-button variant="secondary" size="md" type="submit" icon="bx-refresh">
-                        Recalculate &amp; Re-sync
-                    </x-button>
-                </form>
+                <x-button variant="secondary" size="md" type="button" icon="bx-refresh" onclick="openModal('recalculate-modal')">
+                    Recalculate &amp; Re-sync
+                </x-button>
 
                 @if($payrollRun->status === 'draft')
                     <form method="POST" action="{{ route('admin.payroll.approve', $payrollRun) }}">
@@ -465,6 +462,42 @@
                 openModal('payslip-modal');
             }
         </script>
+
+        <!-- 3. RECALCULATE & RE-SYNC CONFIRMATION MODAL -->
+        <x-modal id="recalculate-modal" title="Confirm Batch Recalculation" subtitle="Re-run calculation engine for {{ $payrollRun->batch_no }}" icon="bx-refresh" iconBg="bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400" size="md">
+            <div class="space-y-4 text-left">
+                <div class="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 text-amber-800 dark:text-amber-300 flex items-start gap-3">
+                    <i class="bx bx-error-circle text-xl text-amber-600 dark:text-amber-400 shrink-0 mt-0.5"></i>
+                    <div class="text-xs space-y-1">
+                        <span class="font-bold block">Re-sync Statutory &amp; Leave Deductions</span>
+                        <p class="leading-relaxed">This action will re-fetch active employees, re-calculate unpaid leaves (ORP), re-compute KWSP/SOCSO/EIS/PCB, and revert the batch status to <strong class="text-amber-900 dark:text-amber-200">Draft Review</strong>.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-2 text-xs text-slate-600 dark:text-slate-300">
+                    <span class="font-semibold text-slate-800 dark:text-slate-200 block">The following steps will be executed:</span>
+                    <ul class="list-disc pl-5 space-y-1 text-slate-500 dark:text-slate-400">
+                        <li>Purge and regenerate all {{ $payrollRun->total_headcount }} employee line items.</li>
+                        <li>Apply updated statutory profile rates (EPF 11%/9%/2%, SOCSO Cat 1/2, EIS, PCB).</li>
+                        <li>Update batch financial totals and unlock for further adjustments.</li>
+                        <li>Log recalculation event to immutable audit trail.</li>
+                    </ul>
+                </div>
+
+                <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2.5">
+                    <x-button variant="secondary" size="md" type="button" onclick="closeModal('recalculate-modal')">
+                        Cancel
+                    </x-button>
+
+                    <form method="POST" action="{{ route('admin.payroll.recalculate', $payrollRun) }}">
+                        @csrf
+                        <x-button variant="primary" size="md" type="submit" icon="bx-refresh">
+                            Confirm &amp; Recalculate
+                        </x-button>
+                    </form>
+                </div>
+            </div>
+        </x-modal>
     </x-slot>
 
 </x-layouts.admin>
