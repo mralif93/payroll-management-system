@@ -6,7 +6,7 @@
         <!-- Header / Branding -->
         <div class="text-center space-y-1.5">
             <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 mb-2">
-                <i class="bx bxs-shield-quarter text-2xl"></i>
+                <i class="bx bxs-shield text-2xl"></i>
             </div>
             <h1 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Admin Console Login</h1>
             <p class="text-xs text-slate-500 dark:text-slate-400">Sign in with your registered administrator email</p>
