@@ -694,6 +694,35 @@ class PayrollRunController extends Controller
     }
 
     /**
+     * Delete a payroll batch.
+     * Only draft batches can be deleted directly. Approved batches must be recalculated/reopened to draft first to ensure 7-year audit compliance.
+     */
+    public function destroy(PayrollRun $payrollRun)
+    {
+        if ($payrollRun->status === 'approved' || $payrollRun->status === 'paid') {
+            return redirect()->back()->with('error', "Cannot delete an approved/paid batch ({$payrollRun->batch_no}). Click 'Recalculate & Re-sync' first to revert to Draft status before deleting.");
+        }
+
+        $batchNo = $payrollRun->batch_no;
+
+        AuditTrail::log(
+            module: 'payroll',
+            event: 'payroll.batch_deleted',
+            description: "Payroll batch {$batchNo} deleted by " . auth()->user()->name,
+            auditable: $payrollRun,
+            oldValues: [
+                'batch_no' => $batchNo,
+                'period' => "{$payrollRun->period_year}-{$payrollRun->period_month}",
+                'total_net' => $payrollRun->total_net_disbursement,
+            ]
+        );
+
+        $payrollRun->delete();
+
+        return redirect()->route('admin.payroll.index')->with('status', "Payroll batch {$batchNo} has been deleted successfully.");
+    }
+
+    /**
      * Preview and print official individual employee payslip statement.
      */
     public function payslip(PayrollRun $payrollRun, \App\Models\PayrollItem $item)

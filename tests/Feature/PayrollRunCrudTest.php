@@ -235,4 +235,47 @@ class PayrollRunCrudTest extends TestCase
         $this->assertEquals(1200.00, $foreignItem->pcb_amount); // Flat 30% of 4000 = 1200.00
         $this->assertEquals(2720.00, $foreignItem->net_salary); // 4000 - 80 - 1200 = 2720.00
     }
+
+    public function test_can_delete_draft_payroll_batch()
+    {
+        $this->actingAs($this->admin)->post(route('admin.payroll.store'), [
+            'company_id' => $this->company->id,
+            'period_year' => '2026',
+            'period_month' => '08',
+            'cutoff_date' => '2026-08-25',
+            'payment_date' => '2026-08-28',
+        ]);
+
+        $payrollRun = PayrollRun::first();
+        $this->assertEquals('draft', $payrollRun->status);
+        $this->assertGreaterThan(0, $payrollRun->items()->count());
+
+        $response = $this->actingAs($this->admin)->delete(route('admin.payroll.destroy', $payrollRun));
+        $response->assertRedirect(route('admin.payroll.index'));
+        $response->assertSessionHas('status');
+
+        $this->assertDatabaseMissing('payroll_runs', ['id' => $payrollRun->id]);
+        $this->assertDatabaseCount('payroll_items', 0);
+    }
+
+    public function test_cannot_directly_delete_approved_payroll_batch_without_recalculating()
+    {
+        $this->actingAs($this->admin)->post(route('admin.payroll.store'), [
+            'company_id' => $this->company->id,
+            'period_year' => '2026',
+            'period_month' => '08',
+            'cutoff_date' => '2026-08-25',
+            'payment_date' => '2026-08-28',
+        ]);
+
+        $payrollRun = PayrollRun::first();
+        $this->actingAs($this->admin)->post(route('admin.payroll.approve', $payrollRun));
+        $payrollRun->refresh();
+        $this->assertEquals('approved', $payrollRun->status);
+
+        $response = $this->actingAs($this->admin)->delete(route('admin.payroll.destroy', $payrollRun));
+        $response->assertSessionHas('error');
+
+        $this->assertDatabaseHas('payroll_runs', ['id' => $payrollRun->id]);
+    }
 }

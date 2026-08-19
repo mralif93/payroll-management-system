@@ -52,6 +52,14 @@
                             Approve &amp; Lock Batch
                         </x-button>
                     </form>
+
+                    <form method="POST" action="{{ route('admin.payroll.destroy', $payrollRun) }}" onsubmit="return confirm('Are you sure you want to permanently delete draft batch {{ $payrollRun->batch_no }}?')">
+                        @csrf
+                        @method('DELETE')
+                        <x-button variant="danger" size="md" type="submit" icon="bx-trash">
+                            Delete Draft
+                        </x-button>
+                    </form>
                 @else
                     <a href="{{ route('admin.banking.index') }}" class="px-4 py-2 text-xs font-bold rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:from-emerald-700 hover:to-teal-700 shadow-sm flex items-center gap-1.5 transition">
                         <i class="bx bxs-bank text-sm"></i>
