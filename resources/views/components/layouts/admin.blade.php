@@ -152,9 +152,17 @@
                     <i class="bx bx-shield-quarter text-lg"></i>
                     <span>Audit Trails</span>
                 </a>
+            </div>
+
+            <!-- Group 8: Developer & Design -->
+            <div class="space-y-1">
+                <div class="px-3 pb-1 text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-bold">
+                    Developer Tools
+                </div>
                 <a href="{{ route('admin.demo') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.demo') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
                     <i class="bx bx-cube-alt text-lg"></i>
                     <span>UI Design System</span>
+                    <span class="ml-auto px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-800">Kit</span>
                 </a>
             </div>
         </nav>
