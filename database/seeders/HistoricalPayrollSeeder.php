@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 class HistoricalPayrollSeeder extends Seeder
 {
     /**
-     * Seed 12 months for 2025 and 7 months for 2026 (Jan - July 2026, until last month).
+     * Seed historical payroll runs from 2024 through today (August 2026) and compile annual Form EA registers.
      */
     public function run(): void
     {
@@ -27,10 +27,11 @@ class HistoricalPayrollSeeder extends Seeder
             return;
         }
 
-        // Years and their completed months (2025: 12 months; 2026: Jan to July = 7 months)
+        // Years and their completed months (2024: 12 months, 2025: 12 months, 2026: 8 months [Jan - Aug / today])
         $schedules = [
+            2024 => 12,
             2025 => 12,
-            2026 => 7,
+            2026 => 8,
         ];
 
         foreach ($schedules as $year => $maxMonth) {
@@ -47,7 +48,7 @@ class HistoricalPayrollSeeder extends Seeder
                         'period_month' => sprintf('%02d', $month),
                         'cutoff_date' => $cutoff,
                         'payment_date' => $payment,
-                        'status' => 'approved',
+                        'status' => ($year === 2026 && $month === 8) ? 'approved' : 'approved',
                         'created_by' => 1,
                         'approved_by' => 1,
                         'approved_at' => $payment . ' 17:00:00',
