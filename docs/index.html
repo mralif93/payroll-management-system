@@ -381,23 +381,20 @@
                         <i class="bx bx-layer text-indigo-600 dark:text-indigo-400"></i>
                         Complete UI Component Kit &amp; Pattern Library
                     </h2>
-                    <p class="text-xs text-slate-500">Interactive 13-part pure Tailwind CSS component reference in accordion containers.</p>
+                    <p class="text-xs text-slate-500">Interactive 13-part pure Tailwind CSS component reference (exclusive single-open accordion).</p>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button type="button" onclick="document.querySelectorAll('.kit-accordion').forEach(d => d.open = true)" class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer">
-                        Expand All
-                    </button>
                     <button type="button" onclick="document.querySelectorAll('.kit-accordion').forEach(d => d.open = false)" class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer">
                         Collapse All
                     </button>
                 </div>
             </div>
 
-            <!-- ACCORDIONS CONTAINER -->
+            <!-- ACCORDIONS CONTAINER (Exclusive Single-Open with name="ui_kit_accordion") -->
             <div class="space-y-4">
 
                 <!-- 1. TYPOGRAPHY & HEADINGS -->
-                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden" open>
+                <details name="ui_kit_accordion" class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                     <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
                         <div class="flex items-center gap-3">
                             <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">1</span>
@@ -421,7 +418,7 @@
                 </details>
 
                 <!-- 2. BUTTONS & ACTIONS -->
-                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden" open>
+                <details name="ui_kit_accordion" class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                     <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
                         <div class="flex items-center gap-3">
                             <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">2</span>
@@ -464,7 +461,7 @@
                 </details>
 
                 <!-- 3. BADGES & STATUS INDICATORS -->
-                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden" open>
+                <details name="ui_kit_accordion" class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                     <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
                         <div class="flex items-center gap-3">
                             <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">3</span>
@@ -498,7 +495,7 @@
                 </details>
 
                 <!-- 4. FORM INPUTS & SELECTS -->
-                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
+                <details name="ui_kit_accordion" class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                     <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
                         <div class="flex items-center gap-3">
                             <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">4</span>
@@ -532,7 +529,7 @@
                 </details>
 
                 <!-- 5. METRIC STAT CARDS -->
-                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
+                <details name="ui_kit_accordion" class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                     <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
                         <div class="flex items-center gap-3">
                             <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">5</span>
@@ -582,7 +579,7 @@
                 </details>
 
                 <!-- 6. DATA TABLES -->
-                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
+                <details name="ui_kit_accordion" class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                     <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
                         <div class="flex items-center gap-3">
                             <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">6</span>
@@ -625,7 +622,7 @@
                 </details>
 
                 <!-- 7. ALERTS & NOTICES -->
-                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
+                <details name="ui_kit_accordion" class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                     <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
                         <div class="flex items-center gap-3">
                             <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">7</span>
@@ -657,7 +654,7 @@
                 </details>
 
                 <!-- 8. NAVIGATION, TABS & BREADCRUMBS -->
-                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
+                <details name="ui_kit_accordion" class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                     <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
                         <div class="flex items-center gap-3">
                             <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">8</span>
@@ -685,7 +682,7 @@
                 </details>
 
                 <!-- 9. MODALS & SLIDEOVERS -->
-                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden" open>
+                <details name="ui_kit_accordion" class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                     <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
                         <div class="flex items-center gap-3">
                             <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">9</span>
@@ -709,7 +706,7 @@
                 </details>
 
                 <!-- 10. AVATARS & USER STACKS -->
-                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
+                <details name="ui_kit_accordion" class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                     <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
                         <div class="flex items-center gap-3">
                             <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">10</span>
@@ -734,7 +731,7 @@
                 </details>
 
                 <!-- 11. ANIMATE.CSS PLAYGROUND -->
-                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden" open>
+                <details name="ui_kit_accordion" class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                     <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
                         <div class="flex items-center gap-3">
                             <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">11</span>
@@ -767,7 +764,7 @@
                 </details>
 
                 <!-- 12. BOXICONS ICON SET REFERENCE -->
-                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
+                <details name="ui_kit_accordion" class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                     <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
                         <div class="flex items-center gap-3">
                             <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">12</span>
@@ -791,7 +788,7 @@
                 </details>
 
                 <!-- 13. TOGGLE SWITCHES & SLIDERS -->
-                <details class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden" open>
+                <details name="ui_kit_accordion" class="kit-accordion group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                     <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-transparent group-open:border-slate-200 dark:group-open:border-slate-800">
                         <div class="flex items-center gap-3">
                             <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">13</span>
@@ -1120,7 +1117,23 @@
             el.className += ' animate__animated ' + animName;
         }
 
-        document.addEventListener('DOMContentLoaded', calculateStatutory);
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateStatutory();
+
+            // Native and fallback exclusive single-open accordion handler
+            const accordions = document.querySelectorAll('details.kit-accordion');
+            accordions.forEach(acc => {
+                acc.addEventListener('toggle', function() {
+                    if (this.open) {
+                        accordions.forEach(other => {
+                            if (other !== this && other.open) {
+                                other.open = false;
+                            }
+                        });
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>
