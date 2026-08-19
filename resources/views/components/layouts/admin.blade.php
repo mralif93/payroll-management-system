@@ -65,29 +65,29 @@
                 </a>
             </div>
 
-            <!-- Group 2: User Access & Identity -->
+            <!-- Group 2: Access & Identity -->
             <div class="space-y-1">
                 <div class="px-3 pb-1 text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-bold">
-                    User &amp; Access Control
+                    Access &amp; Security
                 </div>
                 <a href="{{ route('admin.users.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.users.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
                     <i class="bx bx-user text-lg"></i>
-                    <span>Users</span>
+                    <span>User Accounts</span>
                 </a>
                 <a href="{{ route('admin.roles.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.roles.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
                     <i class="bx bx-shield-quarter text-lg"></i>
-                    <span>Access Roles</span>
+                    <span>Roles &amp; Permissions</span>
                 </a>
             </div>
 
-            <!-- Group 3: Human Resource Management -->
+            <!-- Group 3: Human Resources -->
             <div class="space-y-1">
                 <div class="px-3 pb-1 text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-bold">
-                    HR Management
+                    Human Resources
                 </div>
                 <a href="{{ route('admin.employees.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.employees.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
                     <i class="bx bx-group text-lg"></i>
-                    <span>Employees</span>
+                    <span>Employee Directory</span>
                 </a>
                 <a href="{{ route('admin.leaves.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.leaves.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
                     <i class="bx bx-calendar-event text-lg"></i>
@@ -99,10 +99,10 @@
                 </a>
             </div>
 
-            <!-- Group 4: Payroll Processing -->
+            <!-- Group 4: Payroll Operations -->
             <div class="space-y-1">
                 <div class="px-3 pb-1 text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-bold">
-                    Payroll Management
+                    Payroll Operations
                 </div>
                 <a href="{{ route('admin.payroll.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.payroll.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
                     <i class="bx bx-calculator text-lg"></i>
@@ -117,7 +117,8 @@
                 </div>
                 <a href="{{ route('admin.banking.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.banking.*') && !request()->routeIs('admin.exports.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
                     <i class="bx bxs-bank text-lg"></i>
-                    <span>Bank Autopay (M2E/CIMB)</span>
+                    <span>Bank Autopay</span>
+                    <span class="ml-auto px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-500">M2E/CIMB</span>
                 </a>
             </div>
 
@@ -129,15 +130,16 @@
                 <a href="{{ route('admin.exports.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.exports.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
                     <i class="bx bx-export text-lg"></i>
                     <span>Statutory Exporters</span>
-                    <span class="ml-auto px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">CP39/EIS</span>
+                    <span class="ml-auto px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">Monthly</span>
                 </a>
                 <a href="{{ route('admin.tax-ea.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.tax-ea.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
                     <i class="bx bxs-file-pdf text-lg"></i>
-                    <span>Tax Form EA (C.P.8A)</span>
+                    <span>Form EA (C.P.8A)</span>
+                    <span class="ml-auto px-1.5 py-0.5 rounded text-[9px] font-bold bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-800">Annual</span>
                 </a>
             </div>
 
-            <!-- Group 5: Configuration & Audit -->
+            <!-- Group 7: System Governance -->
             <div class="space-y-1">
                 <div class="px-3 pb-1 text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-bold">
                     System Governance
@@ -152,7 +154,7 @@
                 </a>
                 <a href="{{ route('admin.demo') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.demo') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
                     <i class="bx bx-cube-alt text-lg"></i>
-                    <span>UI Components Kit</span>
+                    <span>UI Design System</span>
                 </a>
             </div>
         </nav>
