@@ -33,10 +33,10 @@
 <body class="h-full bg-slate-100/70 dark:bg-slate-950 text-slate-800 dark:text-slate-100 antialiased selection:bg-indigo-500 selection:text-white transition-colors duration-300 flex overflow-hidden" style="font-family: 'Plus Jakarta Sans', sans-serif;">
 
     <!-- MOBILE SIDEBAR OVERLAY & DRAWER -->
-    <div id="mobile-sidebar-backdrop" onclick="toggleMobileSidebar()" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-40 lg:hidden transition-opacity"></div>
+    <div id="mobile-sidebar-backdrop" onclick="toggleMobileSidebar()" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-40 xl:hidden transition-opacity"></div>
 
     <!-- SIDEBAR NAVIGATION (Desktop & Mobile Drawer) -->
-    <aside id="admin-sidebar" class="fixed inset-y-0 left-0 -translate-x-full lg:translate-x-0 lg:static w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col shrink-0 z-50 transition-transform duration-300 ease-in-out">
+    <aside id="admin-sidebar" class="fixed inset-y-0 left-0 -translate-x-full xl:translate-x-0 xl:static w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col shrink-0 z-50 transition-transform duration-300 ease-in-out">
         
         <!-- Sidebar Brand Logo -->
         <div class="h-16 flex items-center justify-between px-6 border-b border-slate-100 dark:border-slate-800">
@@ -50,7 +50,7 @@
                 </div>
             </a>
             <!-- Mobile Close Button -->
-            <button type="button" onclick="toggleMobileSidebar()" class="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer">
+            <button type="button" onclick="toggleMobileSidebar()" class="xl:hidden p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer">
                 <i class="bx bx-x text-xl"></i>
             </button>
         </div>
@@ -189,7 +189,7 @@
                 <button 
                     type="button" 
                     onclick="toggleMobileSidebar()" 
-                    class="lg:hidden w-9 h-9 flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer shrink-0"
+                    class="xl:hidden w-9 h-9 flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer shrink-0"
                     title="Toggle Sidebar"
                 >
                     <i class="bx bx-menu-alt-left text-xl"></i>
