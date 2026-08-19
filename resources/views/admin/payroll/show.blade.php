@@ -141,18 +141,18 @@
 
             <!-- Responsive Table View -->
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs" id="payroll-items-table">
+                <table class="w-full text-left text-xs min-w-[860px]" id="payroll-items-table">
                     <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]">
                         <tr>
-                            <th class="p-3.5">Employee Name &amp; ID</th>
-                            <th class="p-3.5">Basic Salary</th>
-                            <th class="p-3.5">Gross Pay</th>
-                            <th class="p-3.5">EPF (EE / ER)</th>
-                            <th class="p-3.5">SOCSO &amp; SKBBK</th>
-                            <th class="p-3.5">EIS</th>
-                            <th class="p-3.5">PCB Tax</th>
-                            <th class="p-3.5 font-bold text-slate-900 dark:text-white">Net Take-Home</th>
-                            <th class="p-3.5 text-right">Payslip</th>
+                            <th class="p-3.5 whitespace-nowrap">Employee Name &amp; ID</th>
+                            <th class="p-3.5 whitespace-nowrap">Basic Salary</th>
+                            <th class="p-3.5 whitespace-nowrap">Gross Pay</th>
+                            <th class="p-3.5 whitespace-nowrap">EPF (EE / ER)</th>
+                            <th class="p-3.5 whitespace-nowrap">SOCSO &amp; SKBBK</th>
+                            <th class="p-3.5 whitespace-nowrap">EIS</th>
+                            <th class="p-3.5 whitespace-nowrap">PCB Tax</th>
+                            <th class="p-3.5 font-bold text-slate-900 dark:text-white whitespace-nowrap">Net Take-Home</th>
+                            <th class="p-3.5 text-right whitespace-nowrap">Payslip</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-sans">

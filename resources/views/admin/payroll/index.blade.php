@@ -189,29 +189,29 @@
             </div>
 
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs">
+                <table class="w-full text-left text-xs min-w-[780px]">
                     <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]">
                         <tr>
-                            <th class="p-3.5">Batch Reference</th>
-                            <th class="p-3.5">Period</th>
-                            <th class="p-3.5">Headcount</th>
-                            <th class="p-3.5">Gross Wages</th>
-                            <th class="p-3.5">Statutory (EE / ER)</th>
-                            <th class="p-3.5">Net Disbursement</th>
-                            <th class="p-3.5">Status</th>
-                            <th class="p-3.5 text-right">Actions</th>
+                            <th class="p-3.5 whitespace-nowrap">Batch Reference</th>
+                            <th class="p-3.5 whitespace-nowrap">Period</th>
+                            <th class="p-3.5 whitespace-nowrap">Headcount</th>
+                            <th class="p-3.5 whitespace-nowrap">Gross Wages</th>
+                            <th class="p-3.5 whitespace-nowrap">Statutory (EE / ER)</th>
+                            <th class="p-3.5 whitespace-nowrap">Net Disbursement</th>
+                            <th class="p-3.5 whitespace-nowrap">Status</th>
+                            <th class="p-3.5 text-right whitespace-nowrap">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-sans">
                         @forelse($payrollRuns as $run)
                             <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
-                                <td class="p-3.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">
+                                <td class="p-3.5 font-mono font-bold text-indigo-600 dark:text-indigo-400 whitespace-nowrap">
                                     <div class="flex items-center gap-2">
                                         <i class="bx bx-receipt text-base"></i>
                                         <span>{{ $run->batch_no }}</span>
                                     </div>
                                 </td>
-                                <td class="p-3.5 font-semibold text-slate-900 dark:text-white">
+                                <td class="p-3.5 font-semibold text-slate-900 dark:text-white whitespace-nowrap">
                                     {{ date("F Y", mktime(0, 0, 0, (int)$run->period_month, 1, (int)$run->period_year)) }}
                                     <span class="block text-[11px] font-normal text-slate-400 font-mono">Disburse: {{ \Carbon\Carbon::parse($run->payment_date)->format('d M Y') }}</span>
                                 </td>

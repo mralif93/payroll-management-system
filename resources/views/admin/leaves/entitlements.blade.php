@@ -157,24 +157,24 @@
             </div>
 
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs text-slate-600 dark:text-slate-300">
+                <table class="w-full text-left text-xs text-slate-600 dark:text-slate-300 min-w-[880px]">
                     <thead class="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200/80 dark:border-slate-800 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
                         <tr>
-                            <th class="py-3.5 px-4">Employee</th>
-                            <th class="py-3.5 px-4">Type &amp; Department</th>
+                            <th class="py-3.5 px-4 whitespace-nowrap">Employee</th>
+                            <th class="py-3.5 px-4 whitespace-nowrap">Type &amp; Department</th>
                             @foreach($leaveTypes as $lt)
-                                <th class="py-3.5 px-3 text-center">
+                                <th class="py-3.5 px-3 text-center whitespace-nowrap">
                                     <span class="block">{{ $lt->name }}</span>
                                     <span class="text-[9px] text-slate-400 font-mono">Entitled &bull; Taken &bull; Rem</span>
                                 </th>
                             @endforeach
-                            <th class="py-3.5 px-4 text-right">Actions</th>
+                            <th class="py-3.5 px-4 text-right whitespace-nowrap">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
                         @forelse($employeeBalances as $emp)
                             <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
-                                <td class="py-3.5 px-4">
+                                <td class="py-3.5 px-4 whitespace-nowrap">
                                     <div class="flex items-center gap-3">
                                         <div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center text-white text-xs font-bold shadow-sm">
                                             {{ strtoupper(substr($emp->full_name, 0, 2)) }}

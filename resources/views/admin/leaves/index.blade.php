@@ -168,16 +168,16 @@
             </div>
 
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs text-slate-600 dark:text-slate-300">
+                <table class="w-full text-left text-xs text-slate-600 dark:text-slate-300 min-w-[780px]">
                     <thead class="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200/80 dark:border-slate-800 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
                         <tr>
-                            <th class="py-3.5 px-4">Employee</th>
-                            <th class="py-3.5 px-4">Leave Category</th>
-                            <th class="py-3.5 px-4">Duration &amp; Dates</th>
-                            <th class="py-3.5 px-4">Days</th>
-                            <th class="py-3.5 px-4">Reason / Notes</th>
-                            <th class="py-3.5 px-4">Status</th>
-                            <th class="py-3.5 px-4 text-right">Actions</th>
+                            <th class="py-3.5 px-4 whitespace-nowrap">Employee</th>
+                            <th class="py-3.5 px-4 whitespace-nowrap">Leave Category</th>
+                            <th class="py-3.5 px-4 whitespace-nowrap">Duration &amp; Dates</th>
+                            <th class="py-3.5 px-4 whitespace-nowrap">Days</th>
+                            <th class="py-3.5 px-4 whitespace-nowrap">Reason / Notes</th>
+                            <th class="py-3.5 px-4 whitespace-nowrap">Status</th>
+                            <th class="py-3.5 px-4 text-right whitespace-nowrap">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800">

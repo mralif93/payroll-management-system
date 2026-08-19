@@ -164,24 +164,24 @@
             </div>
 
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs">
+                <table class="w-full text-left text-xs min-w-[760px]">
                     <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]">
                         <tr>
-                            <th class="p-3.5">Employee</th>
-                            <th class="p-3.5">Designation &amp; Dept</th>
-                            <th class="p-3.5">Basic Wage</th>
-                            <th class="p-3.5">Statutory Flags</th>
-                            <th class="p-3.5">Tax Category</th>
-                            <th class="p-3.5">Status</th>
-                            <th class="p-3.5 text-right">Actions</th>
+                            <th class="p-3.5 whitespace-nowrap">Employee</th>
+                            <th class="p-3.5 whitespace-nowrap">Designation &amp; Dept</th>
+                            <th class="p-3.5 whitespace-nowrap">Basic Wage</th>
+                            <th class="p-3.5 whitespace-nowrap">Statutory Flags</th>
+                            <th class="p-3.5 whitespace-nowrap">Tax Category</th>
+                            <th class="p-3.5 whitespace-nowrap">Status</th>
+                            <th class="p-3.5 text-right whitespace-nowrap">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-sans">
                         @forelse($employees as $emp)
                             <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
-                                <td class="p-3.5">
+                                <td class="p-3.5 whitespace-nowrap">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-full bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 font-bold flex items-center justify-center text-xs shadow-xs">
+                                        <div class="w-8 h-8 rounded-full bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 font-bold flex items-center justify-center text-xs shadow-xs shrink-0">
                                             {{ substr($emp->full_name, 0, 2) }}
                                         </div>
                                         <div>
@@ -190,15 +190,15 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="p-3.5">
+                                <td class="p-3.5 whitespace-nowrap">
                                     <span class="font-medium text-slate-800 dark:text-slate-200 block">{{ $emp->designation ?? 'General Staff' }}</span>
                                     <span class="text-[10px] text-slate-400">{{ $emp->department?->name ?? 'Headquarters' }}</span>
                                 </td>
-                                <td class="p-3.5 font-mono font-bold text-slate-900 dark:text-white">
+                                <td class="p-3.5 font-mono font-bold text-slate-900 dark:text-white whitespace-nowrap">
                                     RM {{ number_format($emp->basic_salary, 2) }}
                                 </td>
-                                <td class="p-3.5">
-                                    <div class="flex items-center gap-1.5 flex-wrap">
+                                <td class="p-3.5 whitespace-nowrap">
+                                    <div class="flex items-center gap-1.5">
                                         @if($emp->employment_type === 'freelance_contract')
                                             <x-badge variant="teal" size="sm">Freelance / Contractor</x-badge>
                                         @elseif($emp->employment_type === 'intern')
@@ -219,10 +219,10 @@
                                         @endif
                                     </div>
                                 </td>
-                                <td class="p-3.5 font-mono text-[11px]">
+                                <td class="p-3.5 font-mono text-[11px] whitespace-nowrap">
                                     {{ strtoupper($emp->statutoryProfile?->tax_category ?? 'SINGLE') }}
                                 </td>
-                                <td class="p-3.5">
+                                <td class="p-3.5 whitespace-nowrap">
                                     @if($emp->employment_status === 'active')
                                         <x-badge variant="emerald" dot="true">Active</x-badge>
                                     @elseif($emp->employment_status === 'probation')
@@ -231,8 +231,8 @@
                                         <x-badge variant="rose" dot="true">{{ ucfirst($emp->employment_status) }}</x-badge>
                                     @endif
                                 </td>
-                                <td class="p-3.5 text-right">
-                                    <div class="flex items-center justify-end gap-1.5 flex-wrap">
+                                <td class="p-3.5 text-right whitespace-nowrap">
+                                    <div class="inline-flex items-center justify-end gap-1.5">
                                         <!-- View / Show Details -->
                                         <x-action-button variant="indigo" icon="bx-show" title="View Profile" onclick="openShowEmployeeModal({{ json_encode($emp) }}, '{{ addslashes($emp->department?->name ?? 'General') }}')">
                                             View

@@ -157,22 +157,22 @@
             </div>
 
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs">
+                <table class="w-full text-left text-xs min-w-[780px]">
                     <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]">
                         <tr>
-                            <th class="p-3.5">Timestamp</th>
-                            <th class="p-3.5">User</th>
-                            <th class="p-3.5">Module</th>
-                            <th class="p-3.5">Event</th>
-                            <th class="p-3.5">Description</th>
-                            <th class="p-3.5">IP Address</th>
-                            <th class="p-3.5">Severity</th>
+                            <th class="p-3.5 whitespace-nowrap">Timestamp</th>
+                            <th class="p-3.5 whitespace-nowrap">User</th>
+                            <th class="p-3.5 whitespace-nowrap">Module</th>
+                            <th class="p-3.5 whitespace-nowrap">Event</th>
+                            <th class="p-3.5 whitespace-nowrap">Description</th>
+                            <th class="p-3.5 whitespace-nowrap">IP Address</th>
+                            <th class="p-3.5 whitespace-nowrap">Severity</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-sans">
                         @forelse($logs as $log)
                             <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
-                                <td class="p-3.5 font-mono text-[11px] text-slate-500">
+                                <td class="p-3.5 font-mono text-[11px] text-slate-500 whitespace-nowrap">
                                     {{ $log->created_at->format('Y-m-d H:i:s') }}
                                 </td>
                                 <td class="p-3.5 font-semibold text-slate-900 dark:text-white">
