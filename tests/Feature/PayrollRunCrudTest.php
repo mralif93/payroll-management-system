@@ -278,4 +278,26 @@ class PayrollRunCrudTest extends TestCase
 
         $this->assertDatabaseHas('payroll_runs', ['id' => $payrollRun->id]);
     }
+
+    public function test_cannot_recalculate_approved_payroll_batch()
+    {
+        $this->actingAs($this->admin)->post(route('admin.payroll.store'), [
+            'company_id' => $this->company->id,
+            'period_year' => '2026',
+            'period_month' => '08',
+            'cutoff_date' => '2026-08-25',
+            'payment_date' => '2026-08-28',
+        ]);
+
+        $payrollRun = PayrollRun::first();
+        $this->actingAs($this->admin)->post(route('admin.payroll.approve', $payrollRun));
+        $payrollRun->refresh();
+        $this->assertEquals('approved', $payrollRun->status);
+
+        $response = $this->actingAs($this->admin)->post(route('admin.payroll.recalculate', $payrollRun));
+        $response->assertSessionHas('error');
+
+        $payrollRun->refresh();
+        $this->assertEquals('approved', $payrollRun->status);
+    }
 }

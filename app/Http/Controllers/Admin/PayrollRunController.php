@@ -560,10 +560,15 @@ class PayrollRunController extends Controller
     }
 
     /**
-     * Re-calculate or re-open batch into draft mode to re-sync statutory figures and leaves.
+     * Re-calculate batch in draft mode to re-sync statutory figures and leaves.
      */
     public function recalculate(PayrollRun $payrollRun)
     {
+        // Strict Compliance: Once payroll batch is approved, paid, or locked, it cannot be recalculated
+        if ($payrollRun->status !== 'draft') {
+            return redirect()->back()->with('error', "Payroll batch {$payrollRun->batch_no} is already approved/locked and cannot be recalculated.");
+        }
+
         $periodStart = Carbon::createFromDate($payrollRun->period_year, $payrollRun->period_month, 1)->startOfMonth()->toDateString();
         $periodEnd = Carbon::createFromDate($payrollRun->period_year, $payrollRun->period_month, 1)->endOfMonth()->toDateString();
 

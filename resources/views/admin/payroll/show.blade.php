@@ -38,11 +38,11 @@
                     <span>Batches Roster</span>
                 </a>
 
-                <x-button variant="secondary" size="md" type="button" icon="bx-refresh" onclick="openModal('recalculate-modal')">
-                    Recalculate &amp; Re-sync
-                </x-button>
-
                 @if($payrollRun->status === 'draft')
+                    <x-button variant="secondary" size="md" type="button" icon="bx-refresh" onclick="openModal('recalculate-modal')">
+                        Recalculate &amp; Re-sync
+                    </x-button>
+
                     <form method="POST" action="{{ route('admin.payroll.approve', $payrollRun) }}">
                         @csrf
                         <x-button variant="success" size="md" type="submit" icon="bx-check-double">
@@ -58,6 +58,11 @@
                         </x-button>
                     </form>
                 @else
+                    <div class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-xs font-semibold border border-slate-200 dark:border-slate-700">
+                        <i class="bx bx-lock-alt text-sm text-emerald-600 dark:text-emerald-400"></i>
+                        <span>Approved &amp; Locked</span>
+                    </div>
+
                     <a href="{{ route('admin.banking.index') }}" class="px-4 py-2 text-xs font-bold rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:from-emerald-700 hover:to-teal-700 shadow-sm flex items-center gap-1.5 transition">
                         <i class="bx bxs-bank text-sm"></i>
                         <span>Generate Autopay Exporters</span>
