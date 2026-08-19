@@ -56,7 +56,7 @@ The application implements a zero-custom-CSS, pure Tailwind CSS component archit
   8. `<x-toggle>`: Peer-based toggle switches with smooth left/right sliding animations (`sm`, `md`, `lg` sizes & 6 color themes).
   9. `<x-theme-toggle>`: Interactive dark/light sliding pill switch.
   10. UI Kit Showcase at `/demo` with live component sandbox.
-  11. **Standalone HTML Preview (`public/preview.html`):** Standalone zero-dependency HTML file for GitHub Pages or static preview featuring the live statutory deduction simulator, employment contract matrix, and UI component showcase.
+  11. **Standalone GitHub Pages Preview (`docs/index.html`):** Standalone zero-dependency HTML file ready for GitHub Pages (`https://<username>.github.io/<repo>/`) or static preview featuring the live statutory deduction simulator, employment contract matrix, and UI component showcase.
 
 ---
 

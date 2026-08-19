@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayFlow MY - Malaysian Payroll System Preview & Statutory Calculator</title>
+    <meta name="description" content="Standalone GitHub Preview for PayFlow MY Malaysian Payroll Management System. Interactive statutory deduction calculator, live payslip generator, and UI component kit.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Boxicons CDN -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); }
+        .dark .glass-card { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
+
+    <!-- Top Sticky Header Navigation -->
+    <header class="sticky top-0 z-50 w-full border-b border-slate-200/80 dark:border-slate-800/80 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                
+                <!-- Brand Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 font-extrabold text-lg">
+                        <i class="bx bxs-receipt"></i>
+                    </div>
+                    <div>
+                        <span class="text-base font-extrabold bg-gradient-to-r from-indigo-600 to-blue-600 dark:from-indigo-400 dark:to-blue-400 bg-clip-text text-transparent">PayFlow MY</span>
+                        <span class="hidden sm:inline-block text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 ml-2 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800">Preview</span>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs -->
+                <nav class="hidden md:flex items-center gap-6 text-xs font-semibold text-slate-600 dark:text-slate-300">
+                    <a href="#calculator" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-1.5">
+                        <i class="bx bx-calculator text-sm"></i> Statutory Calculator
+                    </a>
+                    <a href="#matrix" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-1.5">
+                        <i class="bx bx-table text-sm"></i> Contract Matrix
+                    </a>
+                    <a href="#payslip-preview" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-1.5">
+                        <i class="bx bx-receipt text-sm"></i> Sample Payslips
+                    </a>
+                    <a href="#ui-kit" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-1.5">
+                        <i class="bx bx-layer text-sm"></i> UI Components
+                    </a>
+                </nav>
+
+                <!-- Actions / Dark Mode -->
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleDarkMode()" type="button" class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Toggle Theme">
+                        <i id="theme-icon" class="bx bx-moon text-base"></i>
+                    </button>
+                    <a href="https://github.com/mralif93/payroll-management-system" target="_blank" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-xs hover:bg-indigo-600 dark:hover:bg-indigo-300 transition shadow-xs">
+                        <i class="bx bxl-github text-base"></i>
+                        <span>GitHub Repo</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-16">
+
+        <!-- HERO SECTION -->
+        <section class="text-center space-y-4 max-w-3xl mx-auto">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/80 border border-indigo-200 dark:border-indigo-800 text-xs font-semibold text-indigo-700 dark:text-indigo-300">
+                <span class="w-2 h-2 rounded-full bg-indigo-600 animate-pulse"></span>
+                <span>Malaysia Employment Act 1955 • EPF Act 1991 • SOCSO Act 4 • June 2026 SKBBK</span>
+            </div>
+            <h1 class="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
+                Enterprise Malaysian Payroll &amp; <br>
+                <span class="bg-gradient-to-r from-indigo-600 via-indigo-700 to-blue-600 dark:from-indigo-400 dark:to-teal-300 bg-clip-text text-transparent">
+                    Statutory Compliance Engine
+                </span>
+            </h1>
+            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
+                Live interactive showcase for all contract classifications: Local Staff, Foreign Expatriates (Cat 2 SOCSO), Freelance Contractors, Interns, and Senior Citizens.
+            </p>
+        </section>
+
+        <!-- SECTION 1: INTERACTIVE STATUTORY CALCULATOR -->
+        <section id="calculator" class="scroll-mt-24 space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                        <i class="bx bx-calculator text-indigo-600 dark:text-indigo-400"></i>
+                        Live Malaysian Statutory Calculator
+                    </h2>
+                    <p class="text-xs text-slate-500">Calculate real-time EPF, SOCSO Act 4, June 2026 SKBBK (*Lindung 24 Jam*), EIS, and PCB.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+                        2026 Statutory Gazette
+                    </span>
+                </div>
+            </div>
+
+            <!-- Calculator Layout Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
+                
+                <!-- Left Input Controls -->
+                <div class="p-6 sm:p-8 lg:col-span-5 bg-slate-50/70 dark:bg-slate-900/60 border-b lg:border-b-0 lg:border-r border-slate-200 dark:border-slate-800 space-y-5">
+                    
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Salary &amp; Profile Parameters</h3>
+
+                    <!-- Basic Salary Input -->
+                    <div class="space-y-1.5">
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Monthly Basic Salary (RM)</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-xs font-bold text-slate-400">MYR</span>
+                            <input 
+                                type="number" 
+                                id="calc_salary" 
+                                value="6500" 
+                                min="0" 
+                                step="100" 
+                                oninput="calculateStatutory()"
+                                class="w-full text-sm font-mono font-bold rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 pl-14 pr-4 py-2.5 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Employment / Contract Type Select -->
+                    <div class="space-y-1.5">
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Contract &amp; Category Type</label>
+                        <select id="calc_type" onchange="calculateStatutory()" class="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3.5 py-2.5 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <option value="permanent">1. Permanent Staff (Standard 11% EPF + Full SOCSO)</option>
+                            <option value="contract_local">2. Local Fixed-Term Contract (Standard Statutory)</option>
+                            <option value="contract_foreign_res">3. Foreign Worker (Tax Resident - 2% EPF / Cat 2 SOCSO)</option>
+                            <option value="contract_foreign_nonres">4. Foreign Expatriate (Non-Resident Flat 30% Tax)</option>
+                            <option value="freelance">5. Freelancer / Consultant (Contract for Service - Exempt)</option>
+                            <option value="intern">6. Practical Intern (Student Stipend - Exempt)</option>
+                            <option value="senior">7. Senior Citizen Staff (Age 60+ - 0% EE EPF / 4% ER)</option>
+                        </select>
+                    </div>
+
+                    <!-- SKBBK Toggle Switch -->
+                    <div class="flex items-center justify-between p-3.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                        <div>
+                            <span class="text-xs font-bold text-slate-800 dark:text-slate-200 block">SKBBK (*Lindung 24 Jam*)</span>
+                            <span class="text-[10px] text-slate-400">June 2026 24hr non-occupational scheme</span>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="calc_skbbk_opt" checked onchange="calculateStatutory()" class="sr-only peer">
+                            <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
+                        </label>
+                    </div>
+
+                    <!-- Voluntary Reduced 9% EPF Toggle -->
+                    <div class="flex items-center justify-between p-3.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                        <div>
+                            <span class="text-xs font-bold text-slate-800 dark:text-slate-200 block">Voluntary 9% EPF Rate</span>
+                            <span class="text-[10px] text-slate-400">Reduced employee rate (vs standard 11%)</span>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="calc_epf_9_opt" onchange="calculateStatutory()" class="sr-only peer">
+                            <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
+                        </label>
+                    </div>
+
+                </div>
+
+                <!-- Right Calculation Breakdown & Results -->
+                <div class="p-6 sm:p-8 lg:col-span-7 flex flex-col justify-between space-y-6">
+                    
+                    <div class="space-y-6">
+                        
+                        <!-- Net Salary Hero Banner -->
+                        <div class="p-6 rounded-2xl bg-gradient-to-br from-emerald-500/10 via-emerald-500/5 to-teal-500/10 border border-emerald-200 dark:border-emerald-800/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300">Estimated Net Take-Home</span>
+                                <div id="res_net_salary" class="text-3xl sm:text-4xl font-extrabold text-emerald-600 dark:text-emerald-400 font-mono mt-1">RM 5,437.20</div>
+                                <span class="text-[11px] text-slate-500 dark:text-slate-400">Disbursed directly to employee bank account</span>
+                            </div>
+                            <div class="text-left sm:text-right">
+                                <span class="text-[11px] text-slate-400 block font-medium">Total Deductions</span>
+                                <span id="res_total_deductions" class="text-sm font-bold text-rose-600 dark:text-rose-400 font-mono">- RM 1,062.80</span>
+                            </div>
+                        </div>
+
+                        <!-- Employee Deductions Grid -->
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                                <span class="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+                                    <i class="bx bx-user-minus text-rose-500"></i> Employee Deductions
+                                </span>
+                                <span class="text-[11px] text-slate-400">Salary Withholdings</span>
+                            </div>
+
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                <!-- EPF EE -->
+                                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                                    <div class="text-[10px] text-slate-400 font-semibold mb-1 flex justify-between">
+                                        <span>KWSP</span>
+                                        <span id="res_badge_epf_ee" class="text-indigo-600 dark:text-indigo-400">11%</span>
+                                    </div>
+                                    <div id="res_epf_ee" class="text-sm font-mono font-bold text-slate-900 dark:text-white">RM 715.00</div>
+                                </div>
+
+                                <!-- SOCSO EE -->
+                                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                                    <div class="text-[10px] text-slate-400 font-semibold mb-1 flex justify-between">
+                                        <span>SOCSO</span>
+                                        <span class="text-sky-600 dark:text-sky-400">Act 4</span>
+                                    </div>
+                                    <div id="res_socso_ee" class="text-sm font-mono font-bold text-slate-900 dark:text-white">RM 29.75</div>
+                                </div>
+
+                                <!-- SKBBK EE -->
+                                <div class="p-3 rounded-xl bg-purple-50/70 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800">
+                                    <div class="text-[10px] text-purple-700 dark:text-purple-300 font-semibold mb-1 flex justify-between">
+                                        <span>SKBBK</span>
+                                        <span class="text-purple-600">2026</span>
+                                    </div>
+                                    <div id="res_skbbk_ee" class="text-sm font-mono font-bold text-purple-950 dark:text-purple-100">RM 43.65</div>
+                                </div>
+
+                                <!-- EIS & PCB -->
+                                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                                    <div class="text-[10px] text-slate-400 font-semibold mb-1 flex justify-between">
+                                        <span>EIS / PCB</span>
+                                        <span class="text-rose-600">Tax</span>
+                                    </div>
+                                    <div id="res_eis_pcb_ee" class="text-sm font-mono font-bold text-slate-900 dark:text-white">RM 274.40</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Employer Contributions Grid -->
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                                <span class="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+                                    <i class="bx bx-building text-indigo-500"></i> Employer Contributions
+                                </span>
+                                <span class="text-[11px] text-slate-400">Company Overhead Cost</span>
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-3">
+                                <div class="p-3 rounded-xl bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/60">
+                                    <div class="text-[10px] text-indigo-700 dark:text-indigo-300 font-semibold mb-1">EPF (Employer)</div>
+                                    <div id="res_epf_er" class="text-sm font-mono font-bold text-indigo-950 dark:text-indigo-100">RM 780.00</div>
+                                </div>
+
+                                <div class="p-3 rounded-xl bg-sky-50/50 dark:bg-sky-950/30 border border-sky-100 dark:border-sky-900/60">
+                                    <div class="text-[10px] text-sky-700 dark:text-sky-300 font-semibold mb-1">SOCSO (Employer)</div>
+                                    <div id="res_socso_er" class="text-sm font-mono font-bold text-sky-950 dark:text-sky-100">RM 104.15</div>
+                                </div>
+
+                                <div class="p-3 rounded-xl bg-teal-50/50 dark:bg-teal-950/30 border border-teal-100 dark:border-teal-900/60">
+                                    <div class="text-[10px] text-teal-700 dark:text-teal-300 font-semibold mb-1">EIS (Employer)</div>
+                                    <div id="res_eis_er" class="text-sm font-mono font-bold text-teal-950 dark:text-teal-100">RM 11.90</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Total Cost Footer -->
+                    <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
+                        <span class="text-slate-500 dark:text-slate-400 font-medium">Total Employer Employment Cost:</span>
+                        <span id="res_total_employer_cost" class="font-mono font-bold text-indigo-600 dark:text-indigo-400 text-sm">RM 7,396.05</span>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 2: STATUTORY CONTRACT MATRIX -->
+        <section id="matrix" class="scroll-mt-24 space-y-6">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+                <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <i class="bx bx-table text-indigo-600 dark:text-indigo-400"></i>
+                    Malaysian Employment Contract Statutory Matrix
+                </h2>
+                <p class="text-xs text-slate-500">Legal comparison across Employment Act 1955, EPF Act 1991, and SOCSO Act 4.</p>
+            </div>
+
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-slate-50 dark:bg-slate-800/70 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                        <tr>
+                            <th class="p-3.5">Classification</th>
+                            <th class="p-3.5">Contract Basis</th>
+                            <th class="p-3.5">KWSP / EPF</th>
+                            <th class="p-3.5">PERKESO / SOCSO</th>
+                            <th class="p-3.5">SIP / EIS</th>
+                            <th class="p-3.5">LHDN PCB Tax</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+                        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
+                            <td class="p-3.5 font-bold text-slate-900 dark:text-white">Permanent Staff</td>
+                            <td class="p-3.5">Contract of Service</td>
+                            <td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">11% EE / 12-13% ER</span></td>
+                            <td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-50 text-sky-700 dark:bg-sky-950 dark:text-sky-300">Cat 1 + SKBBK</span></td>
+                            <td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300">0.2% / 0.2%</span></td>
+                            <td class="p-3.5 font-mono">Progressive MTD</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
+                            <td class="p-3.5 font-bold text-slate-900 dark:text-white">Local Fixed-Term Contract</td>
+                            <td class="p-3.5">Contract of Service</td>
+                            <td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">11% EE / 12-13% ER</span></td>
+                            <td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-50 text-sky-700 dark:bg-sky-950 dark:text-sky-300">Cat 1 + SKBBK</span></td>
+                            <td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300">0.2% / 0.2%</span></td>
+                            <td class="p-3.5 font-mono">Progressive MTD</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
+                            <td class="p-3.5 font-bold text-purple-600 dark:text-purple-400">Foreign Expatriate / Worker</td>
+                            <td class="p-3.5">Contract of Service</td>
+                            <td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-700 dark:bg-purple-950 dark:text-purple-300">2% EE / 2% ER</span></td>
+                            <td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300">Cat 2 (1.25% ER only)</span></td>
+                            <td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">Exempt (0%)</span></td>
+                            <td class="p-3.5 font-mono">Flat 30% (Non-Res) / MTD</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
+                            <td class="p-3.5 font-bold text-teal-600 dark:text-teal-400">Freelancer / Consultant</td>
+                            <td class="p-3.5">Contract for Service</td>
+                            <td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">Exempt (0%)</span></td>
+                            <td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">Exempt (0%)</span></td>
+                            <td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">Exempt (0%)</span></td>
+                            <td class="p-3.5 font-mono">Invoiced Gross</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
+                            <td class="p-3.5 font-bold text-amber-600 dark:text-amber-400">Practical Intern</td>
+                            <td class="p-3.5">Internship Agreement</td>
+                            <td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">Exempt (0%)</span></td>
+                            <td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">Exempt (0%)</span></td>
+                            <td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">Exempt (0%)</span></td>
+                            <td class="p-3.5 font-mono">Exempt Below Threshold</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECTION 3: UI KIT COMPONENT GALLERY -->
+        <section id="ui-kit" class="scroll-mt-24 space-y-6">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+                <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <i class="bx bx-layer text-indigo-600 dark:text-indigo-400"></i>
+                    Component Library Showcase
+                </h2>
+                <p class="text-xs text-slate-500">Zero-custom-CSS pure utility UI components used across the platform.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1: Buttons & Badges -->
+                <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Buttons &amp; Badges</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="px-3.5 py-1.5 rounded-xl bg-indigo-600 text-white font-bold text-xs shadow-sm hover:bg-indigo-700">Primary</button>
+                        <button class="px-3.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold text-xs hover:bg-slate-200">Secondary</button>
+                        <button class="px-3.5 py-1.5 rounded-xl bg-rose-600 text-white font-bold text-xs hover:bg-rose-700">Danger</button>
+                    </div>
+                    <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">Active</span>
+                        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border border-amber-200 dark:border-amber-800">Probation</span>
+                        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-50 text-purple-700 dark:bg-purple-950 dark:text-purple-300 border border-purple-200 dark:border-purple-800">SKBBK</span>
+                    </div>
+                </div>
+
+                <!-- Card 2: Form Inputs & Toggles -->
+                <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Form Elements</h3>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><i class="bx bx-envelope text-sm"></i></span>
+                        <input type="text" placeholder="payroll@company.my" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 pl-9 pr-3 py-2 text-slate-900 dark:text-white">
+                    </div>
+                    <div class="flex items-center justify-between text-xs pt-1">
+                        <span class="font-medium text-slate-700 dark:text-slate-300">Auto-Approve Batches</span>
+                        <span class="w-9 h-5 bg-indigo-600 rounded-full relative inline-block"><span class="w-4 h-4 bg-white rounded-full absolute top-0.5 right-0.5"></span></span>
+                    </div>
+                </div>
+
+                <!-- Card 3: Metric Stat Card -->
+                <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Stat KPI Widget</h3>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="text-2xl font-extrabold font-mono text-slate-900 dark:text-white">RM 84,250</span>
+                            <span class="text-[11px] text-slate-400 block mt-0.5">August 2026 Batch</span>
+                        </div>
+                        <div class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xl">
+                            <i class="bx bx-wallet"></i>
+                        </div>
+                    </div>
+                    <div class="pt-2 text-[10px] text-emerald-600 font-bold flex items-center gap-1">
+                        <i class="bx bx-up-arrow-alt"></i> 100% Reconciled to Maybank2e
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p>PayFlow MY - Malaysian Payroll Management System • Built with Laravel 11 &amp; Tailwind CSS</p>
+            <p class="text-[11px] text-slate-400">Compliant with Employment Act 1955, KWSP 1991, PERKESO Act 4, EIS Act 800, and LHDN ITA 1967.</p>
+        </div>
+    </footer>
+
+    <!-- Interactive Calculator Script -->
+    <script>
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.className = 'bx bx-moon text-base';
+                localStorage.theme = 'light';
+            } else {
+                html.classList.add('dark');
+                icon.className = 'bx bx-sun text-base';
+                localStorage.theme = 'dark';
+            }
+        }
+
+        // Check system preference
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            document.getElementById('theme-icon').className = 'bx bx-sun text-base';
+        }
+
+        function calculateStatutory() {
+            const salary = parseFloat(document.getElementById('calc_salary').value) || 0;
+            const type = document.getElementById('calc_type').value;
+            const isSkbbk = document.getElementById('calc_skbbk_opt').checked;
+            const isEpf9 = document.getElementById('calc_epf_9_opt').checked;
+
+            const cappedWage = Math.min(salary, 6000.00);
+
+            let epfEe = 0.00;
+            let epfEr = 0.00;
+            let socsoEe = 0.00;
+            let socsoEr = 0.00;
+            let skbbkEe = 0.00;
+            let eisEe = 0.00;
+            let eisEr = 0.00;
+            let pcb = 0.00;
+
+            if (type === 'freelance' || type === 'intern') {
+                // Fully exempt
+            } else if (type === 'contract_foreign_res' || type === 'contract_foreign_nonres') {
+                // Foreign Expatriate
+                epfEe = Math.round(salary * 0.02);
+                epfEr = Math.round(salary * 0.02);
+                socsoEr = Math.round(cappedWage * 0.0125); // Category 2
+                
+                if (type === 'contract_foreign_nonres') {
+                    pcb = Math.round(salary * 0.30); // Flat 30% Non-Resident Tax
+                } else {
+                    // Resident Formula
+                    const annualIncome = Math.max(0, (salary * 12) - 9000 - Math.min(epfEe * 12, 4000));
+                    pcb = estimatePcb(annualIncome);
+                }
+            } else if (type === 'senior') {
+                // Senior Citizen (Age 60+)
+                epfEe = 0.00;
+                epfEr = Math.round(salary * 0.04);
+                socsoEr = Math.round(cappedWage * 0.0175);
+                socsoEe = Math.round(cappedWage * 0.005);
+                if (isSkbbk) skbbkEe = Math.round(cappedWage * 0.00725);
+                const annualIncome = Math.max(0, (salary * 12) - 9000);
+                pcb = estimatePcb(annualIncome);
+            } else {
+                // Standard Permanent or Local Contract
+                const eeRate = isEpf9 ? 0.09 : 0.11;
+                const erRate = salary <= 5000 ? 0.13 : 0.12;
+
+                epfEe = Math.ceil(salary * eeRate);
+                epfEr = Math.ceil(salary * erRate);
+
+                socsoEr = (salary >= 6000) ? 104.15 : Math.round(cappedWage * 0.0175);
+                socsoEe = (salary >= 6000) ? 29.75 : Math.round(cappedWage * 0.005);
+                
+                if (isSkbbk) {
+                    skbbkEe = (salary >= 6000) ? 43.65 : Math.round(cappedWage * 0.00725);
+                }
+
+                eisEe = (salary >= 6000) ? 11.90 : Math.round(cappedWage * 0.002);
+                eisEr = (salary >= 6000) ? 11.90 : Math.round(cappedWage * 0.002);
+
+                const annualIncome = Math.max(0, (salary * 12) - 9000 - Math.min(epfEe * 12, 4000));
+                pcb = estimatePcb(annualIncome);
+            }
+
+            const totalDeductions = epfEe + socsoEe + skbbkEe + eisEe + pcb;
+            const netSalary = Math.max(0, salary - totalDeductions);
+            const totalEmployerCost = salary + epfEr + socsoEr + eisEr;
+
+            // Render Output
+            document.getElementById('res_net_salary').textContent = 'RM ' + netSalary.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('res_total_deductions').textContent = '- RM ' + totalDeductions.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            document.getElementById('res_epf_ee').textContent = 'RM ' + epfEe.toFixed(2);
+            document.getElementById('res_socso_ee').textContent = 'RM ' + socsoEe.toFixed(2);
+            document.getElementById('res_skbbk_ee').textContent = 'RM ' + skbbkEe.toFixed(2);
+            document.getElementById('res_eis_pcb_ee').textContent = 'RM ' + (eisEe + pcb).toFixed(2);
+
+            document.getElementById('res_epf_er').textContent = 'RM ' + epfEr.toFixed(2);
+            document.getElementById('res_socso_er').textContent = 'RM ' + socsoEr.toFixed(2);
+            document.getElementById('res_eis_er').textContent = 'RM ' + eisEr.toFixed(2);
+            document.getElementById('res_total_employer_cost').textContent = 'RM ' + totalEmployerCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            document.getElementById('res_badge_epf_ee').textContent = isEpf9 ? '9%' : (type.includes('foreign') ? '2%' : (type === 'senior' || type === 'freelance' || type === 'intern' ? '0%' : '11%'));
+        }
+
+        function estimatePcb(taxableAnnual) {
+            if (taxableAnnual <= 5000) return 0;
+            let tax = 0;
+            if (taxableAnnual <= 20000) tax = (taxableAnnual - 5000) * 0.01;
+            else if (taxableAnnual <= 35000) tax = 150 + (taxableAnnual - 20000) * 0.03;
+            else if (taxableAnnual <= 50000) tax = 600 + (taxableAnnual - 35000) * 0.06;
+            else if (taxableAnnual <= 70000) tax = 1500 + (taxableAnnual - 50000) * 0.11;
+            else if (taxableAnnual <= 100000) tax = 3700 + (taxableAnnual - 70000) * 0.19;
+            else if (taxableAnnual <= 400000) tax = 9400 + (taxableAnnual - 100000) * 0.25;
+            else if (taxableAnnual <= 600000) tax = 84400 + (taxableAnnual - 400000) * 0.26;
+            else tax = 136400 + (taxableAnnual - 600000) * 0.28;
+
+            if (taxableAnnual <= 35000) tax = Math.max(0, tax - 400); // Sec 6A rebate
+            return Math.max(0, Math.round((tax / 12) * 100) / 100);
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', calculateStatutory);
+    </script>
+</body>
+</html>
