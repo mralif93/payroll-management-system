@@ -1,67 +1,53 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-slate-50 antialiased">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Tailwind CSS UI Component Library & Accordion Reference</title>
+<x-layouts.admin title="UI Component Kit & Pattern Reference">
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <div class="space-y-6">
 
-    <!-- Styles / Scripts via Vite -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="min-h-screen flex flex-col bg-slate-50 text-slate-800 antialiased selection:bg-indigo-500 selection:text-white" style="font-family: 'Plus Jakarta Sans', sans-serif;">
-
-    <!-- Top Sticky Header -->
-    <header class="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/90 backdrop-blur-md shrink-0">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-lg bg-indigo-600 flex items-center justify-center text-white shadow-sm font-bold">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                        </svg>
+        <!-- Page Header Banner with Dark Mode & Boxicons -->
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-6 sm:p-8 text-white shadow-xl border border-slate-800">
+            <div class="absolute -right-10 -bottom-10 w-64 h-64 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none"></div>
+            <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-10 h-10 rounded-2xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-300 text-xl backdrop-blur-xs">
+                            <i class="bx bx-cube-alt"></i>
+                        </div>
+                        <h1 class="text-xl sm:text-2xl font-black text-white tracking-tight">Core UI Components &amp; Pattern Library</h1>
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 inline-flex items-center gap-1.5 backdrop-blur-xs">
+                            <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
+                            13 Categories
+                        </span>
                     </div>
-                    <div>
-                        <span class="text-base font-bold text-slate-900">Tailwind CSS Component Kit</span>
-                        <span class="block text-[11px] font-medium text-slate-500">Pure Utility Accordion Reference</span>
-                    </div>
+                    <p class="text-xs sm:text-sm text-indigo-100/80 leading-relaxed max-w-3xl">
+                        Official reusable UI building blocks and design system patterns for PayFlow. Single-open accordion with zero custom CSS.
+                    </p>
                 </div>
 
-                <div class="flex items-center gap-2">
-                    <button type="button" onclick="document.querySelectorAll('details').forEach(d => d.open = true)" class="px-2.5 py-1 text-xs font-semibold rounded-md bg-slate-100 text-slate-700 hover:bg-slate-200 transition cursor-pointer">
-                        Expand All
+                <div class="flex items-center gap-2.5 flex-wrap shrink-0">
+                    <button 
+                        type="button" 
+                        onclick="document.querySelectorAll('details').forEach(d => d.open = true)" 
+                        class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/10 backdrop-blur-md transition flex items-center gap-1.5 cursor-pointer"
+                    >
+                        <i class="bx bx-expand-alt text-base"></i>
+                        <span>Expand All</span>
                     </button>
-                    <button type="button" onclick="document.querySelectorAll('details').forEach(d => d.open = false)" class="px-2.5 py-1 text-xs font-semibold rounded-md bg-slate-100 text-slate-700 hover:bg-slate-200 transition cursor-pointer">
-                        Collapse All
+                    <button 
+                        type="button" 
+                        onclick="document.querySelectorAll('details').forEach(d => d.open = false)" 
+                        class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/10 backdrop-blur-md transition flex items-center gap-1.5 cursor-pointer"
+                    >
+                        <i class="bx bx-collapse-alt text-base"></i>
+                        <span>Collapse All</span>
                     </button>
-                    <span class="hidden sm:inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                        Zero Custom CSS
-                    </span>
                 </div>
             </div>
-        </div>
-    </header>
-
-    <!-- Page Layout Container -->
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
-        <!-- Intro Hero -->
-        <div class="mb-8 bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
-            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Core UI Components & Pattern Library</h1>
-            <p class="mt-2 text-sm text-slate-600 max-w-3xl leading-relaxed">
-                A clean reference guide of generic, reusable building blocks for developers to copy-paste. Click on each accordion section below to expand and view components.
-            </p>
         </div>
 
         <!-- ACCORDIONS LIST -->
         <div class="space-y-4">
 
             <!-- ACCORDION 1: TYPOGRAPHY -->
-            <details class="group bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden" open>
+            <details name="demo_ui_accordion" class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                 <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white hover:bg-slate-50 transition border-b border-transparent group-open:border-slate-200">
                     <div class="flex items-center gap-3">
                         <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold">1</span>
@@ -98,7 +84,7 @@
             </details>
 
             <!-- ACCORDION 2: BUTTONS -->
-            <details class="group bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden" open>
+            <details name="demo_ui_accordion" class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                 <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white hover:bg-slate-50 transition border-b border-transparent group-open:border-slate-200">
                     <div class="flex items-center gap-3">
                         <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold">2</span>
@@ -188,7 +174,7 @@
             </details>
 
             <!-- ACCORDION 3: BADGES & TAGS -->
-            <details class="group bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden" open>
+            <details name="demo_ui_accordion" class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                 <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white hover:bg-slate-50 transition border-b border-transparent group-open:border-slate-200">
                     <div class="flex items-center gap-3">
                         <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold">3</span>
@@ -242,7 +228,7 @@
             </details>
 
             <!-- ACCORDION 4: FORM INPUTS -->
-            <details class="group bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden" open>
+            <details name="demo_ui_accordion" class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                 <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white hover:bg-slate-50 transition border-b border-transparent group-open:border-slate-200">
                     <div class="flex items-center gap-3">
                         <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold">4</span>
@@ -359,7 +345,7 @@
             </details>
 
             <!-- ACCORDION 5: CARDS & STATS -->
-            <details class="group bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+            <details name="demo_ui_accordion" class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                 <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white hover:bg-slate-50 transition border-b border-transparent group-open:border-slate-200">
                     <div class="flex items-center gap-3">
                         <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold">5</span>
@@ -447,7 +433,7 @@
             </details>
 
             <!-- ACCORDION 6: DATA TABLES & PAGINATION -->
-            <details class="group bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+            <details name="demo_ui_accordion" class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                 <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white hover:bg-slate-50 transition border-b border-transparent group-open:border-slate-200">
                     <div class="flex items-center gap-3">
                         <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold">6</span>
@@ -528,7 +514,7 @@
             </details>
 
             <!-- ACCORDION 7: ALERTS & BANNERS -->
-            <details class="group bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+            <details name="demo_ui_accordion" class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                 <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white hover:bg-slate-50 transition border-b border-transparent group-open:border-slate-200">
                     <div class="flex items-center gap-3">
                         <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold">7</span>
@@ -579,7 +565,7 @@
             </details>
 
             <!-- ACCORDION 8: TABS & BREADCRUMBS -->
-            <details class="group bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+            <details name="demo_ui_accordion" class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                 <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white hover:bg-slate-50 transition border-b border-transparent group-open:border-slate-200">
                     <div class="flex items-center gap-3">
                         <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold">8</span>
@@ -627,7 +613,7 @@
             </details>
 
             <!-- ACCORDION 9: MODALS & SLIDEOVERS -->
-            <details class="group bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden" open>
+            <details name="demo_ui_accordion" class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                 <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white hover:bg-slate-50 transition border-b border-transparent group-open:border-slate-200">
                     <div class="flex items-center gap-3">
                         <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold">9</span>
@@ -829,8 +815,8 @@
                 </div>
             </div>
 
-            <!-- ACCORDION 10: AVATARS -->
-            <details class="group bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+            <!-- ACCORDION 10: AVATARS & USER STACKS -->
+            <details name="demo_ui_accordion" class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                 <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white hover:bg-slate-50 transition border-b border-transparent group-open:border-slate-200">
                     <div class="flex items-center gap-3">
                         <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold">10</span>
@@ -864,7 +850,7 @@
             </details>
 
             <!-- ACCORDION 11: ANIMATE.CSS SHOWCASE & INTERACTIVE PLAYGROUND -->
-            <details class="group bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden" open>
+            <details name="demo_ui_accordion" class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                 <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white hover:bg-slate-50 transition border-b border-transparent group-open:border-slate-200">
                     <div class="flex items-center gap-3">
                         <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold">11</span>
@@ -944,7 +930,7 @@
             </details>
 
             <!-- ACCORDION 12: BOXICONS ICON SET REFERENCE -->
-            <details class="group bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden" open>
+            <details name="demo_ui_accordion" class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                 <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white hover:bg-slate-50 transition border-b border-transparent group-open:border-slate-200">
                     <div class="flex items-center gap-3">
                         <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold">12</span>
@@ -1076,7 +1062,7 @@
                     </div>
 
             <!-- ACCORDION 13: TOGGLE SWITCHES & SLIDERS -->
-            <details class="group bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden" open>
+            <details name="demo_ui_accordion" class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
                 <summary class="flex items-center justify-between p-5 cursor-pointer select-none bg-white hover:bg-slate-50 transition border-b border-transparent group-open:border-slate-200">
                     <div class="flex items-center gap-3">
                         <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold">13</span>
@@ -1144,33 +1130,27 @@
                 </div>
             </details>
 
-            <!-- Javascript Helper for Animate.css Sandbox -->
-            <script>
-                function triggerAnimation(animationName) {
-                    const el = document.getElementById('animation-target');
-                    const label = document.getElementById('current-anim-name');
-                    
-                    // Remove existing animate classes
-                    el.className = 'w-48 h-20 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white font-bold text-xs flex flex-col items-center justify-center shadow-lg shadow-indigo-500/20';
-                    
-                    // Trigger reflow
-                    void el.offsetWidth;
-                    
-                    // Apply animate.css class
-                    el.className += ' animate__animated ' + animationName;
-                    label.textContent = animationName;
-                }
-            </script>
-
         </div>
-    </main>
 
-    <!-- Sticky Bottom Footer -->
-    <footer class="shrink-0 mt-auto border-t border-slate-200 bg-white py-6">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
-            <span>Tailwind CSS UI Component Kit Reference • Accordion Layout</span>
-            <span class="font-medium text-slate-600">Zero Custom CSS</span>
-        </div>
-    </footer>
-</body>
-</html>
+    </div>
+
+    <!-- Javascript Helper for Animate.css Sandbox -->
+    <script>
+        function triggerAnimation(animationName) {
+            const el = document.getElementById('animation-target');
+            const label = document.getElementById('current-anim-name');
+            if (!el || !label) return;
+            
+            // Remove existing animate classes
+            el.className = 'w-48 h-20 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white font-bold text-xs flex flex-col items-center justify-center shadow-lg shadow-indigo-500/20';
+            
+            // Trigger reflow
+            void el.offsetWidth;
+            
+            // Apply animate.css class
+            el.className += ' animate__animated ' + animationName;
+            label.textContent = animationName;
+        }
+    </script>
+
+</x-layouts.admin>

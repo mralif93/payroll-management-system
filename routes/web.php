@@ -91,6 +91,11 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::post('users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
     Route::post('users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
     Route::resource('roles', RoleController::class)->only(['index', 'store', 'update', 'destroy']);
+
+    // 9. UI Component Kit & Pattern Library
+    Route::get('/demo', function () {
+        return view('demo-components');
+    })->name('demo');
 });
 
 // Authentication Logout Route
