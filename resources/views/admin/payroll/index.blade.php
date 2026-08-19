@@ -74,84 +74,101 @@
             />
         </div>
  
-        <!-- Modern Search & Filter Command Bar for Payroll Runs -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs p-3 sm:p-4">
-            <form method="GET" action="{{ route('admin.payroll.index') }}" class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
-                
-                <!-- Main Search Input -->
-                <div class="relative flex-1">
-                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
-                        <i class="bx bx-search text-lg"></i>
+        <!-- Executive Search & Filter Command Suite for Payroll Batches -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
+            <div class="p-3.5 sm:p-4 bg-slate-50/50 dark:bg-slate-850/40 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xs">
+                        <i class="bx bx-slider-alt"></i>
+                    </span>
+                    <span class="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">Search &amp; Filter Batches</span>
+                </div>
+                @if(request()->hasAny(['search', 'year', 'month', 'status']))
+                    <a href="{{ route('admin.payroll.index') }}" class="text-[11px] font-semibold text-rose-600 dark:text-rose-400 hover:underline flex items-center gap-1">
+                        <i class="bx bx-reset"></i>
+                        <span>Clear All Filters</span>
+                    </a>
+                @endif
+            </div>
+
+            <div class="p-3.5 sm:p-4">
+                <form method="GET" action="{{ route('admin.payroll.index') }}" class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+                    
+                    <!-- Search Input -->
+                    <div class="relative flex-1">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
+                            <i class="bx bx-search text-base"></i>
+                        </div>
+                        <input 
+                            type="text" 
+                            name="search" 
+                            value="{{ request('search') }}" 
+                            placeholder="Search by batch number (e.g. RUN-2026-08)..." 
+                            class="w-full pl-10 pr-10 py-2 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 dark:focus:border-indigo-400 transition"
+                        >
+                        @if(request('search'))
+                            <a href="{{ route('admin.payroll.index', request()->except('search')) }}" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600">
+                                <i class="bx bx-x-circle text-base"></i>
+                            </a>
+                        @endif
                     </div>
-                    <input 
-                        type="text" 
-                        name="search" 
-                        value="{{ request('search') }}" 
-                        placeholder="Search payroll batch reference (e.g. RUN-2026-08)..." 
-                        class="w-full pl-10 pr-10 py-2.5 rounded-xl text-xs bg-slate-50/80 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 dark:focus:border-indigo-400 transition-all font-sans"
-                    >
-                    @if(request('search'))
-                        <a href="{{ route('admin.payroll.index', request()->except('search')) }}" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
-                            <i class="bx bx-x-circle text-base"></i>
-                        </a>
-                    @endif
-                </div>
 
-                <!-- Filters -->
-                <div class="flex flex-wrap items-center gap-2.5">
-                    <!-- Year Filter -->
-                    <select 
-                        name="year" 
-                        onchange="this.form.submit()" 
-                        class="py-2.5 pl-3 pr-8 rounded-xl text-xs bg-slate-50/80 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-300 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
-                    >
-                        <option value="">All Years</option>
-                        @foreach($availableYears ?? [2026, 2025, 2024] as $yr)
-                            <option value="{{ $yr }}" {{ request('year') == $yr ? 'selected' : '' }}>Year {{ $yr }}</option>
-                        @endforeach
-                    </select>
+                    <!-- Dropdowns & Actions Group -->
+                    <div class="flex flex-wrap items-center gap-2">
+                        <!-- Year Dropdown -->
+                        <div class="relative">
+                            <select 
+                                name="year" 
+                                onchange="this.form.submit()" 
+                                class="py-2 pl-3 pr-8 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer"
+                            >
+                                <option value="">All Years</option>
+                                @foreach($availableYears ?? [2026, 2025, 2024] as $yr)
+                                    <option value="{{ $yr }}" {{ request('year') == $yr ? 'selected' : '' }}>Year {{ $yr }}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                    <!-- Month Filter -->
-                    <select 
-                        name="month" 
-                        onchange="this.form.submit()" 
-                        class="py-2.5 pl-3 pr-8 rounded-xl text-xs bg-slate-50/80 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-300 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
-                    >
-                        <option value="">All Months</option>
-                        @for($m = 1; $m <= 12; $m++)
-                            <option value="{{ sprintf('%02d', $m) }}" {{ request('month') == sprintf('%02d', $m) ? 'selected' : '' }}>
-                                {{ date('F', mktime(0, 0, 0, $m, 1)) }}
-                            </option>
-                        @endfor
-                    </select>
+                        <!-- Month Dropdown -->
+                        <div class="relative">
+                            <select 
+                                name="month" 
+                                onchange="this.form.submit()" 
+                                class="py-2 pl-3 pr-8 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer"
+                            >
+                                <option value="">All Months</option>
+                                @for($m = 1; $m <= 12; $m++)
+                                    <option value="{{ sprintf('%02d', $m) }}" {{ request('month') == sprintf('%02d', $m) ? 'selected' : '' }}>
+                                        {{ date('M', mktime(0, 0, 0, $m, 1)) }} ({{ sprintf('%02d', $m) }})
+                                    </option>
+                                @endfor
+                            </select>
+                        </div>
 
-                    <!-- Status Filter -->
-                    <select 
-                        name="status" 
-                        onchange="this.form.submit()" 
-                        class="py-2.5 pl-3 pr-8 rounded-xl text-xs bg-slate-50/80 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-300 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
-                    >
-                        <option value="">All Statuses</option>
-                        <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>Draft</option>
-                        <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>Approved</option>
-                        <option value="paid" {{ request('status') === 'paid' ? 'selected' : '' }}>Paid</option>
-                        <option value="locked" {{ request('status') === 'locked' ? 'selected' : '' }}>Locked</option>
-                    </select>
+                        <!-- Status Dropdown -->
+                        <div class="relative">
+                            <select 
+                                name="status" 
+                                onchange="this.form.submit()" 
+                                class="py-2 pl-3 pr-8 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer"
+                            >
+                                <option value="">All Statuses</option>
+                                <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>Draft</option>
+                                <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>Approved</option>
+                                <option value="paid" {{ request('status') === 'paid' ? 'selected' : '' }}>Paid</option>
+                                <option value="locked" {{ request('status') === 'locked' ? 'selected' : '' }}>Locked</option>
+                            </select>
+                        </div>
 
-                    <button type="submit" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs cursor-pointer">
-                        <i class="bx bx-filter-alt text-sm"></i>
-                        <span>Filter</span>
-                    </button>
+                        <!-- Filter Button -->
+                        <button type="submit" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs cursor-pointer">
+                            <i class="bx bx-filter-alt"></i>
+                            <span>Filter</span>
+                        </button>
+                    </div>
 
-                    @if(request()->hasAny(['search', 'year', 'month', 'status']))
-                        <a href="{{ route('admin.payroll.index') }}" class="px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-600 dark:text-slate-300 text-xs font-semibold transition flex items-center gap-1">
-                            <i class="bx bx-reset text-sm"></i>
-                            <span>Reset</span>
-                        </a>
-                    @endif
-                </div>
-
-            </form>
+                </form>
+            </div>
         </div>
 
         <!-- Payroll Runs Batch History Table -->
