@@ -290,7 +290,7 @@ class PayrollRunController extends Controller
         $payrollRuns = $query
             ->latest('period_year')
             ->latest('period_month')
-            ->paginate(12)
+            ->paginate(10)
             ->withQueryString();
 
         $companies = Company::all();

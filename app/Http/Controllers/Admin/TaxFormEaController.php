@@ -32,7 +32,7 @@ class TaxFormEaController extends Controller
             });
         }
 
-        $eaRecords = $query->paginate(15)->withQueryString();
+        $eaRecords = $query->paginate(10)->withQueryString();
 
         $totalAccumulatedPcb = TaxFormEaRecord::where('tax_year', $taxYear)->sum('total_pcb_mtd');
         $totalKwspEe = TaxFormEaRecord::where('tax_year', $taxYear)->sum('total_epf_employee');

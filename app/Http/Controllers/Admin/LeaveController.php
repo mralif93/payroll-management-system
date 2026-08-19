@@ -47,7 +47,7 @@ class LeaveController extends Controller
             });
         }
 
-        $leaves = $query->paginate(15)->withQueryString();
+        $leaves = $query->paginate(10)->withQueryString();
 
         // Key Leave Statistics
         $totalPending = LeaveApplication::where('status', 'pending')->count();

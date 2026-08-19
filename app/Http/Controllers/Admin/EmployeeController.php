@@ -32,7 +32,7 @@ class EmployeeController extends Controller
             $query->where('department_id', $request->input('department_id'));
         }
 
-        $employees = $query->paginate(15);
+        $employees = $query->paginate(10)->withQueryString();
         $departments = Department::all();
         $availableAllowances = \App\Models\SalaryComponent::where('type', 'allowance')->where('is_active', true)->get();
 

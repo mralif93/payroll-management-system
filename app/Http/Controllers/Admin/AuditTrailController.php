@@ -32,7 +32,7 @@ class AuditTrailController extends Controller
             });
         }
 
-        $logs = $query->paginate(20);
+        $logs = $query->paginate(10)->withQueryString();
 
         return view('admin.audit', compact('logs'));
     }
