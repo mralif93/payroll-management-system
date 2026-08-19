@@ -1,32 +1,35 @@
-<x-layouts.admin title="UI Component Kit & Pattern Reference">
+<x-layouts.admin title="UI Component Kit &amp; Pattern Reference">
 
-    <div class="space-y-6">
+    <div class="space-y-8">
 
-        <!-- Page Header Banner with Dark Mode & Boxicons -->
-        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-6 sm:p-8 text-white shadow-xl border border-slate-800">
-            <div class="absolute -right-10 -bottom-10 w-64 h-64 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none"></div>
-            <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div>
-                    <div class="flex items-center gap-3 mb-2">
-                        <div class="w-10 h-10 rounded-2xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-300 text-xl backdrop-blur-xs">
+        <!-- Executive Page Hero Banner & Action Suite -->
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-900 via-slate-900 to-indigo-950 text-white p-6 sm:p-7 shadow-lg shadow-indigo-950/20 border border-indigo-800/40">
+            <!-- Background Decorative Glow -->
+            <div class="absolute -right-16 -top-16 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute right-1/3 -bottom-20 w-48 h-48 bg-purple-500/15 rounded-full blur-2xl pointer-events-none"></div>
+
+            <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+                <div class="space-y-2 max-w-2xl">
+                    <div class="flex items-center gap-2.5 flex-wrap">
+                        <div class="w-8 h-8 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center text-indigo-300 font-bold text-base shadow-xs">
                             <i class="bx bx-cube-alt"></i>
                         </div>
-                        <h1 class="text-xl sm:text-2xl font-black text-white tracking-tight">Core UI Components &amp; Pattern Library</h1>
-                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 inline-flex items-center gap-1.5 backdrop-blur-xs">
-                            <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
+                        <h1 class="text-xl sm:text-2xl font-black text-white tracking-tight">UI Component Kit &amp; Pattern Library</h1>
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 inline-flex items-center gap-1.5 backdrop-blur-xs">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                             13 Categories
                         </span>
                     </div>
-                    <p class="text-xs sm:text-sm text-indigo-100/80 leading-relaxed max-w-3xl">
+                    <p class="text-xs sm:text-sm text-indigo-100/80 leading-relaxed">
                         Official reusable UI building blocks and design system patterns for PayFlow. Single-open accordion with zero custom CSS.
                     </p>
                 </div>
 
-                <div class="flex items-center gap-2.5 flex-wrap shrink-0">
+                <div class="flex items-center gap-2.5 sm:gap-3 flex-wrap shrink-0">
                     <button 
                         type="button" 
                         onclick="document.querySelectorAll('details').forEach(d => d.open = true)" 
-                        class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/10 backdrop-blur-md transition flex items-center gap-1.5 cursor-pointer"
+                        class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/10 backdrop-blur-md transition flex items-center gap-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
                     >
                         <i class="bx bx-expand-alt text-base"></i>
                         <span>Expand All</span>
@@ -34,7 +37,7 @@
                     <button 
                         type="button" 
                         onclick="document.querySelectorAll('details').forEach(d => d.open = false)" 
-                        class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/10 backdrop-blur-md transition flex items-center gap-1.5 cursor-pointer"
+                        class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/10 backdrop-blur-md transition flex items-center gap-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
                     >
                         <i class="bx bx-collapse-alt text-base"></i>
                         <span>Collapse All</span>
