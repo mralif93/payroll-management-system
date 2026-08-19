@@ -59,6 +59,25 @@
             }
         }
 
+        @media (max-width: 640px) {
+            .action-bar {
+                flex-direction: column;
+                gap: 10px;
+                align-items: stretch;
+            }
+            .ea-wrapper {
+                padding: 14px 10px;
+                margin-bottom: 20px;
+                border-width: 1px;
+            }
+            .grid-2 {
+                grid-template-columns: 1fr !important;
+            }
+            .grid-3 {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
         .action-bar {
             max-width: 840px;
             margin: 20px auto 14px auto;

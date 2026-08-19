@@ -325,7 +325,7 @@
         </header>
 
         <!-- Scrollable Dashboard Page Body -->
-        <main class="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6">
+        <main class="flex-1 overflow-y-auto p-3.5 sm:p-6 lg:p-8 space-y-5 sm:space-y-6">
             
             @if(isset($headerActions))
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">

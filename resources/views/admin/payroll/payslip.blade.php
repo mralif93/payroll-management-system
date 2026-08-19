@@ -59,6 +59,35 @@
             }
         }
 
+        @media (max-width: 640px) {
+            .action-bar {
+                flex-direction: column;
+                gap: 10px;
+                align-items: stretch;
+            }
+            .payslip-wrapper {
+                padding: 16px 12px;
+                margin-bottom: 20px;
+            }
+            .header-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            .statement-badge {
+                text-align: left;
+            }
+            .employee-info-box {
+                grid-template-columns: 1fr !important;
+                gap: 8px !important;
+            }
+            .earnings-deductions-grid {
+                grid-template-columns: 1fr !important;
+            }
+            .summary-cards-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
         .action-bar {
             max-width: 800px;
             margin: 20px auto 14px auto;
