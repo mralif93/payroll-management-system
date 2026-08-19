@@ -499,7 +499,14 @@ class PayrollRunController extends Controller
      */
     public function show(PayrollRun $payrollRun)
     {
-        $payrollRun->load(['company', 'items.employee', 'creator', 'approver']);
+        $payrollRun->load([
+            'company',
+            'items.employee.salaryComponents.salaryComponent',
+            'items.employee.statutoryProfile',
+            'items.employee.department',
+            'creator',
+            'approver'
+        ]);
 
         return view('admin.payroll.show', compact('payrollRun'));
     }
@@ -728,7 +735,7 @@ class PayrollRunController extends Controller
     public function payslip(PayrollRun $payrollRun, \App\Models\PayrollItem $item)
     {
         $payrollRun->load('company');
-        $item->load(['employee.department', 'employee.statutoryProfile']);
+        $item->load(['employee.department', 'employee.statutoryProfile', 'employee.salaryComponents.salaryComponent']);
         $company = $payrollRun->company ?? \App\Models\Company::first();
 
         return view('admin.payroll.payslip', compact('payrollRun', 'item', 'company'));

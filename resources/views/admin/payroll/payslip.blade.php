@@ -469,7 +469,17 @@
                     <span class="table-row-amount mono">RM {{ number_format($item->basic_salary, 2) }}</span>
                 </div>
 
-                @if($item->allowances_total > 0)
+                @if($item->allowances_total > 0 && $item->employee?->salaryComponents && $item->employee->salaryComponents->count() > 0)
+                    @foreach($item->employee->salaryComponents->where('salaryComponent.type', 'allowance') as $sc)
+                        <div class="table-row">
+                            <div>
+                                <span class="table-row-title">{{ $sc->salaryComponent?->name ?? 'Fixed Allowance' }}</span>
+                                <span class="table-row-desc">{{ $sc->notes ?? ($sc->salaryComponent?->is_epf_subject ? 'Statutory-Subject' : 'Tax-Exempt Concession') }}</span>
+                            </div>
+                            <span class="table-row-amount mono">RM {{ number_format($sc->amount, 2) }}</span>
+                        </div>
+                    @endforeach
+                @elseif($item->allowances_total > 0)
                     <div class="table-row">
                         <div>
                             <span class="table-row-title">Fixed &amp; Custom Allowances</span>

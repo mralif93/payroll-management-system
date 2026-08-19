@@ -276,10 +276,23 @@
                     <div class="font-semibold text-slate-600 dark:text-slate-400">Monthly Basic Salary</div>
                     <div class="text-right font-mono font-bold text-slate-900 dark:text-white" id="ps-basic">RM 0.00</div>
                 </div>
-                <div class="grid grid-cols-2 p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition items-center">
-                    <div class="font-semibold text-slate-600 dark:text-slate-400">Allowances &amp; Claims</div>
-                    <div class="text-right font-mono text-slate-800 dark:text-slate-200" id="ps-allowances">RM 0.00</div>
+
+                <!-- Allowances Summary Header & Container -->
+                <div class="p-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition space-y-2">
+                    <div class="flex items-center justify-between">
+                        <div class="font-semibold text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
+                            <span>Allowances &amp; Claims</span>
+                            <span id="ps-allowance-count-badge" class="px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">0 items</span>
+                        </div>
+                        <div class="text-right font-mono font-bold text-indigo-600 dark:text-indigo-400" id="ps-allowances">RM 0.00</div>
+                    </div>
+                    
+                    <!-- Itemized Allowance Breakdown List -->
+                    <div id="ps-allowance-items-list" class="space-y-1.5 pl-3 border-l-2 border-indigo-200 dark:border-indigo-800">
+                        <!-- Populated via JS dynamically -->
+                    </div>
                 </div>
+
                 <div class="grid grid-cols-2 p-3 bg-slate-50/80 dark:bg-slate-800/50 hover:bg-slate-100/60 transition items-center">
                     <div class="font-bold text-slate-900 dark:text-white">Gross Wages Computed</div>
                     <div class="text-right font-mono font-extrabold text-slate-900 dark:text-white text-sm" id="ps-gross">RM 0.00</div>
@@ -429,6 +442,54 @@
                 document.getElementById('ps-basic').textContent = fmt(basic);
                 document.getElementById('ps-allowances').textContent = fmt(allowances);
                 document.getElementById('ps-gross').textContent = fmt(gross);
+
+                // Render Itemized Allowance Breakdown
+                const allowanceListEl = document.getElementById('ps-allowance-items-list');
+                const allowanceBadgeEl = document.getElementById('ps-allowance-count-badge');
+                allowanceListEl.innerHTML = '';
+
+                const salaryComponents = employee?.salary_components || [];
+                const allowanceComponents = salaryComponents.filter(sc => (sc.salary_component?.type === 'allowance' || sc.type === 'allowance') && parseFloat(sc.amount) > 0);
+
+                if (allowanceComponents.length > 0) {
+                    allowanceBadgeEl.textContent = `${allowanceComponents.length} items`;
+                    allowanceBadgeEl.className = 'px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400';
+                    allowanceListEl.style.display = 'block';
+
+                    allowanceComponents.forEach(comp => {
+                        const name = comp.salary_component?.name || comp.name || 'Allowance';
+                        const note = comp.notes || (comp.salary_component?.is_epf_subject ? 'Statutory-subject' : 'Tax/Statutory Exempt');
+                        const amt = parseFloat(comp.amount || 0);
+
+                        const rowDiv = document.createElement('div');
+                        rowDiv.className = 'flex items-center justify-between text-[11px]';
+                        rowDiv.innerHTML = `
+                            <div class="flex items-center gap-1.5">
+                                <i class="bx bx-check-circle text-xs text-indigo-500"></i>
+                                <span class="font-medium text-slate-700 dark:text-slate-300">${name}</span>
+                                <span class="text-[9.5px] text-slate-400">(${note})</span>
+                            </div>
+                            <span class="font-mono font-semibold text-slate-800 dark:text-slate-200">+ ${fmt(amt)}</span>
+                        `;
+                        allowanceListEl.appendChild(rowDiv);
+                    });
+                } else if (allowances > 0) {
+                    allowanceBadgeEl.textContent = '1 item';
+                    allowanceListEl.style.display = 'block';
+                    allowanceListEl.innerHTML = `
+                        <div class="flex items-center justify-between text-[11px]">
+                            <div class="flex items-center gap-1.5">
+                                <i class="bx bx-check-circle text-xs text-indigo-500"></i>
+                                <span class="font-medium text-slate-700 dark:text-slate-300">Total Fixed Allowances</span>
+                            </div>
+                            <span class="font-mono font-semibold text-slate-800 dark:text-slate-200">+ ${fmt(allowances)}</span>
+                        </div>
+                    `;
+                } else {
+                    allowanceBadgeEl.textContent = 'None';
+                    allowanceBadgeEl.className = 'px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-400';
+                    allowanceListEl.style.display = 'none';
+                }
 
                 // EPF
                 document.getElementById('ps-epf-er').textContent = fmt(epfEr);
