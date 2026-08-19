@@ -63,13 +63,15 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::delete('/payroll/{payrollRun}', [PayrollRunController::class, 'destroy'])->name('payroll.destroy');
     Route::get('/payroll/{payrollRun}/payslip/{item}', [PayrollRunController::class, 'payslip'])->name('payroll.payslip');
 
-    // 4. Banking Autopay & Statutory Exporters
-    Route::get('/banking', [ExportAndBankingController::class, 'index'])->name('banking.index');
-    Route::get('/exports', [ExportAndBankingController::class, 'index'])->name('exports.index');
-    Route::post('/banking/{payrollRun}/bank-file', [ExportAndBankingController::class, 'generateBankFile'])->name('banking.bank-file');
-    Route::post('/banking/{payrollRun}/statutory-file', [ExportAndBankingController::class, 'generateStatutoryFile'])->name('banking.statutory-file');
+    // 4. Banking Autopay & Corporate Disbursements
+    Route::get('/banking', [\App\Http\Controllers\Admin\BankingController::class, 'index'])->name('banking.index');
+    Route::post('/banking/{payrollRun}/bank-file', [\App\Http\Controllers\Admin\BankingController::class, 'generateBankFile'])->name('banking.bank-file');
 
-    // 5. Year-End Tax Form EA
+    // 5. Monthly Statutory Exporters (KWSP, SOCSO, CP39)
+    Route::get('/exports', [\App\Http\Controllers\Admin\StatutoryExportController::class, 'index'])->name('exports.index');
+    Route::post('/exports/{payrollRun}/generate', [\App\Http\Controllers\Admin\StatutoryExportController::class, 'generateStatutoryFile'])->name('exports.generate');
+
+    // 6. Year-End Tax Form EA
     Route::get('/tax-ea', [TaxFormEaController::class, 'index'])->name('tax-ea.index');
     Route::post('/tax-ea/compile', [TaxFormEaController::class, 'compileAnnual'])->name('tax-ea.compile');
     Route::get('/tax-ea/{record}/print', [TaxFormEaController::class, 'print'])->name('tax-ea.print');

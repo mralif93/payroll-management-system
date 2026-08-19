@@ -123,13 +123,13 @@ class ExportAndBankingTest extends TestCase
 
     public function test_can_generate_and_download_statutory_epf_csv(): void
     {
-        $response = $this->actingAs($this->admin)->post(route('admin.banking.statutory-file', $this->payrollRun), [
+        $response = $this->actingAs($this->admin)->post(route('admin.exports.generate', $this->payrollRun), [
             'statutory_body' => 'epf',
             'download' => '1',
         ]);
 
         $response->assertStatus(200);
-        $this->assertStringContainsString('Employer EPF No,Employee No', $response->getContent());
+        $this->assertStringContainsString('Employer No,Employer Name,Contribution Month', $response->getContent());
         $this->assertDatabaseHas('statutory_submissions', [
             'payroll_run_id' => $this->payrollRun->id,
             'statutory_body' => 'epf',
