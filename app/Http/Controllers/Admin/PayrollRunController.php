@@ -59,10 +59,19 @@ class PayrollRunController extends Controller
 
     /**
      * Get exact PERKESO SOCSO (Act 4 + 2026 SKBBK Lindung 24 Jam) Employee and Employer contribution from statutory wage bracket.
+     * Supports Category 1 (Full Employment Injury + Invalidity) and Category 2 (Employment Injury Scheme Only: 1.25% ER only, 0% EE).
      */
-    public static function calculateSocso(float $grossWage, bool $isSkbbkEnabled = true): array
+    public static function calculateSocso(float $grossWage, bool $isSkbbkEnabled = true, string $socsoCategory = 'category_1_full'): array
     {
         $wage = min($grossWage, 6000.00);
+
+        // If Category 2 (Foreign Worker / Injury Scheme only): 1.25% Employer, 0% Employee, No SKBBK
+        if ($socsoCategory === 'category_2_injury_only') {
+            return [
+                'ee' => 0.00,
+                'er' => round($wage * 0.0125, 2),
+            ];
+        }
 
         // Standard official PERKESO (Act 4) Table Brackets
         $brackets = [
@@ -197,9 +206,17 @@ class PayrollRunController extends Controller
 
     /**
      * Get exact LHDN Computerised Monthly Tax Deduction (PCB / MTD) for standard single / non-claim tax profile.
+     * Supports Tax Residents (Progressive Brackets + Reliefs) & Non-Residents (Flat 30% with zero relief as per ITA 1967).
      */
-    public static function calculatePcb(float $grossWage, float $epfEe): float
+    public static function calculatePcb(float $grossWage, float $epfEe, bool $isTaxResident = true): float
     {
+        if ($grossWage <= 0) return 0.00;
+
+        // Non-Resident Tax Rate: Flat 30% without any personal relief or rebates (Income Tax Act 1967)
+        if (!$isTaxResident) {
+            return round($grossWage * 0.30, 2);
+        }
+
         // Monthly Net Taxable = Gross - min(EPF EE, RM333.33) [LHDN annual max EPF relief RM4,000 / 12 = 333.33]
         $taxableGross = $grossWage - min($epfEe, 333.33);
 
@@ -344,8 +361,9 @@ class PayrollRunController extends Controller
             // Gross salary after deducting unpaid absence
             $gross = max(0.00, $basic + $allowances - $unpaidLeaveDeduction);
 
-            // 2. Interns (Practical Students receiving stipend) are legally exempt from mandatory EPF, SOCSO & EIS
-            if ($empType === 'intern') {
+            // 2. Independent Contractors / Freelancers (Contract for Service) & Interns
+            if ($empType === 'freelance_contract') {
+                // Independent Contractor: Gross disbursement without mandatory statutory withholdings
                 $epfEe = 0.00;
                 $epfEr = 0.00;
                 $socsoEe = 0.00;
@@ -354,8 +372,42 @@ class PayrollRunController extends Controller
                 $eisEe = 0.00;
                 $eisEr = 0.00;
                 $pcb = 0.00;
+            } elseif ($empType === 'intern') {
+                // Interns (Practical Students receiving stipend) are legally exempt from mandatory EPF, SOCSO & EIS
+                $epfEe = 0.00;
+                $epfEr = 0.00;
+                $socsoEe = 0.00;
+                $skbbkEe = 0.00;
+                $socsoEr = 0.00;
+                $eisEe = 0.00;
+                $eisEr = 0.00;
+                $pcb = 0.00;
+            } elseif ($empType === 'contract_foreign' || $employee->citizenship === 'foreign_worker') {
+                // Foreign Contract / Expatriates: SOCSO Category 2 (1.25% ER only), EIS exempt (0%), EPF voluntary/custom, PCB based on tax residency
+                $epfRateType = $employee->statutoryProfile?->epf_rate_type ?? 'custom';
+                $customEeRate = $employee->statutoryProfile?->epf_employee_custom_rate ? (float) $employee->statutoryProfile->epf_employee_custom_rate : 0.0;
+                $customErRate = $employee->statutoryProfile?->epf_employer_custom_rate ? (float) $employee->statutoryProfile->epf_employer_custom_rate : 0.0;
+                $isSenior = ($employee->birth_date && \Carbon\Carbon::parse($employee->birth_date)->age >= 60);
+
+                $epfValues = self::calculateEpf($gross, $epfRateType, $customEeRate, $customErRate, $isSenior);
+                $epfEe = $epfValues['ee'];
+                $epfEr = $epfValues['er'];
+
+                // SOCSO Category 2: 1.25% ER only, 0% EE
+                $socsoValues = self::calculateSocso($gross, false, 'category_2_injury_only');
+                $socsoEe = $socsoValues['ee'];
+                $socsoEr = $socsoValues['er'];
+                $skbbkEe = 0.00;
+
+                // EIS is legally exempt for non-citizens
+                $eisEe = 0.00;
+                $eisEr = 0.00;
+
+                // PCB based on tax residency (Flat 30% if non-resident, standard formula if resident)
+                $isTaxResident = (bool) ($employee->statutoryProfile?->is_tax_resident ?? true);
+                $pcb = self::calculatePcb($gross, $epfEe, $isTaxResident);
             } else {
-                // 3. Permanent, Contract & Part-Time Staff: Full Statutory Calculation
+                // Permanent, Standard Contract & Part-Time Staff: Full Statutory Calculation
                 $epfRateType = $employee->statutoryProfile?->epf_rate_type ?? 'standard_11';
                 $customEeRate = $employee->statutoryProfile?->epf_employee_custom_rate ? (float) $employee->statutoryProfile->epf_employee_custom_rate : null;
                 $customErRate = $employee->statutoryProfile?->epf_employer_custom_rate ? (float) $employee->statutoryProfile->epf_employer_custom_rate : null;
@@ -367,7 +419,8 @@ class PayrollRunController extends Controller
 
                 // Compute Tiered PERKESO (Act 4 + 2026 SKBBK if opted in)
                 $isSkbbkEnabled = (bool) ($employee->statutoryProfile?->is_skbbk_contributed ?? true);
-                $socsoValues = self::calculateSocso($gross, $isSkbbkEnabled);
+                $socsoCategory = $employee->statutoryProfile?->socso_category ?? 'category_1_full';
+                $socsoValues = self::calculateSocso($gross, $isSkbbkEnabled, $socsoCategory);
                 $socsoEe = $socsoValues['ee'];
                 $socsoEr = $socsoValues['er'];
                 $skbbkEe = 0.00; // SKBBK is included in total employee SOCSO
@@ -384,7 +437,8 @@ class PayrollRunController extends Controller
                 }
 
                 // Compute Official LHDN MTD / PCB (Income Tax Act 1967)
-                $pcb = self::calculatePcb($gross, $epfEe);
+                $isTaxResident = (bool) ($employee->statutoryProfile?->is_tax_resident ?? true);
+                $pcb = self::calculatePcb($gross, $epfEe, $isTaxResident);
             }
 
             $totalDeductions = $epfEe + $socsoEe + $skbbkEe + $eisEe + $pcb;
@@ -511,7 +565,8 @@ class PayrollRunController extends Controller
             $unpaidLeaveDeduction = round($unpaidLeaveDays * $dailyOrp, 2);
             $gross = max(0.00, $basic + $allowances - $unpaidLeaveDeduction);
 
-            if ($empType === 'intern') {
+            // 2. Independent Contractors / Freelancers & Interns
+            if ($empType === 'freelance_contract') {
                 $epfEe = 0.00;
                 $epfEr = 0.00;
                 $socsoEe = 0.00;
@@ -520,6 +575,36 @@ class PayrollRunController extends Controller
                 $eisEe = 0.00;
                 $eisEr = 0.00;
                 $pcb = 0.00;
+            } elseif ($empType === 'intern') {
+                $epfEe = 0.00;
+                $epfEr = 0.00;
+                $socsoEe = 0.00;
+                $skbbkEe = 0.00;
+                $socsoEr = 0.00;
+                $eisEe = 0.00;
+                $eisEr = 0.00;
+                $pcb = 0.00;
+            } elseif ($empType === 'contract_foreign' || $employee->citizenship === 'foreign_worker') {
+                // Foreign Contract Worker / Expatriates
+                $epfRateType = $employee->statutoryProfile?->epf_rate_type ?? 'custom';
+                $customEeRate = $employee->statutoryProfile?->epf_employee_custom_rate ? (float) $employee->statutoryProfile->epf_employee_custom_rate : 0.0;
+                $customErRate = $employee->statutoryProfile?->epf_employer_custom_rate ? (float) $employee->statutoryProfile->epf_employer_custom_rate : 0.0;
+                $isSenior = ($employee->birth_date && \Carbon\Carbon::parse($employee->birth_date)->age >= 60);
+
+                $epfValues = self::calculateEpf($gross, $epfRateType, $customEeRate, $customErRate, $isSenior);
+                $epfEe = $epfValues['ee'];
+                $epfEr = $epfValues['er'];
+
+                $socsoValues = self::calculateSocso($gross, false, 'category_2_injury_only');
+                $socsoEe = $socsoValues['ee'];
+                $socsoEr = $socsoValues['er'];
+                $skbbkEe = 0.00;
+
+                $eisEe = 0.00;
+                $eisEr = 0.00;
+
+                $isTaxResident = (bool) ($employee->statutoryProfile?->is_tax_resident ?? true);
+                $pcb = self::calculatePcb($gross, $epfEe, $isTaxResident);
             } else {
                 $epfRateType = $employee->statutoryProfile?->epf_rate_type ?? 'standard_11';
                 $customEeRate = $employee->statutoryProfile?->epf_employee_custom_rate ? (float) $employee->statutoryProfile->epf_employee_custom_rate : null;
@@ -532,7 +617,8 @@ class PayrollRunController extends Controller
 
                 // Compute Tiered PERKESO (Act 4 + 2026 SKBBK if opted in)
                 $isSkbbkEnabled = (bool) ($employee->statutoryProfile?->is_skbbk_contributed ?? true);
-                $socsoValues = self::calculateSocso($gross, $isSkbbkEnabled);
+                $socsoCategory = $employee->statutoryProfile?->socso_category ?? 'category_1_full';
+                $socsoValues = self::calculateSocso($gross, $isSkbbkEnabled, $socsoCategory);
                 $socsoEe = $socsoValues['ee'];
                 $socsoEr = $socsoValues['er'];
                 $skbbkEe = 0.00;
@@ -547,7 +633,8 @@ class PayrollRunController extends Controller
                     $eisEr = 0.00;
                 }
 
-                $pcb = self::calculatePcb($gross, $epfEe);
+                $isTaxResident = (bool) ($employee->statutoryProfile?->is_tax_resident ?? true);
+                $pcb = self::calculatePcb($gross, $epfEe, $isTaxResident);
             }
 
             $totalDeductions = $epfEe + $socsoEe + $skbbkEe + $eisEe + $pcb;

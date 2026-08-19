@@ -8,7 +8,12 @@ An enterprise-grade, web-based Malaysian Payroll Management System built on Lara
 
 This system strictly adheres to Malaysian statutory regulatory frameworks:
 
-- **Employment Act 1955 (Amended 2022/2023):** Overtime (OT) rate multipliers ($1.5\times, 2.0\times, 3.0\times$), max 45-hour work weeks, 7-day payment window, and 50% max monthly deduction limits.
+- **Employment Act 1955 (Amended 2022/2023):** Overtime (OT) rate multipliers ($1.5\times, 2.0\times, 3.0\times$), max 45-hour work weeks, 7-day payment window, Ordinary Rate of Pay (ORP: $\frac{\text{Basic}}{26}$) unpaid proration, and 50% max monthly deduction limits.
+- **Contract of Service vs. Contract for Service:**
+  - **Local Fixed-Term Contract Staff (`contract`):** Full mandatory statutory compliance (KWSP/EPF, PERKESO/SOCSO Act 4 + SKBBK, SIP/EIS Act 800, LHDN PCB).
+  - **Foreign Contract Workers / Expatriates (`contract_foreign`):** PERKESO Category 2 (Employment Injury Scheme only: 1.25% ER / 0% EE), EIS exempt (0% EE / 0% ER), voluntary/custom EPF rates, and tax residency support (flat 30% for non-residents).
+  - **Independent Contractors / Freelancers (`freelance_contract`):** Gross disbursement without mandatory statutory employee deductions.
+  - **Practical Interns (`intern`):** Stipend disbursement legally exempt from statutory EPF/SOCSO/EIS.
 - **KWSP / EPF (Employees Provident Fund Act 1991):** Statutory employee & employer contribution rates (including $\le \text{RM}5,000$ vs. $> \text{RM}5,000$ rules, senior age $60+$ rates, and foreign worker rates).
 - **PERKESO / SOCSO (Employees' Social Security Act 1969):** Employment Injury & Invalidity schemes (Category 1 & Category 2) with statutory monthly wage ceiling caps ($\text{RM}6,000$).
 - **PERKESO / SKBBK (*LINDUNG 24 JAM* - Effective 1 June 2026):** Non-Employment Injury Scheme providing 24-hour accident protection funded via employee contributions across official tiered wage brackets.

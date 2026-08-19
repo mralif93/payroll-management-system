@@ -60,23 +60,27 @@ class EmployeeController extends Controller
             'bank_account_no' => ['nullable', 'string'],
             'email' => ['nullable', 'email'],
             'phone_number' => ['nullable', 'string'],
-            'employment_type' => ['nullable', 'in:permanent,contract,intern,part_time'],
+            'employment_type' => ['nullable', 'in:permanent,contract,contract_foreign,freelance_contract,intern,part_time'],
         ]);
 
         $employee = Employee::create($validated);
+
+        $isForeign = ($validated['citizenship'] === 'foreign_worker' || ($validated['employment_type'] ?? '') === 'contract_foreign');
+        $isFreelance = (($validated['employment_type'] ?? '') === 'freelance_contract');
 
         // Auto-create statutory profile with configured toggles, statutory IDs, and EPF rate
         $employee->statutoryProfile()->create([
             'epf_member_no' => $request->input('epf_member_no'),
             'socso_member_no' => $request->input('socso_member_no'),
             'income_tax_no' => $request->input('income_tax_no'),
-            'epf_rate_type' => $request->input('epf_rate_type', 'standard_11'),
-            'epf_employee_custom_rate' => $request->filled('epf_employee_custom_rate') ? (float) $request->input('epf_employee_custom_rate') : null,
-            'socso_category' => 'category_1_full',
-            'is_eis_contributed' => $request->boolean('is_eis_contributed', true),
-            'is_skbbk_contributed' => $request->boolean('is_skbbk_contributed', true),
-            'tax_category' => 'single',
-            'is_tax_resident' => true,
+            'epf_rate_type' => $request->input('epf_rate_type', ($isForeign || $isFreelance) ? 'custom' : 'standard_11'),
+            'epf_employee_custom_rate' => $request->filled('epf_employee_custom_rate') ? (float) $request->input('epf_employee_custom_rate') : ($isForeign ? 2.0 : ($isFreelance ? 0.0 : null)),
+            'epf_employer_custom_rate' => $request->filled('epf_employer_custom_rate') ? (float) $request->input('epf_employer_custom_rate') : ($isForeign ? 2.0 : ($isFreelance ? 0.0 : null)),
+            'socso_category' => $isForeign ? 'category_2_injury_only' : 'category_1_full',
+            'is_eis_contributed' => ($isForeign || $isFreelance) ? false : $request->boolean('is_eis_contributed', true),
+            'is_skbbk_contributed' => ($isForeign || $isFreelance) ? false : $request->boolean('is_skbbk_contributed', true),
+            'tax_category' => $request->input('tax_category', 'single'),
+            'is_tax_resident' => $request->boolean('is_tax_resident', !$isForeign),
         ]);
 
         // Save Allowances if provided
@@ -147,12 +151,16 @@ class EmployeeController extends Controller
             'basic_salary' => ['required', 'numeric', 'min:0'],
             'joined_date' => ['required', 'date'],
             'employment_status' => ['required', 'in:active,probation,confirmed,resigned'],
-            'employment_type' => ['required', 'in:permanent,contract,intern,part_time'],
+            'employment_type' => ['required', 'in:permanent,contract,contract_foreign,freelance_contract,intern,part_time'],
             'resigned_date' => ['nullable', 'date'],
             'bank_name' => ['nullable', 'string'],
             'bank_account_no' => ['nullable', 'string'],
             'epf_rate_type' => ['nullable', 'in:standard_11,reduced_9,custom'],
             'epf_employee_custom_rate' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'epf_employer_custom_rate' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'socso_category' => ['nullable', 'in:category_1_full,category_2_injury_only'],
+            'is_tax_resident' => ['nullable', 'boolean'],
+            'tax_category' => ['nullable', 'string'],
         ]);
 
         if ($validated['employment_status'] === 'resigned' && empty($validated['resigned_date'])) {
@@ -164,6 +172,8 @@ class EmployeeController extends Controller
         $oldValues = $employee->only(array_keys($validated));
         $employee->update($validated);
 
+        $isForeign = ($validated['citizenship'] === 'foreign_worker' || $validated['employment_type'] === 'contract_foreign');
+
         // Update statutory profile toggles, IDs, and EPF rate
         $employee->statutoryProfile()->updateOrCreate(
             ['employee_id' => $employee->id],
@@ -173,8 +183,12 @@ class EmployeeController extends Controller
                 'income_tax_no' => $request->input('income_tax_no'),
                 'epf_rate_type' => $request->input('epf_rate_type', 'standard_11'),
                 'epf_employee_custom_rate' => $request->filled('epf_employee_custom_rate') ? (float) $request->input('epf_employee_custom_rate') : null,
+                'epf_employer_custom_rate' => $request->filled('epf_employer_custom_rate') ? (float) $request->input('epf_employer_custom_rate') : null,
+                'socso_category' => $request->input('socso_category', $isForeign ? 'category_2_injury_only' : 'category_1_full'),
                 'is_skbbk_contributed' => $request->boolean('is_skbbk_contributed'),
                 'is_eis_contributed' => $request->boolean('is_eis_contributed'),
+                'is_tax_resident' => $request->has('is_tax_resident') ? $request->boolean('is_tax_resident') : !$isForeign,
+                'tax_category' => $request->input('tax_category', 'single'),
             ]
         );
 

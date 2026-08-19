@@ -22,6 +22,19 @@ The system automates employee compensation, statutory deductions, monthly bank a
 | **HRD Corp** | Pembangunan Sumber Manusia Berhad Act 2001 | Mandatory $1.0\%$ levy for employers with $10+$ Malaysian employees (optional $0.5\%$ for 5–9 employees) based on gross monthly remuneration. |
 | **PDPA** | Personal Data Protection Act 2010 | Mandatory field-level encryption for sensitive Personally Identifiable Information (NRIC, Passports, Bank Accounts) and granular role-based access logs. |
 
+### 1.3 Malaysian Employment Contract Classification & Statutory Matrix
+
+The system supports 5 distinct employment classifications in strict compliance with the Employment Act 1955 and statutory acts:
+
+| Employment Type Code | Classification Name | Contractual Basis | KWSP / EPF | PERKESO / SOCSO | SIP / EIS | LHDN PCB / MTD |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `permanent` | Permanent Staff | Contract of Service | **Mandatory** (11% EE / 12–13% ER) | **Mandatory** (Category 1 Full + SKBBK) | **Mandatory** (0.2% EE / 0.2% ER) | Standard Progressive Tax Rates |
+| `contract` | Fixed-Term Contract (Local) | Contract of Service | **Mandatory** (11% EE / 12–13% ER) | **Mandatory** (Category 1 Full + SKBBK) | **Mandatory** (0.2% EE / 0.2% ER) | Standard Progressive Tax Rates |
+| `contract_foreign` | Foreign Contract / Expatriate | Contract of Service | **Voluntary / Custom** (Default 2% EE / 2% ER) | **Category 2 Only** (1.25% ER only, 0% EE) | **Exempt** (0% EE / 0% ER under Act 800) | Residency-based (Flat 30% if Non-Resident) |
+| `freelance_contract` | Freelancer / Independent Vendor | Contract for Service | **Exempt** (Gross Disbursement) | **Exempt** (Gross Disbursement) | **Exempt** (Gross Disbursement) | Invoiced / Sec 107D Withholding |
+| `intern` | Practical Trainee / Intern | Training Agreement | **Exempt** (Stipend Allowance) | **Exempt** (Stipend Allowance) | **Exempt** (Stipend Allowance) | Exempt below threshold |
+| `part_time` | Part-Time Staff | Contract of Service | **Mandatory** (Prorated) | **Mandatory** (Category 1) | **Mandatory** (0.2%) | Standard Progressive Tax Rates |
+
 ---
 
 ## 2. Technology Stack & Directory Architecture

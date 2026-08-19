@@ -158,4 +158,81 @@ class PayrollRunCrudTest extends TestCase
         $this->assertEquals($this->admin->id, $payrollRun->approved_by);
         $this->assertNotNull($payrollRun->approved_at);
     }
+
+    public function test_calculates_freelance_contractor_and_foreign_worker_correctly(): void
+    {
+        $dept = Department::first();
+
+        // 1. Independent Contractor / Freelance (Contract for Service)
+        $freelancer = Employee::create([
+            'company_id' => $this->company->id,
+            'department_id' => $dept->id,
+            'employee_no' => 'EMP-FREE01',
+            'full_name' => 'John Freelancer',
+            'nric_passport' => '880101-14-9999',
+            'citizenship' => 'malaysian',
+            'gender' => 'male',
+            'birth_date' => '1988-01-01',
+            'joined_date' => '2026-01-01',
+            'basic_salary' => 5000.00,
+            'designation' => 'External Consultant',
+            'employment_status' => 'active',
+            'employment_type' => 'freelance_contract',
+        ]);
+
+        // 2. Foreign Contract Worker (Non-resident, Category 2 SOCSO, 0% EIS, 2% EPF)
+        $foreignWorker = Employee::create([
+            'company_id' => $this->company->id,
+            'department_id' => $dept->id,
+            'employee_no' => 'EMP-FOR01',
+            'full_name' => 'Alex Expat',
+            'nric_passport' => 'P12345678X',
+            'citizenship' => 'foreign_worker',
+            'gender' => 'male',
+            'birth_date' => '1990-06-15',
+            'joined_date' => '2026-03-01',
+            'basic_salary' => 4000.00,
+            'designation' => 'Senior Specialist',
+            'employment_status' => 'active',
+            'employment_type' => 'contract_foreign',
+        ]);
+        $foreignWorker->statutoryProfile()->create([
+            'epf_rate_type' => 'custom',
+            'epf_employee_custom_rate' => 2.0,
+            'epf_employer_custom_rate' => 2.0,
+            'socso_category' => 'category_2_injury_only',
+            'is_eis_contributed' => false,
+            'is_skbbk_contributed' => false,
+            'is_tax_resident' => false, // Non-resident => Flat 30%
+        ]);
+
+        $this->actingAs($this->admin)->post(route('admin.payroll.store'), [
+            'company_id' => $this->company->id,
+            'period_year' => '2026',
+            'period_month' => '08',
+            'cutoff_date' => '2026-08-25',
+            'payment_date' => '2026-08-28',
+        ]);
+
+        $payrollRun = PayrollRun::first();
+
+        // Verify Freelancer item (Zero statutory deductions)
+        $freelanceItem = $payrollRun->items()->where('employee_id', $freelancer->id)->first();
+        $this->assertNotNull($freelanceItem);
+        $this->assertEquals(0.00, $freelanceItem->epf_employee);
+        $this->assertEquals(0.00, $freelanceItem->socso_employee);
+        $this->assertEquals(0.00, $freelanceItem->eis_employee);
+        $this->assertEquals(0.00, $freelanceItem->total_employee_deductions);
+        $this->assertEquals(5000.00, $freelanceItem->net_salary);
+
+        // Verify Foreign Worker item (2% EPF = RM80, 0% EE SOCSO, RM50 ER SOCSO (1.25%), 0% EIS, Flat 30% tax = RM1200)
+        $foreignItem = $payrollRun->items()->where('employee_id', $foreignWorker->id)->first();
+        $this->assertNotNull($foreignItem);
+        $this->assertEquals(80.00, $foreignItem->epf_employee);
+        $this->assertEquals(0.00, $foreignItem->socso_employee);
+        $this->assertEquals(50.00, $foreignItem->socso_employer); // 4000 * 1.25% = 50.00
+        $this->assertEquals(0.00, $foreignItem->eis_employee);
+        $this->assertEquals(1200.00, $foreignItem->pcb_amount); // Flat 30% of 4000 = 1200.00
+        $this->assertEquals(2720.00, $foreignItem->net_salary); // 4000 - 80 - 1200 = 2720.00
+    }
 }

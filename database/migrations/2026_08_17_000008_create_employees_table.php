@@ -24,7 +24,7 @@ return new class extends Migration
             $table->date('joined_date');
             $table->date('resigned_date')->nullable();
             $table->enum('employment_status', ['active', 'probation', 'confirmed', 'resigned'])->default('active');
-            $table->enum('employment_type', ['permanent', 'contract', 'intern', 'part_time'])->default('permanent');
+            $table->enum('employment_type', ['permanent', 'contract', 'contract_foreign', 'freelance_contract', 'intern', 'part_time'])->default('permanent');
             $table->decimal('basic_salary', 12, 2)->default(0.00);
             $table->string('designation')->nullable();
             $table->string('bank_name')->nullable();

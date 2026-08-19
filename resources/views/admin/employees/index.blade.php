@@ -208,14 +208,23 @@
                                 </td>
                                 <td class="p-3.5">
                                     <div class="flex items-center gap-1.5 flex-wrap">
-                                        <x-badge variant="indigo" size="sm">EPF 11%</x-badge>
-                                        @if($emp->statutoryProfile?->is_skbbk_contributed)
-                                            <x-badge variant="purple" size="sm">SKBBK</x-badge>
+                                        @if($emp->employment_type === 'freelance_contract')
+                                            <x-badge variant="teal" size="sm">Freelance / Contractor</x-badge>
+                                        @elseif($emp->employment_type === 'intern')
+                                            <x-badge variant="amber" size="sm">Intern (Exempt)</x-badge>
+                                        @elseif($emp->employment_type === 'contract_foreign' || $emp->citizenship === 'foreign_worker')
+                                            <x-badge variant="purple" size="sm">Foreign / Cat 2</x-badge>
+                                            <x-badge variant="indigo" size="sm">EPF {{ $emp->statutoryProfile?->epf_employee_custom_rate ?? 2 }}%</x-badge>
                                         @else
-                                            <x-badge variant="slate" size="sm">No SKBBK</x-badge>
-                                        @endif
-                                        @if($emp->statutoryProfile?->is_eis_contributed)
-                                            <x-badge variant="blue" size="sm">EIS</x-badge>
+                                            <x-badge variant="indigo" size="sm">EPF {{ $emp->statutoryProfile?->epf_rate_type === 'reduced_9' ? '9%' : ($emp->statutoryProfile?->epf_employee_custom_rate ? $emp->statutoryProfile->epf_employee_custom_rate.'%' : '11%') }}</x-badge>
+                                            @if($emp->statutoryProfile?->is_skbbk_contributed)
+                                                <x-badge variant="purple" size="sm">SKBBK</x-badge>
+                                            @else
+                                                <x-badge variant="slate" size="sm">No SKBBK</x-badge>
+                                            @endif
+                                            @if($emp->statutoryProfile?->is_eis_contributed)
+                                                <x-badge variant="blue" size="sm">EIS</x-badge>
+                                            @endif
                                         @endif
                                     </div>
                                 </td>
@@ -367,7 +376,9 @@
                         <div class="relative">
                             <select name="employment_type" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
                                 <option value="permanent">Permanent Staff</option>
-                                <option value="contract">Contract</option>
+                                <option value="contract">Contract (Local / Fixed-Term)</option>
+                                <option value="contract_foreign">Contract (Foreign Expatriate / Worker)</option>
+                                <option value="freelance_contract">Freelance / Contract for Service</option>
                                 <option value="intern">Intern</option>
                                 <option value="part_time">Part Time</option>
                             </select>
@@ -586,7 +597,9 @@
                         <div class="relative">
                             <select name="employment_type" id="edit-emp-type" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
                                 <option value="permanent">Permanent Staff</option>
-                                <option value="contract">Contract</option>
+                                <option value="contract">Contract (Local / Fixed-Term)</option>
+                                <option value="contract_foreign">Contract (Foreign Expatriate / Worker)</option>
+                                <option value="freelance_contract">Freelance / Contract for Service</option>
                                 <option value="intern">Intern</option>
                                 <option value="part_time">Part Time</option>
                             </select>
