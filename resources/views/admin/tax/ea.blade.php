@@ -197,6 +197,12 @@
                     </tbody>
                 </table>
             </div>
+
+            @if($eaRecords->hasPages())
+                <div class="p-4 border-t border-slate-100 dark:border-slate-800">
+                    {{ $eaRecords->links() }}
+                </div>
+            @endif
         </div>
 
     </div>

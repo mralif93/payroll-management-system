@@ -390,6 +390,12 @@
                     </tbody>
                 </table>
             </div>
+
+            @if($bankBatches->hasPages() || $statutorySubmissions->hasPages())
+                <div class="p-4 border-t border-slate-100 dark:border-slate-800">
+                    {{ $bankBatches->hasPages() ? $bankBatches->links() : $statutorySubmissions->links() }}
+                </div>
+            @endif
         </div>
 
     </div>

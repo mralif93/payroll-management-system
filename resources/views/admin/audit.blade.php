@@ -136,6 +136,12 @@
                     </tbody>
                 </table>
             </div>
+
+            @if($logs->hasPages())
+                <div class="p-4 border-t border-slate-100 dark:border-slate-800">
+                    {{ $logs->links() }}
+                </div>
+            @endif
         </div>
 
     </div>
