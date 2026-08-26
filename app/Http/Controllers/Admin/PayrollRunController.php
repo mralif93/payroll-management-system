@@ -331,7 +331,13 @@ class PayrollRunController extends Controller
             'payment_date' => ['required', 'date'],
         ]);
 
-        $batchNo = 'RUN-' . $validated['period_year'] . '-' . $validated['period_month'] . '-' . strtoupper(Str::random(4));
+        $periodCode = $validated['period_year'] . str_pad($validated['period_month'], 2, '0', STR_PAD_LEFT);
+        $count = PayrollRun::where('company_id', $validated['company_id'])
+            ->where('period_year', $validated['period_year'])
+            ->where('period_month', $validated['period_month'])
+            ->count();
+        $sequence = str_pad($count + 1, 2, '0', STR_PAD_LEFT);
+        $batchNo = "PRN-{$periodCode}-{$sequence}";
 
         $payrollRun = PayrollRun::create([
             'company_id' => $validated['company_id'],

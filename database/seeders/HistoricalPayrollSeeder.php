@@ -36,7 +36,7 @@ class HistoricalPayrollSeeder extends Seeder
 
         foreach ($schedules as $year => $maxMonth) {
             for ($month = 1; $month <= $maxMonth; $month++) {
-                $batchNo = sprintf('RUN-%04d-%02d-PAY', $year, $month);
+                $batchNo = sprintf('PRN-%04d%02d-01', $year, $month);
                 $cutoff = sprintf('%04d-%02d-25', $year, $month);
                 $payment = sprintf('%04d-%02d-28', $year, $month);
 

@@ -103,7 +103,7 @@
                             type="text" 
                             name="search" 
                             value="{{ request('search') }}" 
-                            placeholder="Search by batch number (e.g. RUN-2026-08)..." 
+                            placeholder="Search by batch number (e.g. PRN-202608)..." 
                             class="w-full pl-10 pr-10 py-2 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 dark:focus:border-indigo-400 transition"
                         >
                         @if(request('search'))
@@ -205,9 +205,9 @@
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-sans">
                         @forelse($payrollRuns as $run)
                             <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
-                                <td class="p-3.5 font-mono font-bold text-indigo-600 dark:text-indigo-400 whitespace-nowrap">
-                                    <div class="flex items-center gap-2">
-                                        <i class="bx bx-receipt text-base"></i>
+                                <td class="p-3.5 whitespace-nowrap">
+                                    <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-50/80 dark:bg-indigo-950/50 border border-indigo-200/60 dark:border-indigo-800/60 text-indigo-700 dark:text-indigo-300 font-mono text-[11px] font-bold tracking-tight shadow-2xs">
+                                        <i class="bx bx-receipt text-indigo-500 dark:text-indigo-400 text-xs"></i>
                                         <span>{{ $run->batch_no }}</span>
                                     </div>
                                 </td>
