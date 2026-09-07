@@ -1,8 +1,15 @@
 # Malaysian Payroll Management System
 
+[![Live Demo on GitHub Pages](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-indigo?style=for-the-badge&logo=github)](https://mralif93.github.io/payroll-management-system/)
+[![Laravel 11.x](https://img.shields.io/badge/Laravel-11.x-red?style=for-the-badge&logo=laravel)](https://laravel.com)
+[![Tailwind CSS v4](https://img.shields.io/badge/Tailwind-v4.0-sky?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com)
+
 An enterprise-grade, web-based Malaysian Payroll Management System built on Laravel 11.x, designed to automate employee compensation, statutory deductions, monthly bank autopay processing, government statutory file exports, and annual tax filings in compliance with Malaysian labor and tax legislation.
 
+🌐 **Live Demo (GitHub Pages):** [https://mralif93.github.io/payroll-management-system/](https://mralif93.github.io/payroll-management-system/)
+
 ---
+
 
 ## 📌 Overview & Statutory Compliance
 
