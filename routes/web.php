@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\StatutoryParameterController;
 use App\Http\Controllers\Admin\TaxFormEaController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\CentraFlowSsoClientController;
 use Illuminate\Support\Facades\Route;
 
 // Public Landing Page (Zero CSS, High Conversion, Calculator Demo)
@@ -22,17 +23,15 @@ Route::get('/demo', function () {
     return view('demo-components');
 })->name('demo');
 
-// Guest-Only Authentication Routes (Auto-redirect authenticated admins to /admin)
+// Single Sign-On (SSO) Routes via CentraFlow
+Route::get('/auth/centraflow', [CentraFlowSsoClientController::class, 'redirect'])->name('sso.login');
+Route::get('/auth/callback', [CentraFlowSsoClientController::class, 'callback'])->name('sso.callback');
+
+// Guest-Only Authentication Routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AuthController::class, 'login']);
-
-    Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
-    Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
-
-    Route::get('/reset-password/{token}', [AuthController::class, 'showResetPassword'])->name('password.reset');
-    Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
 });
+
 
 // Protected Admin Console Portal (Requires Authentication)
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {

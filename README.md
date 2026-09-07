@@ -62,6 +62,8 @@ The application implements a zero-custom-CSS, pure Tailwind CSS component archit
 
 ## 🛠️ Key Features
 
+- **Enterprise Single Sign-On (SSO) with CentraFlow:** Centralized identity authentication powered by CentraFlow OAuth 2.0 Authorization Server (`http://localhost:8004`), seamless profile auto-provisioning, role sync, and token verification.
+- **Unified Design Suite & Theme System:** Standardized responsive master layouts (`<x-layouts.app>`, `<x-layouts.auth>`, and `<x-layouts.admin>`) with dual-tier headers, sliding track theme switch (`light`/`dark`), and entrance animations matching the PulseHR ecosystem.
 - **Automated Statutory Calculation Engines:** Accurate real-time calculations for EPF, SOCSO (Act 4), SKBBK (June 2026), EIS, PCB (Computerised Formula), and HRD Corp.
 - **Effective-Dated Statutory Parameters:** Dynamically configured wage ceilings and rates mapped to effective dates.
 - **Bank Autopay File Generators:** Ready-to-upload payment files for **Maybank2e (HDR/DTL format)** and **CIMB BizChannel (CSV)**.
@@ -73,7 +75,9 @@ The application implements a zero-custom-CSS, pure Tailwind CSS component archit
 
 ## 📖 Documentation
 
-For detailed architecture, schema migrations, formulas, and service implementations, refer to the [Software Requirements Specification (SRS) & Development Blueprint](documentation/software-requirement-specifiction.md).
+- [Sub-System Authentication & CentraFlow SSO Integration Guide](documentation/subsystem-auth-guide.md)
+- [Software Requirements Specification (SRS) & Development Blueprint](documentation/software-requirement-specifiction.md)
+
 
 ---
 

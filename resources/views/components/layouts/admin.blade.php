@@ -14,12 +14,12 @@
     <!-- Google Fonts & Boxicons CDN -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 
     <!-- Prevent FOUC for Dark Mode -->
     <script>
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         } else {
             document.documentElement.classList.remove('dark');
@@ -30,7 +30,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     {{ $head ?? '' }}
 </head>
-<body class="h-full bg-slate-100/70 dark:bg-slate-950 text-slate-800 dark:text-slate-100 antialiased selection:bg-indigo-500 selection:text-white transition-colors duration-300 flex overflow-hidden" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+<body class="h-full bg-slate-100/80 dark:bg-slate-950 text-slate-800 dark:text-slate-100 antialiased selection:bg-indigo-600 selection:text-white transition-colors duration-300 flex overflow-hidden" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+
 
     <!-- MOBILE SIDEBAR OVERLAY & DRAWER -->
     <div id="mobile-sidebar-backdrop" onclick="toggleMobileSidebar()" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-40 xl:hidden transition-opacity"></div>
@@ -220,18 +221,11 @@
                     <span>Statutory 2026</span>
                 </div>
 
-                <!-- Theme Toggle Button -->
-                <button 
-                    type="button" 
-                    onclick="toggleDarkMode()" 
-                    id="theme-toggle-btn"
-                    class="w-9 h-9 flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-amber-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer shrink-0 shadow-2xs group"
-                    title="Toggle Dark/Light Mode"
-                >
-                    <i id="theme-toggle-icon" class="bx bx-moon text-lg group-hover:scale-110 transition-transform"></i>
-                </button>
+                <!-- Standardized Theme Toggle Switch -->
+                <x-theme-toggle id="admin-theme-toggle" />
 
                 <!-- Notifications Button -->
+
                 <button 
                     type="button" 
                     class="relative w-9 h-9 flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/70 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer shrink-0"
@@ -356,31 +350,19 @@
 
     <!-- Global Theme & Mobile Navigation Script -->
     <script>
-        function updateThemeIcon() {
-            const icon = document.getElementById('theme-toggle-icon');
-            if (!icon) return;
-            if (document.documentElement.classList.contains('dark')) {
-                icon.className = 'bx bx-sun text-lg text-amber-400 group-hover:scale-110 transition-transform';
-            } else {
-                icon.className = 'bx bx-moon text-lg text-slate-600 group-hover:scale-110 transition-transform';
-            }
-        }
-
-        function toggleDarkMode() {
+        function toggleTheme() {
             const isDark = document.documentElement.classList.contains('dark');
             if (isDark) {
                 document.documentElement.classList.remove('dark');
-                localStorage.theme = 'light';
+                localStorage.setItem('theme', 'light');
             } else {
                 document.documentElement.classList.add('dark');
-                localStorage.theme = 'dark';
+                localStorage.setItem('theme', 'dark');
             }
-            updateThemeIcon();
         }
 
-        document.addEventListener('DOMContentLoaded', updateThemeIcon);
-
         function toggleMobileSidebar() {
+
             const sidebar = document.getElementById('admin-sidebar');
             const backdrop = document.getElementById('mobile-sidebar-backdrop');
             
