@@ -1,125 +1,153 @@
-# Malaysian Payroll Management System
+# PayFlow MY — Enterprise Malaysian Payroll Management System
 
-[![Live Demo on GitHub Pages](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-indigo?style=for-the-badge&logo=github)](https://mralif93.github.io/payroll-management-system/)
-[![Laravel 11.x](https://img.shields.io/badge/Laravel-11.x-red?style=for-the-badge&logo=laravel)](https://laravel.com)
-[![Tailwind CSS v4](https://img.shields.io/badge/Tailwind-v4.0-sky?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com)
-
-An enterprise-grade, web-based Malaysian Payroll Management System built on Laravel 11.x, designed to automate employee compensation, statutory deductions, monthly bank autopay processing, government statutory file exports, and annual tax filings in compliance with Malaysian labor and tax legislation.
-
-🌐 **Live Demo (GitHub Pages):** [https://mralif93.github.io/payroll-management-system/](https://mralif93.github.io/payroll-management-system/)
-
----
-
-
-## 📌 Overview & Statutory Compliance
-
-This system strictly adheres to Malaysian statutory regulatory frameworks:
-
-- **Employment Act 1955 (Amended 2022/2023):** Overtime (OT) rate multipliers ($1.5\times, 2.0\times, 3.0\times$), max 45-hour work weeks, 7-day payment window, Ordinary Rate of Pay (ORP: $\frac{\text{Basic}}{26}$) unpaid proration, and 50% max monthly deduction limits.
-- **Contract of Service vs. Contract for Service:**
-  - **Local Fixed-Term Contract Staff (`contract`):** Full mandatory statutory compliance (KWSP/EPF, PERKESO/SOCSO Act 4 + SKBBK, SIP/EIS Act 800, LHDN PCB).
-  - **Foreign Contract Workers / Expatriates (`contract_foreign`):** PERKESO Category 2 (Employment Injury Scheme only: 1.25% ER / 0% EE), EIS exempt (0% EE / 0% ER), voluntary/custom EPF rates, and tax residency support (flat 30% for non-residents).
-  - **Independent Contractors / Freelancers (`freelance_contract`):** Gross disbursement without mandatory statutory employee deductions.
-  - **Practical Interns (`intern`):** Stipend disbursement legally exempt from statutory EPF/SOCSO/EIS.
-- **KWSP / EPF (Employees Provident Fund Act 1991):** Statutory employee & employer contribution rates (including $\le \text{RM}5,000$ vs. $> \text{RM}5,000$ rules, senior age $60+$ rates, and foreign worker rates).
-- **PERKESO / SOCSO (Employees' Social Security Act 1969):** Employment Injury & Invalidity schemes (Category 1 & Category 2) with statutory monthly wage ceiling caps ($\text{RM}6,000$).
-- **PERKESO / SKBBK (*LINDUNG 24 JAM* - Effective 1 June 2026):** Non-Employment Injury Scheme providing 24-hour accident protection funded via employee contributions across official tiered wage brackets.
-- **PERKESO / EIS (Employment Insurance System Act 2017):** $0.2\%$ employee and employer contributions up to the $\text{RM}6,000$ wage ceiling.
-- **LHDN / HASiL (Income Tax Act 1967):** Full computerized calculation method for Monthly Tax Deductions (PCB/MTD), Form TP1/TP3 reliefs, CP39 text export, and Form EA / Form E generation.
-- **HRD Corp:** $1.0\%$ mandatory levy for qualifying employers ($0.5\%$ optional).
-- **PDPA 2010:** Automated encryption for sensitive personally identifiable information (NRIC, Passport, Bank Account Numbers).
+<p align="center">
+  <a href="https://mralif93.github.io/payroll-management-system/">
+    <img src="https://img.shields.io/badge/Live_Showcase-GitHub_Pages-6366f1?style=for-the-badge&logo=github&logoColor=white" alt="Live Showcase on GitHub Pages">
+  </a>
+  <img src="https://img.shields.io/badge/Laravel-11.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel 11">
+  <img src="https://img.shields.io/badge/Tailwind_CSS-v4.0-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
+  <img src="https://img.shields.io/badge/PHP-8.3-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP 8.3">
+  <img src="https://img.shields.io/badge/RBAC-Spatie-blue?style=for-the-badge&logo=shield" alt="RBAC">
+  <img src="https://img.shields.io/badge/Malaysian_Statutory-2026_Compliant-emerald?style=for-the-badge&logo=checkmarx" alt="Statutory 2026">
+</p>
 
 ---
 
-## 🚀 Technology Stack & UI Architecture
+## 🌐 Live Landing Page & Interactive Showcase
+Experience the live, interactive demo and operational specifications deployed on GitHub Pages:  
+👉 **[https://mralif93.github.io/payroll-management-system/](https://mralif93.github.io/payroll-management-system/)**
 
-| Layer | Technology |
-| :--- | :--- |
-| **Framework** | Laravel 11.x (PHP 8.3+) |
-| **Database** | PostgreSQL 16+ / MySQL 8.0+ / SQLite |
-| **Frontend Styling** | Tailwind CSS v4 (Zero Custom CSS policy, dark/light mode, mobile responsive) |
-| **Icons & Animation** | Boxicons (`boxicons`) & Animate.css (`animate.css`) |
-| **Queue & Cache** | Redis 7.x + Laravel Horizon |
-| **Document / PDF Engine** | `barryvdh/laravel-dompdf` / `spatie/browsershot` |
-| **Security & Auditing** | Laravel Native Encryption, `spatie/laravel-permission`, `spatie/laravel-activitylog` |
-
----
-
-## 🎨 Global UI Components & Master Layouts
-
-The application implements a zero-custom-CSS, pure Tailwind CSS component architecture:
-
-- **Master Public Layout (`<x-layouts.app>`):** Sticky header, animated Dark/Light sliding pill switch, collapsible mobile navigation menu, and footer.
-- **Master Admin Console Layout (`<x-layouts.admin>`):** Responsive sidebar with mobile slide-over drawer, breadcrumbs, and live indicator widgets.
-- **Interactive Statutory Deduction Simulator:** Live calculations for EPF, Act 4 SOCSO, June 2026 SKBBK (*Lindung 24 Jam*), EIS, and PCB across single/married categories and voluntary EPF rate adjustments.
-- **13 Global Blade UI Components (`resources/views/components/`):**
-  1. `<x-button>`: Primary, secondary, dark, danger, and ghost variants.
-  2. `<x-badge>`: Status badges with optional pulsing indicators.
-  3. `<x-card>`: Surface card with header and footer slots.
-  4. `<x-stat-card>`: Metric KPI counters with trends and icons.
-  5. `<x-alert>`: Contextual banner notices with dismiss actions.
-  6. `<x-modal>`: Popup dialogs with backdrop blur and zoom transitions.
-  7. `<x-input>`: Form controls with prefix/suffix addons and error states.
-  8. `<x-toggle>`: Peer-based toggle switches with smooth left/right sliding animations (`sm`, `md`, `lg` sizes & 6 color themes).
-  9. `<x-theme-toggle>`: Interactive dark/light sliding pill switch.
-  10. UI Kit Showcase at `/demo` with live component sandbox.
-  11. **Standalone GitHub Pages Preview (`docs/index.html`):** Standalone zero-dependency HTML file ready for GitHub Pages (`https://<username>.github.io/<repo>/`) or static preview featuring the live statutory deduction simulator, employment contract matrix, and UI component showcase.
+Includes interactive client-side sandboxes for:
+- 🧮 **Real-Time Statutory Deduction Simulator** (KWSP/EPF, PERKESO Act 4, June 2026 SKBBK *Lindung 24 Jam*, SIP/EIS, and LHDN PCB)
+- 📋 **Employment Contract Classification Matrix** (Local contract, expatriate/foreign contract, freelance, and intern schemes)
+- 🏦 **1-Click Bank Autopay Formatter** (Maybank2e HDR/DTL structured text & CIMB BizChannel Bulk CSV)
+- 🏛️ **Government Statutory Exporters** (EPF i-Akaun, PERKESO ASSIST, and LHDN CP39 text generator)
+- 🎨 **13-Part Global UI Component Kit Reference** (Buttons, modals, badges, inputs, peer toggles, and dark mode controls)
 
 ---
 
-## 🛠️ Key Features
+## 📋 System Overview & Architecture
 
-- **Enterprise Single Sign-On (SSO) with CentraFlow:** Centralized identity authentication powered by CentraFlow OAuth 2.0 Authorization Server (`http://localhost:8004`), seamless profile auto-provisioning, role sync, and token verification.
-- **Unified Design Suite & Theme System:** Standardized responsive master layouts (`<x-layouts.app>`, `<x-layouts.auth>`, and `<x-layouts.admin>`) with dual-tier headers, sliding track theme switch (`light`/`dark`), and entrance animations matching the PulseHR ecosystem.
-- **Automated Statutory Calculation Engines:** Accurate real-time calculations for EPF, SOCSO (Act 4), SKBBK (June 2026), EIS, PCB (Computerised Formula), and HRD Corp.
-- **Effective-Dated Statutory Parameters:** Dynamically configured wage ceilings and rates mapped to effective dates.
-- **Bank Autopay File Generators:** Ready-to-upload payment files for **Maybank2e (HDR/DTL format)** and **CIMB BizChannel (CSV)**.
-- **Statutory Submission Generators:** Text and CSV export formatters for **EPF i-Akaun**, **PERKESO ASSIST**, and **LHDN CP39**.
-- **Tax & Payslip Documents:** Digital payslip generator and automated annual **Form EA** builder.
-- **Data Protection & Audit Locking:** Field-level encryption for sensitive PII and frozen state audit trails on approved/locked payroll runs.
+**PayFlow MY** is an enterprise-grade Malaysian Payroll Management System built on Laravel 11.x and Tailwind CSS v4. It automates employee compensation, statutory deductions, bank autopay batch disbursements, government filings, and year-end tax Form EA generation in compliance with Malaysian labor and tax legislation, fully integrated with the **CentraFlow Central Identity & SSO Hub**.
+
+```text
++-----------------------------------------------------------------------------------+
+|                            CentraFlow SSO Hub (:8004)                             |
+|              OAuth 2.0 Authorization Server / Master User Registry                |
++-----------------------------------------+-----------------------------------------+
+                                          | OAuth 2.0 Auth Code Grant (Port :8002)
+                                          v
++-----------------------------------------------------------------------------------+
+|                            PayFlow MY Engine (:8002)                              |
+|                                                                                   |
+|  [Staff & Statutory Profiles]  <--->  [Monthly Payroll Runs]  <--->  [Tax Form EA] |
+|               |                                |                             |    |
+|               +--------------------------------+-----------------------------+    |
+|                                                |                                  |
+|                                                v                                  |
+|                               [Disbursement & Export Feeds]                       |
+|                                (Maybank2e / CIMB / EPF / SOCSO / PCB)             |
++------------------------------------------------+----------------------------------+
+                                                 ^
+                                                 | Sync Feeder Data
+                    +----------------------------+--------+
+                    |       PulseHR Suite (:8001)         |
+                    | Attendance, Overtime & Unpaid Leave |
+                    +-------------------------------------+
+```
+
+> [!NOTE]
+> **Decoupled Architecture & Federation**:
+> 1. **Central Identity Provider**: User authentication, role provisioning, and session governance are managed via **[CentraFlow](http://localhost:8004)** using OAuth 2.0 Authorization Code Grant (`payroll:run`, `payroll:read`). Local password logins are decommissioned in favor of SSO.
+> 2. **Decoupled HR Feeder Synchronization**: Feeder data (working days, overtime hours, and unpaid leave proration) is consumed from **[PulseHR (HRMS)](https://github.com/mralif93/human-resources-management-system)**, decoupling workforce governance from financial and statutory computation.
 
 ---
 
-## 📖 Documentation
+## 📌 Statutory Regulatory Compliance Matrix
 
-- [Sub-System Authentication & CentraFlow SSO Integration Guide](documentation/subsystem-auth-guide.md)
-- [Software Requirements Specification (SRS) & Development Blueprint](documentation/software-requirement-specifiction.md)
-
+| Regulatory Body | Legislative Act | System Implementation & Engine Rules | Status |
+| :--- | :--- | :--- | :---: |
+| **KWSP / EPF** | Employees Provident Fund Act 1991 | Standard 11% EE, 13% ER (wages $\le \text{RM}5,000$), 12% ER (wages $> \text{RM}5,000$), Senior 60+ (0%/4%), Foreign worker baseline (2%), and voluntary 9% toggle. | `Compliant` |
+| **PERKESO / SOCSO** | Employees' Social Security Act 1969 | Category 1 (Employment Injury & Invalidity) & Category 2 with dynamic monthly wage ceiling cap ($\text{RM}6,000$). | `Compliant` |
+| **PERKESO / SKBBK** | *LINDUNG 24 JAM* (Effective June 2026) | 24-hour Non-Employment Injury Scheme tier table with employee-funded contributions. | `Compliant` |
+| **PERKESO / EIS** | Employment Insurance System Act 2017 | 0.2% Employee + 0.2% Employer contribution matching the $\text{RM}6,000$ wage ceiling. | `Compliant` |
+| **LHDN / HASiL** | Income Tax Act 1967 | Official computerized calculation method for PCB/MTD, Form TP1/TP3 reliefs, and CP39 exports. | `Compliant` |
+| **JTK / KSM** | Employment Act 1955 (Amended 2022/2023) | Ordinary Rate of Pay (ORP: $\frac{\text{Basic}}{26}$), 7-day payment window, 50% max deduction threshold, and 1.5x/2.0x/3.0x OT multipliers. | `Compliant` |
+| **HRD Corp** | Pembangunan Sumber Manusia Berhad Act 2001 | 1.0% mandatory employer levy for qualifying enterprises (0.5% optional). | `Compliant` |
+| **PDPA 2010** | Personal Data Protection Act 2010 | Field-level encryption for sensitive PII (NRIC, Passport, Bank Account Numbers) and frozen immutable state locks. | `Compliant` |
 
 ---
 
-## ⚙️ Getting Started
+## 🧩 Core Payroll Modules
 
-### Prerequisites
-- PHP 8.3+
-- Composer
-- Node.js & NPM
-- PostgreSQL / MySQL / SQLite
+| # | Module | Key Features & Capabilities |
+|---|---|---|
+| **01** | **Authentication & Central SSO** | Enterprise SSO-only login powered by **CentraFlow** (OAuth 2.0 Authorization Code Grant), automated role syncing, and login audit trails. |
+| **02** | **Staff & Statutory Profiles** | Master directory with NRIC encryption, citizenship categories, marital status, and tax relief profiles. |
+| **03** | **Monthly Payroll Runs** | Automated computation of gross pay, statutory cuts (EPF, SOCSO, SKBBK, EIS, PCB), net salary, and approval lock workflow. |
+| **04** | **Leave & Entitlements** | Tracking annual/medical balances, leave application workflows, and unpaid leave salary deductions. |
+| **05** | **Bank Autopay Exports** | 1-click export of structured batch files for **Maybank2e (HDR/DTL)** and **CIMB BizChannel (CSV)**. |
+| **06** | **Statutory Filings & Tax** | Automated file generation for **EPF i-Akaun (.txt)**, **SOCSO ASSIST (.csv)**, **LHDN CP39 (.txt)**, and digital **Form EA (C.P.8A)**. |
+| **07** | **System Governance & Audit** | Gazetted statutory parameter tables, multi-department cost center assignment, and immutable audit logs. |
 
-### Installation
+---
+
+## 🔐 Role-Based Access Control (RBAC) Matrix
+
+| Module / Area | Super Administrator | Payroll Officer | Finance Director | Internal Auditor |
+| :--- | :---: | :---: | :---: | :---: |
+| **System Governance & Audit Trails** | Full Access | No Access | No Access | Read-Only |
+| **Staff Directory & Profiles** | Full Access | Full Access | View Only | View Only |
+| **Statutory Rates & Allowances** | Full Access | View Only | View Only | View Only |
+| **Payroll Run Creation & Calculate** | Full Access | Full Access | View Only | View Only |
+| **Payroll Approval & Run Lock** | Full Access | No Access | Full Access | No Access |
+| **Bank Autopay Batch Generation** | Full Access | Full Access | Full Access | View Only |
+| **Statutory Exports (EPF, SOCSO, PCB)**| Full Access | Full Access | Full Access | View Only |
+| **Year-End Form EA Compilation** | Full Access | Full Access | Full Access | View Only |
+
+---
+
+## 🚀 Quick Start (Local Setup)
 
 ```bash
-# Clone the repository
+# 1. Clone repository
 git clone https://github.com/mralif93/payroll-management-system.git
 cd payroll-management-system
 
-# Install PHP dependencies
+# 2. Install PHP & Node dependencies
 composer install
+npm install
 
-# Copy environment file and generate application key
+# 3. Environment configuration
 cp .env.example .env
 php artisan key:generate
 
-# Run migrations and seeders
+# CentraFlow SSO Configuration (in .env)
+# CENTRAFLOW_HOST=http://localhost:8004
+# CENTRAFLOW_CLIENT_ID=9d12a101-0002-4000-8000-000000000002
+# CENTRAFLOW_CLIENT_SECRET=payroll_secret_centraflow_2026
+# CENTRAFLOW_REDIRECT_URI=http://localhost:8002/auth/callback
+# CENTRAFLOW_SCOPES="payroll:run payroll:read"
+
+# 4. Database migrations & seeders
 php artisan migrate --seed
 
-# Install frontend dependencies and build
-npm install
+# 5. Build frontend assets & run dev server
 npm run build
-
-# Start the local development server
-php artisan serve
+php artisan serve --port=8002
 ```
+
+Authentication is centrally governed via **CentraFlow SSO** (`http://localhost:8004`). Pre-registered demo credentials on CentraFlow:
+- **HR & Payroll Manager:** `hr.manager@centraflow.local` / `password` (maps to Payroll Officer)
+- **Super Administrator:** `superadmin@centraflow.local` / `password` (maps to Super Administrator)
+
+---
+
+## 📄 Documentation & Specifications
+- 📘 [Software Requirements Specification (SRS)](documentation/software-requirement-specifiction.md)
+- 🔐 [Sub-System Authentication Integration Manual (SSO with CentraFlow)](documentation/subsystem-auth-guide.md)
+- 🌐 [GitHub Pages Landing Page Showcase](https://mralif93.github.io/payroll-management-system/)
+- 🔗 [External Decoupled Human Resources Management System (PulseHR)](https://github.com/mralif93/human-resources-management-system)
 
 ---
 
