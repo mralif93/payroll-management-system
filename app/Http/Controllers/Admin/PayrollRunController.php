@@ -152,26 +152,26 @@ class PayrollRunController extends Controller
             }
         }
 
-        // If opted into 2026 SKBBK (Lindung 24 Jam), add employee SKBBK portion (Phase 1: 0.75% / +RM1.25 per RM100 tier from base)
-        if ($isSkbbkEnabled) {
-            $tier = ($wage > 500.00) ? (int) ceil(($wage - 500.00) / 100.00) : 0;
-            if ($wage <= 500.00) {
-                $ee = $matchedEe * 2.5; // proportional scale
-            } else {
-                $ee = 5.65 + ($tier * 1.25);
-                if ($wage <= 2000) {
-                    $ee = 6.25 + (($tier - 1) * 1.25) + 0.65;
-                }
-            }
-            $finalEe = min(73.40, round($ee, 2));
-        } else {
-            $finalEe = $matchedEe;
-        }
-
+        // Standard statutory Act 4 Employee contribution (Cap RM29.75 at RM6,000 wage ceiling)
         return [
-            'ee' => $finalEe,
+            'ee' => $matchedEe,
             'er' => $matchedEr,
         ];
+    }
+
+    /**
+     * Get exact PERKESO SKBBK (Lindung 24 Jam - Non-Employment Injury Scheme) Employee contribution.
+     * Phase 1 (June 2026 - May 2028): 0.75% of wage, capped at RM6,000 wage ceiling (Max RM45.00).
+     * 100% Employee contribution (0% Employer).
+     */
+    public static function calculateSkbbk(float $grossWage, bool $isSkbbkEnabled = true): float
+    {
+        if (!$isSkbbkEnabled || $grossWage <= 0) {
+            return 0.00;
+        }
+
+        $wage = min($grossWage, 6000.00);
+        return min(45.00, round($wage * 0.0075, 2));
     }
 
     /**
@@ -393,6 +393,19 @@ class PayrollRunController extends Controller
             // Gross salary after deducting unpaid absence
             $gross = max(0.00, $basic + $allowances - $unpaidLeaveDeduction);
 
+            // Calculate exact statutory subject wages from assigned components
+            $epfSubjectAllowances = (float) $employee->salaryComponents->filter(fn($c) => ($c->salaryComponent?->type === 'allowance' || $c->type === 'allowance') && ($c->salaryComponent?->is_epf_subject ?? true))->sum('amount');
+            $socsoSubjectAllowances = (float) $employee->salaryComponents->filter(fn($c) => ($c->salaryComponent?->type === 'allowance' || $c->type === 'allowance') && ($c->salaryComponent?->is_socso_subject ?? true))->sum('amount');
+            $eisSubjectAllowances = (float) $employee->salaryComponents->filter(fn($c) => ($c->salaryComponent?->type === 'allowance' || $c->type === 'allowance') && ($c->salaryComponent?->is_eis_subject ?? true))->sum('amount');
+            $pcbSubjectAllowances = (float) $employee->salaryComponents->filter(fn($c) => ($c->salaryComponent?->type === 'allowance' || $c->type === 'allowance') && ($c->salaryComponent?->is_pcb_subject ?? true))->sum('amount');
+            $hrdSubjectAllowances = (float) $employee->salaryComponents->filter(fn($c) => ($c->salaryComponent?->type === 'allowance' || $c->type === 'allowance') && ($c->salaryComponent?->is_hrd_subject ?? true))->sum('amount');
+
+            $epfWage = max(0.00, $basic + $epfSubjectAllowances - $unpaidLeaveDeduction);
+            $socsoWage = min(6000.00, max(0.00, $basic + $socsoSubjectAllowances - $unpaidLeaveDeduction));
+            $eisWage = min(6000.00, max(0.00, $basic + $eisSubjectAllowances - $unpaidLeaveDeduction));
+            $pcbWage = max(0.00, $basic + $pcbSubjectAllowances - $unpaidLeaveDeduction);
+            $hrdWage = max(0.00, $basic + $hrdSubjectAllowances - $unpaidLeaveDeduction);
+
             // 2. Independent Contractors / Freelancers (Contract for Service) & Interns
             if ($empType === 'freelance_contract') {
                 // Independent Contractor: Gross disbursement without mandatory statutory withholdings
@@ -421,12 +434,12 @@ class PayrollRunController extends Controller
                 $customErRate = $employee->statutoryProfile?->epf_employer_custom_rate ? (float) $employee->statutoryProfile->epf_employer_custom_rate : 0.0;
                 $isSenior = ($employee->birth_date && \Carbon\Carbon::parse($employee->birth_date)->age >= 60);
 
-                $epfValues = self::calculateEpf($gross, $epfRateType, $customEeRate, $customErRate, $isSenior);
+                $epfValues = self::calculateEpf($epfWage, $epfRateType, $customEeRate, $customErRate, $isSenior);
                 $epfEe = $epfValues['ee'];
                 $epfEr = $epfValues['er'];
 
                 // SOCSO Category 2: 1.25% ER only, 0% EE
-                $socsoValues = self::calculateSocso($gross, false, 'category_2_injury_only');
+                $socsoValues = self::calculateSocso($socsoWage, false, 'category_2_injury_only');
                 $socsoEe = $socsoValues['ee'];
                 $socsoEr = $socsoValues['er'];
                 $skbbkEe = 0.00;
@@ -437,7 +450,7 @@ class PayrollRunController extends Controller
 
                 // PCB based on tax residency (Flat 30% if non-resident, standard formula if resident)
                 $isTaxResident = (bool) ($employee->statutoryProfile?->is_tax_resident ?? true);
-                $pcb = self::calculatePcb($gross, $epfEe, $isTaxResident);
+                $pcb = self::calculatePcb($pcbWage, $epfEe, $isTaxResident);
             } else {
                 // Permanent, Standard Contract & Part-Time Staff: Full Statutory Calculation
                 $epfRateType = $employee->statutoryProfile?->epf_rate_type ?? 'standard_11';
@@ -445,22 +458,22 @@ class PayrollRunController extends Controller
                 $customErRate = $employee->statutoryProfile?->epf_employer_custom_rate ? (float) $employee->statutoryProfile->epf_employer_custom_rate : null;
                 $isSenior = ($employee->birth_date && \Carbon\Carbon::parse($employee->birth_date)->age >= 60);
 
-                $epfValues = self::calculateEpf($gross, $epfRateType, $customEeRate, $customErRate, $isSenior);
+                $epfValues = self::calculateEpf($epfWage, $epfRateType, $customEeRate, $customErRate, $isSenior);
                 $epfEe = $epfValues['ee'];
                 $epfEr = $epfValues['er'];
 
-                // Compute Tiered PERKESO (Act 4 + 2026 SKBBK if opted in)
-                $isSkbbkEnabled = (bool) ($employee->statutoryProfile?->is_skbbk_contributed ?? true);
+                // Compute Tiered PERKESO (Act 4)
+                $isSkbbkEnabled = (bool) ($employee->statutoryProfile?->is_skbbk_contributed ?? false);
                 $socsoCategory = $employee->statutoryProfile?->socso_category ?? 'category_1_full';
-                $socsoValues = self::calculateSocso($gross, $isSkbbkEnabled, $socsoCategory);
+                $socsoValues = self::calculateSocso($socsoWage, false, $socsoCategory);
                 $socsoEe = $socsoValues['ee'];
                 $socsoEr = $socsoValues['er'];
-                $skbbkEe = 0.00; // SKBBK is included in total employee SOCSO
+                $skbbkEe = self::calculateSkbbk($socsoWage, $isSkbbkEnabled);
 
                 // Compute EIS (Act 800 Standard Schedule)
                 $isEisEnabled = (bool) ($employee->statutoryProfile?->is_eis_contributed ?? true);
                 if ($isEisEnabled) {
-                    $eisValues = self::calculateEis($gross);
+                    $eisValues = self::calculateEis($eisWage);
                     $eisEe = $eisValues['ee'];
                     $eisEr = $eisValues['er'];
                 } else {
@@ -470,11 +483,14 @@ class PayrollRunController extends Controller
 
                 // Compute Official LHDN MTD / PCB (Income Tax Act 1967)
                 $isTaxResident = (bool) ($employee->statutoryProfile?->is_tax_resident ?? true);
-                $pcb = self::calculatePcb($gross, $epfEe, $isTaxResident);
+                $pcb = self::calculatePcb($pcbWage, $epfEe, $isTaxResident);
             }
 
             $totalDeductions = $epfEe + $socsoEe + $skbbkEe + $eisEe + $pcb;
             $netSalary = $gross - $totalDeductions;
+            $isHrdLiable = !empty($payrollRun->company?->hrd_no) || ($payrollRun->company?->employees()->where('employment_status', 'active')->count() >= 10);
+            $hrdLevy = $isHrdLiable ? round($hrdWage * 0.01, 2) : 0.00;
+            $totalErContribution = $epfEr + $socsoEr + $eisEr + $hrdLevy;
 
             PayrollItem::create([
                 'payroll_run_id' => $payrollRun->id,
@@ -487,6 +503,7 @@ class PayrollRunController extends Controller
                 'socso_subject_wages' => min($gross, 6000.00),
                 'eis_subject_wages' => min($gross, 6000.00),
                 'pcb_subject_wages' => $gross,
+                'hrd_subject_wages' => $gross,
                 'epf_employee' => $epfEe,
                 'socso_employee' => $socsoEe,
                 'skbbk_employee' => $skbbkEe,
@@ -496,14 +513,15 @@ class PayrollRunController extends Controller
                 'epf_employer' => $epfEr,
                 'socso_employer' => $socsoEr,
                 'eis_employer' => $eisEr,
-                'total_employer_contributions' => $epfEr + $socsoEr + $eisEr,
+                'hrd_levy_employer' => $hrdLevy,
+                'total_employer_contributions' => $totalErContribution,
                 'net_salary' => $netSalary,
                 'payslip_token' => Str::random(32),
             ]);
 
             $totalGross += $gross;
             $totalEmployeeStatutory += $totalDeductions;
-            $totalEmployerStatutory += ($epfEr + $socsoEr + $eisEr);
+            $totalEmployerStatutory += $totalErContribution;
             $totalNet += $netSalary;
         }
 
@@ -604,12 +622,24 @@ class PayrollRunController extends Controller
                         ->orWhereBetween('end_date', [$periodStart, $periodEnd]);
                 })
                 ->sum('total_days');
-
             $dailyOrp = ($basic > 0) ? round($basic / 26.0, 2) : 0.00;
             $unpaidLeaveDeduction = round($unpaidLeaveDays * $dailyOrp, 2);
             $gross = max(0.00, $basic + $allowances - $unpaidLeaveDeduction);
 
-            // 2. Independent Contractors / Freelancers & Interns
+            // Calculate exact statutory subject wages from assigned components
+            $epfSubjectAllowances = (float) $employee->salaryComponents->filter(fn($c) => ($c->salaryComponent?->type === 'allowance' || $c->type === 'allowance') && ($c->salaryComponent?->is_epf_subject ?? true))->sum('amount');
+            $socsoSubjectAllowances = (float) $employee->salaryComponents->filter(fn($c) => ($c->salaryComponent?->type === 'allowance' || $c->type === 'allowance') && ($c->salaryComponent?->is_socso_subject ?? true))->sum('amount');
+            $eisSubjectAllowances = (float) $employee->salaryComponents->filter(fn($c) => ($c->salaryComponent?->type === 'allowance' || $c->type === 'allowance') && ($c->salaryComponent?->is_eis_subject ?? true))->sum('amount');
+            $pcbSubjectAllowances = (float) $employee->salaryComponents->filter(fn($c) => ($c->salaryComponent?->type === 'allowance' || $c->type === 'allowance') && ($c->salaryComponent?->is_pcb_subject ?? true))->sum('amount');
+            $hrdSubjectAllowances = (float) $employee->salaryComponents->filter(fn($c) => ($c->salaryComponent?->type === 'allowance' || $c->type === 'allowance') && ($c->salaryComponent?->is_hrd_subject ?? true))->sum('amount');
+
+            $epfWage = max(0.00, $basic + $epfSubjectAllowances - $unpaidLeaveDeduction);
+            $socsoWage = min(6000.00, max(0.00, $basic + $socsoSubjectAllowances - $unpaidLeaveDeduction));
+            $eisWage = min(6000.00, max(0.00, $basic + $eisSubjectAllowances - $unpaidLeaveDeduction));
+            $pcbWage = max(0.00, $basic + $pcbSubjectAllowances - $unpaidLeaveDeduction);
+            $hrdWage = max(0.00, $basic + $hrdSubjectAllowances - $unpaidLeaveDeduction);
+
+            // 2. Independent Contractors / Freelancers (Contract for Service) & Interns
             if ($empType === 'freelance_contract') {
                 $epfEe = 0.00;
                 $epfEr = 0.00;
@@ -629,17 +659,16 @@ class PayrollRunController extends Controller
                 $eisEr = 0.00;
                 $pcb = 0.00;
             } elseif ($empType === 'contract_foreign' || $employee->citizenship === 'foreign_worker') {
-                // Foreign Contract Worker / Expatriates
                 $epfRateType = $employee->statutoryProfile?->epf_rate_type ?? 'custom';
                 $customEeRate = $employee->statutoryProfile?->epf_employee_custom_rate ? (float) $employee->statutoryProfile->epf_employee_custom_rate : 0.0;
                 $customErRate = $employee->statutoryProfile?->epf_employer_custom_rate ? (float) $employee->statutoryProfile->epf_employer_custom_rate : 0.0;
                 $isSenior = ($employee->birth_date && \Carbon\Carbon::parse($employee->birth_date)->age >= 60);
 
-                $epfValues = self::calculateEpf($gross, $epfRateType, $customEeRate, $customErRate, $isSenior);
+                $epfValues = self::calculateEpf($epfWage, $epfRateType, $customEeRate, $customErRate, $isSenior);
                 $epfEe = $epfValues['ee'];
                 $epfEr = $epfValues['er'];
 
-                $socsoValues = self::calculateSocso($gross, false, 'category_2_injury_only');
+                $socsoValues = self::calculateSocso($socsoWage, false, 'category_2_injury_only');
                 $socsoEe = $socsoValues['ee'];
                 $socsoEr = $socsoValues['er'];
                 $skbbkEe = 0.00;
@@ -648,28 +677,28 @@ class PayrollRunController extends Controller
                 $eisEr = 0.00;
 
                 $isTaxResident = (bool) ($employee->statutoryProfile?->is_tax_resident ?? true);
-                $pcb = self::calculatePcb($gross, $epfEe, $isTaxResident);
+                $pcb = self::calculatePcb($pcbWage, $epfEe, $isTaxResident);
             } else {
                 $epfRateType = $employee->statutoryProfile?->epf_rate_type ?? 'standard_11';
                 $customEeRate = $employee->statutoryProfile?->epf_employee_custom_rate ? (float) $employee->statutoryProfile->epf_employee_custom_rate : null;
                 $customErRate = $employee->statutoryProfile?->epf_employer_custom_rate ? (float) $employee->statutoryProfile->epf_employer_custom_rate : null;
                 $isSenior = ($employee->birth_date && \Carbon\Carbon::parse($employee->birth_date)->age >= 60);
 
-                $epfValues = self::calculateEpf($gross, $epfRateType, $customEeRate, $customErRate, $isSenior);
+                $epfValues = self::calculateEpf($epfWage, $epfRateType, $customEeRate, $customErRate, $isSenior);
                 $epfEe = $epfValues['ee'];
                 $epfEr = $epfValues['er'];
 
-                // Compute Tiered PERKESO (Act 4 + 2026 SKBBK if opted in)
-                $isSkbbkEnabled = (bool) ($employee->statutoryProfile?->is_skbbk_contributed ?? true);
+                // Compute Tiered PERKESO (Act 4)
+                $isSkbbkEnabled = (bool) ($employee->statutoryProfile?->is_skbbk_contributed ?? false);
                 $socsoCategory = $employee->statutoryProfile?->socso_category ?? 'category_1_full';
-                $socsoValues = self::calculateSocso($gross, $isSkbbkEnabled, $socsoCategory);
+                $socsoValues = self::calculateSocso($socsoWage, false, $socsoCategory);
                 $socsoEe = $socsoValues['ee'];
                 $socsoEr = $socsoValues['er'];
-                $skbbkEe = 0.00;
+                $skbbkEe = self::calculateSkbbk($socsoWage, $isSkbbkEnabled);
 
                 $isEisEnabled = (bool) ($employee->statutoryProfile?->is_eis_contributed ?? true);
                 if ($isEisEnabled) {
-                    $eisValues = self::calculateEis($gross);
+                    $eisValues = self::calculateEis($eisWage);
                     $eisEe = $eisValues['ee'];
                     $eisEr = $eisValues['er'];
                 } else {
@@ -678,11 +707,14 @@ class PayrollRunController extends Controller
                 }
 
                 $isTaxResident = (bool) ($employee->statutoryProfile?->is_tax_resident ?? true);
-                $pcb = self::calculatePcb($gross, $epfEe, $isTaxResident);
+                $pcb = self::calculatePcb($pcbWage, $epfEe, $isTaxResident);
             }
 
             $totalDeductions = $epfEe + $socsoEe + $skbbkEe + $eisEe + $pcb;
             $netSalary = $gross - $totalDeductions;
+            $isHrdLiable = !empty($payrollRun->company?->hrd_no) || ($payrollRun->company?->employees()->where('employment_status', 'active')->count() >= 10);
+            $hrdLevy = $isHrdLiable ? round($hrdWage * 0.01, 2) : 0.00;
+            $totalErContribution = $epfEr + $socsoEr + $eisEr + $hrdLevy;
 
             PayrollItem::create([
                 'payroll_run_id' => $payrollRun->id,
@@ -691,10 +723,11 @@ class PayrollRunController extends Controller
                 'allowances_total' => $allowances,
                 'gross_salary' => $gross,
                 'unpaid_leave_deduction' => $unpaidLeaveDeduction,
-                'epf_subject_wages' => $gross,
-                'socso_subject_wages' => min($gross, 6000.00),
-                'eis_subject_wages' => min($gross, 6000.00),
-                'pcb_subject_wages' => $gross,
+                'epf_subject_wages' => $epfWage,
+                'socso_subject_wages' => $socsoWage,
+                'eis_subject_wages' => $eisWage,
+                'pcb_subject_wages' => $pcbWage,
+                'hrd_subject_wages' => $hrdWage,
                 'epf_employee' => $epfEe,
                 'socso_employee' => $socsoEe,
                 'skbbk_employee' => $skbbkEe,
@@ -704,14 +737,15 @@ class PayrollRunController extends Controller
                 'epf_employer' => $epfEr,
                 'socso_employer' => $socsoEr,
                 'eis_employer' => $eisEr,
-                'total_employer_contributions' => $epfEr + $socsoEr + $eisEr,
+                'hrd_levy_employer' => $hrdLevy,
+                'total_employer_contributions' => $totalErContribution,
                 'net_salary' => $netSalary,
                 'payslip_token' => Str::random(32),
             ]);
 
             $totalGross += $gross;
             $totalEmployeeStatutory += $totalDeductions;
-            $totalEmployerStatutory += ($epfEr + $socsoEr + $eisEr);
+            $totalEmployerStatutory += $totalErContribution;
             $totalNet += $netSalary;
         }
 
@@ -729,7 +763,7 @@ class PayrollRunController extends Controller
         AuditTrail::log(
             module: 'payroll',
             event: 'payroll.batch_recalculated',
-            description: "Payroll batch {$payrollRun->batch_no} recalculated and reverted to draft by " . auth()->user()->name,
+            description: "Payroll batch {$payrollRun->batch_no} recalculated and reverted to draft by " . (auth()->user()?->name ?? 'System'),
             auditable: $payrollRun,
             newValues: ['status' => 'draft', 'total_net' => $totalNet]
         );

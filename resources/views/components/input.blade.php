@@ -7,16 +7,24 @@
     'error' => null,
     'icon' => null,
     'prefix' => null,
+    'required' => false,
+    'optional' => false,
 ])
 
 @php
     $inputId = $id ?? 'input_' . Str::random(8);
+    $isRequired = $required || $attributes->has('required');
 @endphp
 
 <div class="space-y-1.5">
     @if($label)
         <label for="{{ $inputId }}" class="block text-xs font-semibold {{ $error ? 'text-rose-700 dark:text-rose-400' : 'text-slate-700 dark:text-slate-300' }}">
             {{ $label }}
+            @if($isRequired)
+                <span class="text-rose-500 font-bold ml-0.5">*</span>
+            @elseif($optional)
+                <span class="text-[10px] font-normal text-slate-400 dark:text-slate-500 ml-1">(optional)</span>
+            @endif
         </label>
     @endif
 

@@ -241,10 +241,12 @@
                 <x-input label="Role Slug/Key" name="name" required placeholder="e.g. payroll_reviewer" />
             </div>
 
-            <x-input label="Role Description" name="description" placeholder="Short summary of access privileges and duties" />
+            <x-input label="Role Description" name="description" optional placeholder="Short summary of access privileges and duties" />
 
             <div>
-                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">Module Permissions Matrix</label>
+                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                    Module Permissions Matrix <span class="text-[10px] font-normal text-slate-400 dark:text-slate-500 ml-1">(optional)</span>
+                </label>
                 <div class="space-y-4 max-h-60 overflow-y-auto p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900">
                     @foreach($permissions as $module => $modulePerms)
                         <div class="space-y-2">
@@ -282,10 +284,12 @@
             @method('PUT')
 
             <x-input label="Role Display Name" name="display_name" id="edit-role-display-name" required />
-            <x-input label="Role Description" name="description" id="edit-role-description" />
+            <x-input label="Role Description" name="description" id="edit-role-description" optional />
 
             <div>
-                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">Module Permissions Matrix</label>
+                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                    Module Permissions Matrix <span class="text-[10px] font-normal text-slate-400 dark:text-slate-500 ml-1">(optional)</span>
+                </label>
                 <div class="space-y-4 max-h-60 overflow-y-auto p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900">
                     @foreach($permissions as $module => $modulePerms)
                         <div class="space-y-2">

@@ -600,10 +600,10 @@
                     <span class="text-xs font-bold text-slate-800 dark:text-white uppercase tracking-wider">Statutory Organization Numbers</span>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                    <x-input label="KWSP / EPF Employer No." name="epf_no" value="{{ $company->epf_no ?? '' }}" placeholder="e.g. 123456789" />
-                    <x-input label="PERKESO / SOCSO Employer No." name="socso_no" value="{{ $company->socso_no ?? '' }}" placeholder="e.g. A123456789" />
-                    <x-input label="LHDN Employer Tax No. (E)" name="tax_no" value="{{ $company->tax_no ?? '' }}" placeholder="e.g. E 9876543200" />
-                    <x-input label="HRD Corp Registration No." name="hrd_no" value="{{ $company->hrd_no ?? '' }}" placeholder="e.g. HRD-2026-999" />
+                    <x-input label="KWSP / EPF Employer No." name="epf_no" value="{{ $company->epf_no ?? '' }}" optional placeholder="e.g. 123456789" />
+                    <x-input label="PERKESO / SOCSO Employer No." name="socso_no" value="{{ $company->socso_no ?? '' }}" optional placeholder="e.g. A123456789" />
+                    <x-input label="LHDN Employer Tax No. (E)" name="tax_no" value="{{ $company->tax_no ?? '' }}" optional placeholder="e.g. E 9876543200" />
+                    <x-input label="HRD Corp Registration No." name="hrd_no" value="{{ $company->hrd_no ?? '' }}" optional placeholder="e.g. HRD-2026-999" />
                 </div>
             </div>
 
@@ -614,8 +614,8 @@
                     <span class="text-xs font-bold text-slate-800 dark:text-white uppercase tracking-wider">Corporate Banking &amp; AutoPay</span>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                    <x-input label="AutoPay Bank Name" name="bank_name" value="{{ $company->bank_name ?? '' }}" placeholder="e.g. Malayan Banking Berhad (Maybank)" />
-                    <x-input label="Corporate Bank Account No." name="bank_account_no" value="{{ $company->bank_account_no ?? '' }}" placeholder="e.g. 514012345678" />
+                    <x-input label="AutoPay Bank Name" name="bank_name" value="{{ $company->bank_name ?? '' }}" optional placeholder="e.g. Malayan Banking Berhad (Maybank)" />
+                    <x-input label="Corporate Bank Account No." name="bank_account_no" value="{{ $company->bank_account_no ?? '' }}" optional placeholder="e.g. 514012345678" />
                 </div>
             </div>
 
@@ -626,11 +626,11 @@
                     <span class="text-xs font-bold text-slate-800 dark:text-white uppercase tracking-wider">Contact &amp; Registered Address</span>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-                    <x-input label="Contact Person" name="contact_person" value="{{ $company->contact_person ?? '' }}" placeholder="e.g. Ahmad Tajudin" />
-                    <x-input label="Contact Email" name="contact_email" type="email" value="{{ $company->contact_email ?? '' }}" placeholder="e.g. admin@payroll.my" />
-                    <x-input label="Contact Phone" name="contact_phone" value="{{ $company->contact_phone ?? '' }}" placeholder="e.g. +603-88889999" />
+                    <x-input label="Contact Person" name="contact_person" value="{{ $company->contact_person ?? '' }}" optional placeholder="e.g. Ahmad Tajudin" />
+                    <x-input label="Contact Email" name="contact_email" type="email" value="{{ $company->contact_email ?? '' }}" optional placeholder="e.g. admin@payroll.my" />
+                    <x-input label="Contact Phone" name="contact_phone" value="{{ $company->contact_phone ?? '' }}" optional placeholder="e.g. +603-88889999" />
                 </div>
-                <x-input label="Corporate Registered Address" name="address" value="{{ $company->address ?? '' }}" placeholder="Registered office address" />
+                <x-input label="Corporate Registered Address" name="address" value="{{ $company->address ?? '' }}" optional placeholder="Registered office address" />
             </div>
 
             <div class="flex justify-end gap-2.5 pt-4 border-t border-slate-100 dark:border-slate-800">
@@ -651,7 +651,7 @@
             <input type="hidden" name="company_id" value="{{ $company->id ?? 1 }}">
 
             <x-input label="Department Name" name="name" required placeholder="e.g. Quality Assurance & Testing" />
-            <x-input label="Department Code / Acronym" name="code" placeholder="e.g. QAT" />
+            <x-input label="Department Code / Acronym" name="code" optional placeholder="e.g. QAT" />
 
             <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
                 <x-button variant="secondary" size="sm" type="button" onclick="closeModal('add-department-modal')">
@@ -671,7 +671,7 @@
             @method('PUT')
 
             <x-input label="Department Name" name="name" id="edit-dept-name" required />
-            <x-input label="Department Code / Acronym" name="code" id="edit-dept-code" />
+            <x-input label="Department Code / Acronym" name="code" id="edit-dept-code" optional />
 
             <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
                 <x-button variant="secondary" size="sm" type="button" onclick="closeModal('edit-department-modal')">
@@ -696,7 +696,9 @@
             </div>
 
             <div>
-                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">Malaysian Statutory Deductibility &amp; Taxability Rules</label>
+                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                    Malaysian Statutory Deductibility &amp; Taxability Rules <span class="text-rose-500 font-bold">*</span>
+                </label>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40">
                     <label class="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
                         <input type="checkbox" name="is_epf_subject" value="1" checked class="rounded text-indigo-600 focus:ring-indigo-500">
@@ -740,7 +742,9 @@
             </div>
 
             <div>
-                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">Malaysian Statutory Deductibility &amp; Taxability Rules</label>
+                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                    Malaysian Statutory Deductibility &amp; Taxability Rules <span class="text-rose-500 font-bold">*</span>
+                </label>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40">
                     <label class="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
                         <input type="checkbox" name="is_epf_subject" id="edit-allowance-epf" value="1" class="rounded text-indigo-600 focus:ring-indigo-500">
@@ -778,7 +782,7 @@
             @csrf
             @method('PUT')
 
-            <x-input label="Statutory Gazette Reference" name="reference_gazette" value="{{ $parameters['epf']->first()?->reference_gazette ?? 'P.U. (A) EPF Act 1991 Third Schedule' }}" />
+            <x-input label="Statutory Gazette Reference" name="reference_gazette" value="{{ $parameters['epf']->first()?->reference_gazette ?? 'P.U. (A) EPF Act 1991 Third Schedule' }}" optional />
             <x-input label="Standard Employee Rate (%)" name="value_payload[standard_employee_rate]" type="number" step="0.5" value="{{ ($epfParams['standard_employee_rate'] ?? 0.11) * 100 }}" required />
             <x-input label="Voluntary Reduced Rate (%)" name="value_payload[voluntary_reduced_employee_rate]" type="number" step="0.5" value="{{ ($epfParams['voluntary_reduced_employee_rate'] ?? 0.09) * 100 }}" required />
             <x-input label="Low Wage Threshold (RM)" name="value_payload[salary_threshold]" type="number" step="100" value="{{ $epfParams['salary_threshold'] ?? 5000 }}" required />
@@ -804,7 +808,7 @@
             @csrf
             @method('PUT')
 
-            <x-input label="Statutory Gazette Reference" name="reference_gazette" value="{{ $parameters['socso']->first()?->reference_gazette ?? 'Warta Kerajaan PERKESO SKBBK 2026' }}" />
+            <x-input label="Statutory Gazette Reference" name="reference_gazette" value="{{ $parameters['socso']->first()?->reference_gazette ?? 'Warta Kerajaan PERKESO SKBBK 2026' }}" optional />
             <x-input label="Monthly Wage Ceiling (RM)" name="value_payload[wage_ceiling]" type="number" step="100" value="{{ $socsoParams['wage_ceiling'] ?? 6000 }}" required />
             <x-input label="Category 1 Employer Rate (%)" name="value_payload[category_1][employer_rate_percentage]" type="number" step="0.05" value="{{ ($socsoParams['category_1']['employer_rate_percentage'] ?? 0.0175) * 100 }}" required />
             <x-input label="Category 1 Employee Rate (%)" name="value_payload[category_1][employee_base_percentage]" type="number" step="0.05" value="{{ ($socsoParams['category_1']['employee_base_percentage'] ?? 0.005) * 100 }}" required />
@@ -875,7 +879,9 @@
                 <x-input label="Annual Default Days" name="default_days_per_year" type="number" min="0" max="365" required placeholder="e.g. 14" />
                 
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Payroll Compensation Rule</label>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                        Payroll Compensation Rule <span class="text-rose-500 font-bold">*</span>
+                    </label>
                     <div class="relative">
                         <select name="is_paid" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
                             <option value="1">Paid Leave (100% Full Wages)</option>
@@ -888,7 +894,9 @@
                 </div>
 
                 <div class="sm:col-span-2">
-                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Description & Guidelines</label>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                        Description &amp; Guidelines <span class="text-[10px] font-normal text-slate-400 dark:text-slate-500 ml-1">(optional)</span>
+                    </label>
                     <textarea name="description" rows="2" placeholder="Policy terms, eligibility criteria, documentation needed..." class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white placeholder:text-slate-400 focus:bg-white dark:focus:bg-slate-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition"></textarea>
                 </div>
             </div>
@@ -916,7 +924,9 @@
                 <x-input label="Annual Default Days" name="default_days_per_year" id="edit-leave-days" type="number" min="0" max="365" required />
                 
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Payroll Compensation Rule</label>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                        Payroll Compensation Rule <span class="text-rose-500 font-bold">*</span>
+                    </label>
                     <div class="relative">
                         <select name="is_paid" id="edit-leave-paid" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
                             <option value="1">Paid Leave (100% Full Wages)</option>
@@ -929,7 +939,9 @@
                 </div>
 
                 <div class="sm:col-span-2">
-                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Description & Guidelines</label>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                        Description &amp; Guidelines <span class="text-[10px] font-normal text-slate-400 dark:text-slate-500 ml-1">(optional)</span>
+                    </label>
                     <textarea name="description" id="edit-leave-desc" rows="2" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white placeholder:text-slate-400 focus:bg-white dark:focus:bg-slate-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition"></textarea>
                 </div>
             </div>

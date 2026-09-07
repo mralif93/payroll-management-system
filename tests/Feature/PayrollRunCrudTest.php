@@ -300,4 +300,69 @@ class PayrollRunCrudTest extends TestCase
         $payrollRun->refresh();
         $this->assertEquals('approved', $payrollRun->status);
     }
+
+    public function test_calculates_various_salary_categories_correctly(): void
+    {
+        // 1. Low Wage (<= RM5,000) => EPF EE 11%, ER 13%, SOCSO Act 4 Bracket, EIS Bracket, PCB with Sec 6A rebate
+        $epfLow = \App\Http\Controllers\Admin\PayrollRunController::calculateEpf(3000.00, 'standard_11');
+        $this->assertEquals(330.00, $epfLow['ee']); // 3000 * 11%
+        $this->assertEquals(390.00, $epfLow['er']); // 3000 * 13%
+        
+        $socsoLow = \App\Http\Controllers\Admin\PayrollRunController::calculateSocso(3000.00);
+        $this->assertEquals(14.75, $socsoLow['ee']); // Bracket 3000: EE 14.75, ER 51.65
+        $this->assertEquals(51.65, $socsoLow['er']);
+
+        $eisLow = \App\Http\Controllers\Admin\PayrollRunController::calculateEis(3000.00);
+        $this->assertEquals(5.90, $eisLow['ee']); // Bracket 3000: EE 5.90, ER 5.90
+        $this->assertEquals(5.90, $eisLow['er']);
+
+        $pcbLow = \App\Http\Controllers\Admin\PayrollRunController::calculatePcb(3000.00, $epfLow['ee'], true);
+        $this->assertEquals(0.00, $pcbLow); // Net chargeable income after reliefs <= RM35,000 rebate => RM0 tax
+
+        // 2. Medium-High Wage (> RM5,000 and <= RM6,000) => EPF EE 11%, ER 12%, SOCSO capped at wage ceiling, EIS capped
+        $epfMid = \App\Http\Controllers\Admin\PayrollRunController::calculateEpf(6000.00, 'standard_11');
+        $this->assertEquals(660.00, $epfMid['ee']); // 6000 * 11%
+        $this->assertEquals(720.00, $epfMid['er']); // 6000 * 12%
+
+        $socsoMid = \App\Http\Controllers\Admin\PayrollRunController::calculateSocso(6000.00);
+        $this->assertEquals(29.75, $socsoMid['ee']); // Max ceiling RM29.75
+        $this->assertEquals(104.15, $socsoMid['er']); // Max ceiling RM104.15
+
+        $eisMid = \App\Http\Controllers\Admin\PayrollRunController::calculateEis(6000.00);
+        $this->assertEquals(11.90, $eisMid['ee']); // Max ceiling RM11.90
+        $this->assertEquals(11.90, $eisMid['er']);
+
+        $pcbMid = \App\Http\Controllers\Admin\PayrollRunController::calculatePcb(6000.00, $epfMid['ee'], true);
+        $this->assertGreaterThan(0.00, $pcbMid);
+
+        // 3. Executive High Wage (> RM6,000, e.g. RM15,000) => SOCSO and EIS strictly capped at RM6k ceiling
+        $socsoHigh = \App\Http\Controllers\Admin\PayrollRunController::calculateSocso(15000.00);
+        $this->assertEquals(29.75, $socsoHigh['ee']);
+        $this->assertEquals(104.15, $socsoHigh['er']);
+
+        $eisHigh = \App\Http\Controllers\Admin\PayrollRunController::calculateEis(15000.00);
+        $this->assertEquals(11.90, $eisHigh['ee']);
+        $this->assertEquals(11.90, $eisHigh['er']);
+
+        $epfHigh = \App\Http\Controllers\Admin\PayrollRunController::calculateEpf(15000.00, 'standard_11');
+        $this->assertEquals(1650.00, $epfHigh['ee']); // 15000 * 11%
+        $this->assertEquals(1800.00, $epfHigh['er']); // 15000 * 12%
+
+        // 4. Senior Citizen (Age 60+) => EPF EE 0%, ER 4%
+        $epfSenior = \App\Http\Controllers\Admin\PayrollRunController::calculateEpf(4000.00, 'standard_11', null, null, true);
+        $this->assertEquals(0.00, $epfSenior['ee']);
+        $this->assertEquals(160.00, $epfSenior['er']); // 4000 * 4%
+
+        // 5. Voluntary Reduced EPF (9%)
+        $epfReduced = \App\Http\Controllers\Admin\PayrollRunController::calculateEpf(4000.00, 'reduced_9');
+        $this->assertEquals(360.00, $epfReduced['ee']); // 4000 * 9%
+        $this->assertEquals(520.00, $epfReduced['er']); // 4000 * 13%
+
+        // 6. SKBBK (Lindung 24 Jam - 0.75% Phase 1)
+        $skbbkOptIn = \App\Http\Controllers\Admin\PayrollRunController::calculateSkbbk(6000.00, true);
+        $this->assertEquals(45.00, $skbbkOptIn); // 6000 * 0.75% = RM 45.00
+
+        $skbbkOptOut = \App\Http\Controllers\Admin\PayrollRunController::calculateSkbbk(6000.00, false);
+        $this->assertEquals(0.00, $skbbkOptOut); // Opted out => RM 0.00
+    }
 }

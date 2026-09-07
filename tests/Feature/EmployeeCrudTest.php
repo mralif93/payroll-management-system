@@ -152,4 +152,58 @@ class EmployeeCrudTest extends TestCase
         $response->assertRedirect(route('admin.employees.index'));
         $this->assertDatabaseMissing('employees', ['id' => $emp->id]);
     }
+
+    public function test_can_view_statutory_profiles(): void
+    {
+        $response = $this->actingAs($this->admin)->get(route('admin.employees.statutory'));
+        $response->assertOk();
+        $response->assertSee('Salary &amp; Statutory Profiles', false);
+    }
+
+    public function test_can_update_statutory_and_compensation_profile(): void
+    {
+        $emp = Employee::create([
+            'company_id' => $this->company->id,
+            'employee_no' => 'EMP-00105',
+            'full_name' => 'Dr. Latif',
+            'nric_passport' => '850505-10-2222',
+            'citizenship' => 'malaysian',
+            'gender' => 'male',
+            'birth_date' => '1985-05-05',
+            'joined_date' => '2026-05-01',
+            'basic_salary' => 7000.00,
+            'employment_status' => 'active',
+            'employment_type' => 'permanent',
+        ]);
+
+        $response = $this->actingAs($this->admin)->put(route('admin.employees.update-statutory', $emp), [
+            'basic_salary' => 7500.00,
+            'bank_name' => 'CIMB Bank',
+            'bank_account_no' => '8601234567',
+            'epf_member_no' => 'EPF-998877',
+            'epf_rate_type' => 'reduced_9',
+            'socso_member_no' => 'SOCSO-112233',
+            'socso_category' => 'category_1_full',
+            'is_eis_contributed' => 1,
+            'is_skbbk_contributed' => 1,
+            'income_tax_no' => 'SG9988776600',
+            'tax_category' => 'married_working',
+            'number_of_children' => 2,
+            'is_tax_resident' => 1,
+            'is_disabled' => 0,
+            'spouse_is_disabled' => 0,
+            'monthly_zakat_amount' => 50.00,
+            'total_tp1_relief_amount' => 0.00,
+        ]);
+
+        $response->assertRedirect(route('admin.employees.statutory'));
+        $this->assertDatabaseHas('employees', ['id' => $emp->id, 'basic_salary' => 7500.00, 'bank_name' => 'CIMB Bank']);
+        $this->assertDatabaseHas('employee_statutory_profiles', [
+            'employee_id' => $emp->id,
+            'epf_rate_type' => 'reduced_9',
+            'is_skbbk_contributed' => 1,
+            'tax_category' => 'married_working',
+            'number_of_children' => 2,
+        ]);
+    }
 }

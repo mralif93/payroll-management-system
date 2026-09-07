@@ -559,10 +559,18 @@
 
                 <div class="table-row">
                     <div>
-                        <span class="table-row-title">PERKESO SOCSO &amp; SKBBK</span>
-                        <span class="table-row-desc">Act 4 + 2026 Lindung 24 Jam</span>
+                        <span class="table-row-title">PERKESO / SOCSO (Employee)</span>
+                        <span class="table-row-desc">Employees' Social Security Act 1969 (Act 4)</span>
                     </div>
-                    <span class="table-row-amount mono">- RM {{ number_format($item->socso_employee + $item->skbbk_employee, 2) }}</span>
+                    <span class="table-row-amount mono">{{ $item->socso_employee > 0 ? '- RM ' . number_format($item->socso_employee, 2) : '—' }}</span>
+                </div>
+
+                <div class="table-row">
+                    <div>
+                        <span class="table-row-title">PERKESO SKBBK (Lindung 24 Jam)</span>
+                        <span class="table-row-desc">Non-Employment Injury Scheme</span>
+                    </div>
+                    <span class="table-row-amount mono">{{ $item->skbbk_employee > 0 ? '- RM ' . number_format($item->skbbk_employee, 2) : '—' }}</span>
                 </div>
 
                 <div class="table-row">
@@ -621,7 +629,7 @@
                 </div>
                 <div class="employer-item">
                     <div class="employer-item-label">HRD Corp Levy (1%)</div>
-                    <div class="employer-item-amount">RM {{ number_format($item->gross_salary * 0.01, 2) }}</div>
+                    <div class="employer-item-amount">{{ ($item->hrd_levy_employer ?? ($item->gross_salary * 0.01)) > 0 ? 'RM ' . number_format($item->hrd_levy_employer ?? ($item->gross_salary * 0.01), 2) : '—' }}</div>
                 </div>
             </div>
         </div>

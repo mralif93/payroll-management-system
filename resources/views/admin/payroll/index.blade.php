@@ -297,7 +297,9 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div class="sm:col-span-2">
-                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Employer / Company</label>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                            Employer / Company <span class="text-rose-500 font-bold">*</span>
+                        </label>
                         <div class="relative">
                             <select name="company_id" required class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
                                 @foreach($companies as $company)
@@ -311,7 +313,9 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Payroll Year</label>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                            Payroll Year <span class="text-rose-500 font-bold">*</span>
+                        </label>
                         <div class="relative">
                             <select name="period_year" required class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8 font-mono">
                                 @for($y = (int)date('Y') + 1; $y >= 2024; $y--)
@@ -325,7 +329,9 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Payroll Month</label>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                            Payroll Month <span class="text-rose-500 font-bold">*</span>
+                        </label>
                         <div class="relative">
                             <select name="period_month" required class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8 font-mono">
                                 @foreach(range(1, 12) as $m)

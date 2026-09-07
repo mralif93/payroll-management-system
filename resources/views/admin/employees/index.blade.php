@@ -39,10 +39,28 @@
                 </div>
 
                 <div class="flex items-center gap-2.5 sm:gap-3 flex-wrap shrink-0">
+                    <!-- Navigation Switcher -->
+                    <div class="flex items-center gap-2 bg-white/10 dark:bg-slate-900/60 p-1.5 rounded-2xl backdrop-blur-md border border-white/10 shrink-0">
+                        <a 
+                            href="{{ route('admin.employees.index') }}"
+                            class="px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 shadow-md shadow-indigo-600/30 transition flex items-center gap-2"
+                        >
+                            <i class="bx bx-group text-sm"></i>
+                            <span>Staff Directory</span>
+                        </a>
+                        <a 
+                            href="{{ route('admin.employees.statutory') }}"
+                            class="px-3.5 py-2 rounded-xl text-xs font-bold text-indigo-200 hover:text-white hover:bg-white/10 transition flex items-center gap-2"
+                        >
+                            <i class="bx bx-wallet-alt text-sm"></i>
+                            <span>Salary &amp; Statutory</span>
+                        </a>
+                    </div>
+
                     <button 
                         type="button" 
                         onclick="openModal('register-employee-modal')"
-                        class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-md shadow-indigo-600/30 transition flex items-center gap-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+                        class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-md shadow-indigo-600/30 transition flex items-center gap-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
                     >
                         <i class="bx bx-user-plus text-base"></i>
                         <span>Register Employee</span>
@@ -282,7 +300,7 @@
     </div>
 
     <!-- 1. REGISTER EMPLOYEE MODAL (User Friendly Tabbed / Sectioned Design) -->
-    <x-modal id="register-employee-modal" title="Register New Employee" subtitle="Create master staff record with default Malaysian statutory profile" icon="bx-user-plus" size="2xl">
+    <x-modal id="register-employee-modal" title="Register New Employee" subtitle="Create master staff record with default Malaysian statutory profile" icon="bx-user-plus" iconBg="bg-emerald-50 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400" size="2xl">
         <form method="POST" action="{{ route('admin.employees.store') }}" class="space-y-6 text-left">
             @csrf
             <input type="hidden" name="company_id" value="1">
@@ -298,14 +316,16 @@
                     <div class="sm:col-span-2">
                         <x-input label="Full Legal Name" name="full_name" required placeholder="e.g. Ahmad bin Mustaffa" icon="bx-user" />
                     </div>
-                    <x-input label="Email Address" name="email" type="email" placeholder="ahmad@company.com" icon="bx-envelope" />
-                    <x-input label="Phone Number" name="phone_number" placeholder="+60123456789" icon="bx-phone" />
+                    <x-input label="Email Address" name="email" type="email" optional placeholder="ahmad@company.com" icon="bx-envelope" />
+                    <x-input label="Phone Number" name="phone_number" optional placeholder="+60123456789" icon="bx-phone" />
                     <x-input label="Staff ID" name="employee_no" required placeholder="e.g. EMP-00105" icon="bx-id-card" />
                     <x-input label="NRIC / Passport No." name="nric_passport" required placeholder="880415-14-5531" icon="bx-card" />
                     <x-input label="Date of Birth" name="birth_date" type="date" required icon="bx-calendar" />
                     
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Gender</label>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                            Gender <span class="text-rose-500 font-bold">*</span>
+                        </label>
                         <div class="relative">
                             <select name="gender" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
                                 <option value="male">Male (Lelaki)</option>
@@ -318,7 +338,9 @@
                     </div>
 
                     <div class="sm:col-span-2">
-                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Citizenship &amp; Tax Status</label>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                            Citizenship &amp; Tax Status <span class="text-rose-500 font-bold">*</span>
+                        </label>
                         <div class="relative">
                             <select name="citizenship" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
                                 <option value="malaysian">Malaysian Citizen (Warganegara)</option>
@@ -342,7 +364,9 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Department</label>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                            Department <span class="text-[10px] font-normal text-slate-400 dark:text-slate-500 ml-1">(optional)</span>
+                        </label>
                         <div class="relative">
                             <select name="department_id" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
                                 <option value="">Select Department...</option>
@@ -356,14 +380,16 @@
                         </div>
                     </div>
 
-                    <x-input label="Designation / Position" name="designation" placeholder="e.g. Senior Software Engineer" icon="bx-briefcase-alt" />
+                    <x-input label="Designation / Position" name="designation" optional placeholder="e.g. Senior Software Engineer" icon="bx-briefcase-alt" />
                     
                     <x-input label="Monthly Basic Salary (RM)" name="basic_salary" type="number" step="0.01" required placeholder="6500.00" icon="bx-money" />
                     
                     <x-input label="Joined Date" name="joined_date" type="date" required icon="bx-calendar-check" />
 
                     <div class="sm:col-span-2">
-                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Employment Type</label>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                            Employment Type <span class="text-[10px] font-normal text-slate-400 dark:text-slate-500 ml-1">(optional)</span>
+                        </label>
                         <div class="relative">
                             <select name="employment_type" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
                                 <option value="permanent">Permanent Staff</option>
@@ -385,14 +411,16 @@
             <div class="space-y-3">
                 <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
                     <span class="w-6 h-6 rounded-lg bg-teal-50 dark:bg-teal-950 text-teal-600 dark:text-teal-400 flex items-center justify-center text-xs font-bold">3</span>
-                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Fixed Monthly Allowances (RM)</h4>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Fixed Monthly Allowances (RM) <span class="text-[10px] font-normal text-slate-400 dark:text-slate-500 lowercase">(optional)</span></h4>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     @foreach($availableAllowances as $allowance)
                         <div>
                             <div class="flex items-center justify-between mb-1.5">
-                                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 truncate" title="{{ $allowance->name }}">{{ $allowance->name }}</label>
+                                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 truncate" title="{{ $allowance->name }}">
+                                    {{ $allowance->name }} <span class="text-[10px] font-normal text-slate-400 dark:text-slate-500">(optional)</span>
+                                </label>
                                 <span class="text-[10px] font-medium {{ $allowance->is_epf_subject ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400' }}">
                                     {{ $allowance->is_epf_subject ? 'EPF/SOCSO' : 'Tax Exempt' }}
                                 </span>
@@ -414,8 +442,8 @@
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                    <x-input label="Disbursement Bank" name="bank_name" placeholder="Maybank, CIMB, Public Bank, RHB..." icon="bx-buildings" />
-                    <x-input label="Bank Account Number" name="bank_account_no" placeholder="e.g. 514012345678" icon="bx-credit-card" />
+                    <x-input label="Disbursement Bank" name="bank_name" optional placeholder="Maybank, CIMB, Public Bank, RHB..." icon="bx-buildings" />
+                    <x-input label="Bank Account Number" name="bank_account_no" optional placeholder="e.g. 514012345678" icon="bx-credit-card" />
                 </div>
             </div>
 
@@ -429,7 +457,9 @@
                 <!-- EPF Rate Configuration -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">KWSP / EPF Employee Rate</label>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                            KWSP / EPF Employee Rate <span class="text-[10px] font-normal text-slate-400 dark:text-slate-500 ml-1">(optional)</span>
+                        </label>
                         <div class="relative">
                             <select name="epf_rate_type" id="create-emp-epf-rate-type" onchange="toggleCustomEpfFields(this.value, 'create')" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
                                 <option value="standard_11">Standard Statutory (11.0% EE)</option>
@@ -443,16 +473,16 @@
                     </div>
 
                     <div id="create-custom-epf-container" class="hidden">
-                        <x-input label="Custom Employee EPF Rate (%)" name="epf_employee_custom_rate" id="create-emp-epf-custom-rate" type="number" step="0.5" placeholder="e.g. 13.0" icon="bx-percentage" />
+                        <x-input label="Custom Employee EPF Rate (%)" name="epf_employee_custom_rate" id="create-emp-epf-custom-rate" type="number" step="0.5" optional placeholder="e.g. 13.0" icon="bx-percentage" />
                     </div>
                 </div>
 
                 <!-- Statutory Account & Member Numbers (Clean 2-Column Grid) -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                    <x-input label="KWSP / EPF Member No." name="epf_member_no" placeholder="e.g. 12345678" icon="bx-shield-quarter" />
-                    <x-input label="PERKESO / SOCSO No." name="socso_member_no" placeholder="e.g. A12345678" icon="bx-check-shield" />
+                    <x-input label="KWSP / EPF Member No." name="epf_member_no" optional placeholder="e.g. 12345678" icon="bx-shield-quarter" />
+                    <x-input label="PERKESO / SOCSO No." name="socso_member_no" optional placeholder="e.g. A12345678" icon="bx-check-shield" />
                     <div class="sm:col-span-2">
-                        <x-input label="LHDN Income Tax No." name="income_tax_no" placeholder="e.g. SG 123456780" icon="bx-calculator" />
+                        <x-input label="LHDN Income Tax No." name="income_tax_no" optional placeholder="e.g. SG 123456780" icon="bx-calculator" />
                     </div>
                 </div>
 
@@ -488,7 +518,7 @@
     </x-modal>
 
     <!-- 2. EDIT EMPLOYEE MODAL (Sectioned & User-Friendly) -->
-    <x-modal id="edit-employee-modal" title="Edit Employee Profile" subtitle="Update designation, compensation, contact, and employment status" icon="bx-pencil" size="2xl">
+    <x-modal id="edit-employee-modal" title="Edit Employee Profile" subtitle="Update designation, compensation, contact, and employment status" icon="bx-edit-alt" iconBg="bg-amber-50 dark:bg-amber-950/80 text-amber-600 dark:text-amber-400" size="2xl">
         <form id="edit-employee-form" method="POST" action="" class="space-y-6 text-left">
             @csrf
             @method('PUT')
@@ -504,14 +534,16 @@
                     <div class="sm:col-span-2">
                         <x-input label="Full Legal Name" name="full_name" id="edit-emp-name" required icon="bx-user" />
                     </div>
-                    <x-input label="Email Address" name="email" id="edit-emp-email" type="email" icon="bx-envelope" />
-                    <x-input label="Contact Phone" name="phone_number" id="edit-emp-phone" icon="bx-phone" />
+                    <x-input label="Email Address" name="email" id="edit-emp-email" type="email" optional icon="bx-envelope" />
+                    <x-input label="Contact Phone" name="phone_number" id="edit-emp-phone" optional icon="bx-phone" />
                     <x-input label="Staff ID" name="employee_no" id="edit-emp-no" disabled icon="bx-id-card" helper="System Master Identifier" />
                     <x-input label="NRIC / Passport No." name="nric_passport" id="edit-emp-nric" required icon="bx-card" />
                     <x-input label="Date of Birth" name="birth_date" id="edit-emp-birth" type="date" required icon="bx-calendar" />
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Gender</label>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                            Gender <span class="text-rose-500 font-bold">*</span>
+                        </label>
                         <div class="relative">
                             <select name="gender" id="edit-emp-gender" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
                                 <option value="male">Male (Lelaki)</option>
@@ -524,7 +556,9 @@
                     </div>
 
                     <div class="sm:col-span-2">
-                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Citizenship &amp; Tax Status</label>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                            Citizenship &amp; Tax Status <span class="text-rose-500 font-bold">*</span>
+                        </label>
                         <div class="relative">
                             <select name="citizenship" id="edit-emp-citizenship" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
                                 <option value="malaysian">Malaysian Citizen (Warganegara)</option>
@@ -548,7 +582,9 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Department</label>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                            Department <span class="text-[10px] font-normal text-slate-400 dark:text-slate-500 ml-1">(optional)</span>
+                        </label>
                         <div class="relative">
                             <select name="department_id" id="edit-emp-dept" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
                                 <option value="">Select Department...</option>
@@ -562,14 +598,16 @@
                         </div>
                     </div>
 
-                    <x-input label="Designation / Role" name="designation" id="edit-emp-designation" icon="bx-briefcase-alt" />
+                    <x-input label="Designation / Role" name="designation" id="edit-emp-designation" optional icon="bx-briefcase-alt" />
                     
                     <x-input label="Monthly Basic Salary (RM)" name="basic_salary" id="edit-emp-salary" type="number" step="0.01" required icon="bx-money" />
 
                     <x-input label="Joined Date" name="joined_date" id="edit-emp-joined" type="date" required icon="bx-calendar-check" />
                     
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Employment Status</label>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                            Employment Status <span class="text-rose-500 font-bold">*</span>
+                        </label>
                         <div class="relative">
                             <select name="employment_status" id="edit-emp-status" onchange="toggleResignedDateField(this.value)" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
                                 <option value="active">Active (On Payroll)</option>
@@ -584,7 +622,9 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Employment Type</label>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                            Employment Type <span class="text-rose-500 font-bold">*</span>
+                        </label>
                         <div class="relative">
                             <select name="employment_type" id="edit-emp-type" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
                                 <option value="permanent">Permanent Staff</option>
@@ -602,7 +642,7 @@
 
                     <!-- Dynamic Resigned Date Field in Edit Modal -->
                     <div id="edit-emp-resigned-container" class="hidden sm:col-span-2 p-3 rounded-xl bg-rose-50/60 dark:bg-rose-950/30 border border-rose-200/60 dark:border-rose-900/60">
-                        <x-input label="Official Resignation / Last Day Date" name="resigned_date" id="edit-emp-resigned-date" type="date" icon="bx-calendar-x" helper="Date employee formally offboarded from monthly payroll" />
+                        <x-input label="Official Resignation / Last Day Date" name="resigned_date" id="edit-emp-resigned-date" type="date" optional icon="bx-calendar-x" helper="Date employee formally offboarded from monthly payroll" />
                     </div>
                 </div>
             </div>
@@ -611,14 +651,16 @@
             <div class="space-y-3">
                 <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
                     <span class="w-6 h-6 rounded-lg bg-teal-50 dark:bg-teal-950 text-teal-600 dark:text-teal-400 flex items-center justify-center text-xs font-bold">3</span>
-                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Fixed Monthly Allowances (RM)</h4>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Fixed Monthly Allowances (RM) <span class="text-[10px] font-normal text-slate-400 dark:text-slate-500 lowercase">(optional)</span></h4>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     @foreach($availableAllowances as $allowance)
                         <div>
                             <div class="flex items-center justify-between mb-1.5">
-                                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 truncate" title="{{ $allowance->name }}">{{ $allowance->name }}</label>
+                                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 truncate" title="{{ $allowance->name }}">
+                                    {{ $allowance->name }} <span class="text-[10px] font-normal text-slate-400 dark:text-slate-500">(optional)</span>
+                                </label>
                                 <span class="text-[10px] font-medium {{ $allowance->is_epf_subject ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400' }}">
                                     {{ $allowance->is_epf_subject ? 'EPF/SOCSO' : 'Tax Exempt' }}
                                 </span>
@@ -640,8 +682,8 @@
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                    <x-input label="Disbursement Bank" name="bank_name" id="edit-emp-bank-name" placeholder="Maybank, CIMB, Public Bank, RHB..." icon="bx-buildings" />
-                    <x-input label="Bank Account Number" name="bank_account_no" id="edit-emp-bank-acc" placeholder="e.g. 514012345678" icon="bx-credit-card" />
+                    <x-input label="Disbursement Bank" name="bank_name" id="edit-emp-bank-name" optional placeholder="Maybank, CIMB, Public Bank, RHB..." icon="bx-buildings" />
+                    <x-input label="Bank Account Number" name="bank_account_no" id="edit-emp-bank-acc" optional placeholder="e.g. 514012345678" icon="bx-credit-card" />
                 </div>
             </div>
 
@@ -655,7 +697,9 @@
                 <!-- EPF Rate Configuration -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">KWSP / EPF Employee Rate</label>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                            KWSP / EPF Employee Rate <span class="text-[10px] font-normal text-slate-400 dark:text-slate-500 ml-1">(optional)</span>
+                        </label>
                         <div class="relative">
                             <select name="epf_rate_type" id="edit-emp-epf-rate-type" onchange="toggleCustomEpfFields(this.value, 'edit')" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
                                 <option value="standard_11">Standard Statutory (11.0% EE)</option>
@@ -669,16 +713,16 @@
                     </div>
 
                     <div id="edit-custom-epf-container" class="hidden">
-                        <x-input label="Custom Employee EPF Rate (%)" name="epf_employee_custom_rate" id="edit-emp-epf-custom-rate" type="number" step="0.5" placeholder="e.g. 13.0" icon="bx-percentage" />
+                        <x-input label="Custom Employee EPF Rate (%)" name="epf_employee_custom_rate" id="edit-emp-epf-custom-rate" type="number" step="0.5" optional placeholder="e.g. 13.0" icon="bx-percentage" />
                     </div>
                 </div>
 
                 <!-- Statutory Account & Member Numbers (Clean 2-Column Grid) -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                    <x-input label="KWSP / EPF Member No." name="epf_member_no" id="edit-emp-epf-no" placeholder="e.g. 12345678" icon="bx-shield-quarter" />
-                    <x-input label="PERKESO / SOCSO No." name="socso_member_no" id="edit-emp-socso-no" placeholder="e.g. A12345678" icon="bx-check-shield" />
+                    <x-input label="KWSP / EPF Member No." name="epf_member_no" id="edit-emp-epf-no" optional placeholder="e.g. 12345678" icon="bx-shield-quarter" />
+                    <x-input label="PERKESO / SOCSO No." name="socso_member_no" id="edit-emp-socso-no" optional placeholder="e.g. A12345678" icon="bx-check-shield" />
                     <div class="sm:col-span-2">
-                        <x-input label="LHDN Income Tax No." name="income_tax_no" id="edit-emp-tax-no" placeholder="e.g. SG 123456780" icon="bx-calculator" />
+                        <x-input label="LHDN Income Tax No." name="income_tax_no" id="edit-emp-tax-no" optional placeholder="e.g. SG 123456780" icon="bx-calculator" />
                     </div>
                 </div>
 
@@ -714,19 +758,21 @@
     </x-modal>
 
     <!-- 3. SHOW EMPLOYEE MODAL (Label | Value Design with Full Field Parity) -->
-    <x-modal id="show-employee-modal" title="Employee Master Profile" subtitle="Complete staff identity, contact, statutory tags, and compensation" icon="bx-user" size="lg">
+    <x-modal id="show-employee-modal" title="Employee Master Profile" subtitle="Complete staff identity, contact, statutory tags, and compensation" icon="bx-id-card" iconBg="bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400" size="lg">
         <div class="space-y-4 text-left text-xs">
             
             <!-- Identity Banner -->
-            <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-800 flex items-center gap-3.5">
-                <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-500 text-white flex items-center justify-center text-sm font-extrabold shadow-sm shrink-0" id="show-emp-avatar">
-                    EM
+            <div class="p-3.5 sm:p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 shadow-xs">
+                <div class="flex items-center gap-3 min-w-0 flex-1">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-indigo-500 text-white flex items-center justify-center text-base font-extrabold shadow-sm shrink-0 ring-4 ring-indigo-50 dark:ring-indigo-950/50" id="show-emp-avatar">
+                        EM
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <h3 class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white leading-tight break-words" id="show-emp-name">Employee Name</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5 break-words" id="show-emp-designation">Designation</p>
+                    </div>
                 </div>
-                <div class="min-w-0 flex-1">
-                    <h3 class="text-sm font-extrabold text-slate-900 dark:text-white truncate" id="show-emp-name">Employee Name</h3>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 font-mono truncate" id="show-emp-designation">Designation</p>
-                </div>
-                <div id="show-emp-status-badge" class="shrink-0">
+                <div id="show-emp-status-badge" class="self-end sm:self-center shrink-0">
                     <x-badge variant="emerald" dot="true">Active</x-badge>
                 </div>
             </div>

@@ -13,17 +13,17 @@ class CompanyAndDepartmentSeeder extends Seeder
         $company = Company::firstOrCreate(
             ['registration_no' => '202601009999'],
             [
-                'name' => 'PayFlow Technologies Sdn Bhd',
+                'name' => 'Sakeenah Medicare Entreprise',
                 'epf_no' => '123456789',
                 'socso_no' => 'A123456789',
                 'tax_no' => 'E 9876543200',
                 'hrd_no' => 'HRD-2026-999',
-                'bank_name' => 'Malayan Banking Berhad (Maybank)',
-                'bank_account_no' => '514012345678',
-                'contact_person' => 'Ahmad Tajudin',
-                'contact_email' => 'admin@payroll.my',
-                'contact_phone' => '+603-88889999',
-                'address' => 'Level 28, Menara PayFlow, KLCC, 50088 Kuala Lumpur, Malaysia',
+                'bank_name' => 'CIMB Bank Berhad',
+                'bank_account_no' => '8605369657',
+                'contact_person' => 'Yasmin Binti Mohd Zainal Abidin',
+                'contact_email' => 'sakeenahmedicare@gmail.com',
+                'contact_phone' => '+60123456789',
+                'address' => 'P3-03, Shaftsbury Square, Persiaran Multimedia, Cyber 6, 63000 Cyberjaya, Selangor, Malaysia',
                 'is_active' => true,
             ]
         );

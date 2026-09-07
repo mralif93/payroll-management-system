@@ -129,7 +129,8 @@ class HistoricalPayrollSeeder extends Seeder
                             'epf_employer' => $epfEr,
                             'socso_employer' => $socsoEr,
                             'eis_employer' => $eisEr,
-                            'total_employer_contributions' => $epfEr + $socsoEr + $eisEr,
+                            'hrd_levy_employer' => round($gross * 0.01, 2),
+                            'total_employer_contributions' => $epfEr + $socsoEr + $eisEr + round($gross * 0.01, 2),
                             'net_salary' => $net,
                             'payslip_token' => Str::random(32),
                         ]
@@ -137,7 +138,7 @@ class HistoricalPayrollSeeder extends Seeder
 
                     $totalGross += $gross;
                     $totalEeStat += $deductions;
-                    $totalErStat += ($epfEr + $socsoEr + $eisEr);
+                    $totalErStat += ($epfEr + $socsoEr + $eisEr + round($gross * 0.01, 2));
                     $totalNet += $net;
                 }
 

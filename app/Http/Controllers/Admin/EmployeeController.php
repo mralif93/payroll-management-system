@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 class EmployeeController extends Controller
 {
     /**
-     * Display a listing of active and registered employees.
+     * Display a listing of active and registered employees (HR Directory).
      */
     public function index(Request $request)
     {
@@ -32,11 +32,137 @@ class EmployeeController extends Controller
             $query->where('department_id', $request->input('department_id'));
         }
 
+        if ($request->filled('status')) {
+            $query->where('employment_status', $request->input('status'));
+        }
+
         $employees = $query->paginate(10)->withQueryString();
         $departments = Department::all();
         $availableAllowances = \App\Models\SalaryComponent::where('type', 'allowance')->where('is_active', true)->get();
 
         return view('admin.employees.index', compact('employees', 'departments', 'availableAllowances'));
+    }
+
+    /**
+     * Display Salary, Allowances & Malaysian Statutory Profiles (Compensation Section).
+     */
+    public function statutory(Request $request)
+    {
+        $query = Employee::with(['department', 'statutoryProfile', 'company', 'salaryComponents.salaryComponent']);
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('full_name', 'like', "%{$search}%")
+                  ->orWhere('employee_no', 'like', "%{$search}%")
+                  ->orWhere('designation', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('department_id')) {
+            $query->where('department_id', $request->input('department_id'));
+        }
+
+        if ($request->filled('status')) {
+            $query->where('employment_status', $request->input('status'));
+        }
+
+        $employees = $query->paginate(10)->withQueryString();
+        $departments = Department::all();
+        $availableAllowances = \App\Models\SalaryComponent::where('type', 'allowance')->where('is_active', true)->get();
+
+        return view('admin.employees.statutory', compact('employees', 'departments', 'availableAllowances'));
+    }
+
+    /**
+     * Quick-update salary, fixed allowances, and statutory settings from the Statutory view.
+     */
+    public function updateStatutory(Request $request, Employee $employee)
+    {
+        $validated = $request->validate([
+            'basic_salary' => ['required', 'numeric', 'min:0'],
+            'bank_name' => ['nullable', 'string', 'max:255'],
+            'bank_account_no' => ['nullable', 'string', 'max:255'],
+            'epf_member_no' => ['nullable', 'string', 'max:100'],
+            'epf_rate_type' => ['required', 'in:standard_11,reduced_9,custom'],
+            'epf_employee_custom_rate' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'epf_employer_custom_rate' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'socso_member_no' => ['nullable', 'string', 'max:100'],
+            'socso_category' => ['required', 'in:category_1_full,category_2_injury_only'],
+            'is_eis_contributed' => ['nullable', 'boolean'],
+            'is_skbbk_contributed' => ['nullable', 'boolean'],
+            'income_tax_no' => ['nullable', 'string', 'max:100'],
+            'tax_category' => ['required', 'in:single,married_non_working,married_working'],
+            'number_of_children' => ['required', 'integer', 'min:0'],
+            'is_tax_resident' => ['nullable', 'boolean'],
+            'is_disabled' => ['nullable', 'boolean'],
+            'spouse_is_disabled' => ['nullable', 'boolean'],
+            'monthly_zakat_amount' => ['nullable', 'numeric', 'min:0'],
+            'total_tp1_relief_amount' => ['nullable', 'numeric', 'min:0'],
+            'allowances' => ['nullable', 'array'],
+        ]);
+
+        $employee->update([
+            'basic_salary' => $validated['basic_salary'],
+            'bank_name' => $validated['bank_name'] ?? null,
+            'bank_account_no' => $validated['bank_account_no'] ?? null,
+        ]);
+
+        $employee->statutoryProfile()->updateOrCreate(
+            ['employee_id' => $employee->id],
+            [
+                'epf_member_no' => $validated['epf_member_no'] ?? null,
+                'epf_rate_type' => $validated['epf_rate_type'],
+                'epf_employee_custom_rate' => $validated['epf_rate_type'] === 'custom' ? $validated['epf_employee_custom_rate'] : null,
+                'epf_employer_custom_rate' => $validated['epf_rate_type'] === 'custom' ? $validated['epf_employer_custom_rate'] : null,
+                'socso_member_no' => $validated['socso_member_no'] ?? null,
+                'socso_category' => $validated['socso_category'],
+                'is_eis_contributed' => (bool) ($request->input('is_eis_contributed', false)),
+                'is_skbbk_contributed' => (bool) ($request->input('is_skbbk_contributed', false)),
+                'income_tax_no' => $validated['income_tax_no'] ?? null,
+                'tax_category' => $validated['tax_category'],
+                'number_of_children' => (int) $validated['number_of_children'],
+                'is_tax_resident' => (bool) ($request->input('is_tax_resident', false)),
+                'is_disabled' => (bool) ($request->input('is_disabled', false)),
+                'spouse_is_disabled' => (bool) ($request->input('spouse_is_disabled', false)),
+                'monthly_zakat_amount' => (float) ($validated['monthly_zakat_amount'] ?? 0.00),
+                'total_tp1_relief_amount' => (float) ($validated['total_tp1_relief_amount'] ?? 0.00),
+            ]
+        );
+
+        // Update Fixed Allowances
+        if ($request->has('allowances') && is_array($request->input('allowances'))) {
+            foreach ($request->input('allowances') as $componentId => $amount) {
+                if ($amount !== null && (float) $amount > 0) {
+                    $employee->salaryComponents()->updateOrCreate(
+                        ['employee_id' => $employee->id, 'salary_component_id' => $componentId],
+                        [
+                            'amount' => (float) $amount,
+                            'effective_from' => $employee->joined_date ?? now()->toDateString(),
+                            'is_recurring' => true,
+                        ]
+                    );
+                } else {
+                    $employee->salaryComponents()->where('salary_component_id', $componentId)->delete();
+                }
+            }
+        }
+
+        AuditTrail::create([
+            'auditable_type' => Employee::class,
+            'auditable_id' => $employee->id,
+            'user_id' => auth()->id(),
+            'module' => 'employees',
+            'event' => 'salary_statutory_updated',
+            'description' => "Updated compensation & statutory settings for {$employee->full_name} ({$employee->employee_no})",
+            'old_values' => null,
+            'new_values' => $validated,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'severity' => 'info',
+        ]);
+
+        return redirect()->route('admin.employees.statutory')->with('success', "Compensation & statutory profile for {$employee->full_name} updated successfully.");
     }
 
     /**

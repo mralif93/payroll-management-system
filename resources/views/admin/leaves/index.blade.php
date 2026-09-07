@@ -294,7 +294,9 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div class="sm:col-span-2">
-                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Select Employee</label>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                        Select Employee <span class="text-rose-500 font-bold">*</span>
+                    </label>
                     <div class="relative">
                         <select name="employee_id" required class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
                             <option value="">Select Employee...</option>
@@ -311,7 +313,9 @@
                 </div>
 
                 <div class="sm:col-span-2">
-                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Leave Category</label>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                        Leave Category <span class="text-rose-500 font-bold">*</span>
+                    </label>
                     <div class="relative">
                         <select name="leave_type_id" required class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
                             <option value="">Select Leave Type...</option>
@@ -333,7 +337,9 @@
                 <x-input label="Total Days Taken" name="total_days" type="number" step="0.5" min="0.5" max="90" required placeholder="e.g. 1.0 or 0.5" icon="bx-time" />
 
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Approval Status</label>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                        Approval Status <span class="text-rose-500 font-bold">*</span>
+                    </label>
                     <div class="relative">
                         <select name="status" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
                             <option value="approved">Approved (Immediately deducts quota/salary)</option>
@@ -346,7 +352,9 @@
                 </div>
 
                 <div class="sm:col-span-2">
-                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Reason / Justification</label>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                        Reason / Justification <span class="text-[10px] font-normal text-slate-400 dark:text-slate-500 ml-1">(optional)</span>
+                    </label>
                     <textarea name="reason" rows="2" placeholder="e.g. Family emergency, Clinic Medical Certificate, Personal matters..." class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white placeholder:text-slate-400 focus:bg-white dark:focus:bg-slate-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition"></textarea>
                 </div>
             </div>

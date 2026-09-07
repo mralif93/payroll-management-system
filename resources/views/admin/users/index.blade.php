@@ -306,12 +306,14 @@
                         <x-input label="Full Name" name="name" required placeholder="e.g. Siti Nurhaliza binti Tarudin" icon="bx-user" />
                     </div>
                     <x-input label="Email Address" name="email" type="email" required placeholder="siti@payroll.my" icon="bx-envelope" />
-                    <x-input label="Staff ID" name="staff_id" placeholder="e.g. ADM-003" icon="bx-id-card" />
-                    <x-input label="Phone Number" name="phone_number" placeholder="+60123456789" icon="bx-phone" />
+                    <x-input label="Staff ID" name="staff_id" optional placeholder="e.g. ADM-003" icon="bx-id-card" />
+                    <x-input label="Phone Number" name="phone_number" optional placeholder="+60123456789" icon="bx-phone" />
                     <x-input label="Temporary Password" name="password" type="password" required placeholder="Minimum 8 characters" icon="bx-lock-alt" />
                     
                     <div class="sm:col-span-2">
-                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Account Status</label>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                            Account Status <span class="text-rose-500 font-bold">*</span>
+                        </label>
                         <div class="relative">
                             <select name="status" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
                                 <option value="active">Active (Full Portal Access Granted)</option>
@@ -330,7 +332,7 @@
             <div class="space-y-3">
                 <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
                     <span class="w-6 h-6 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs font-bold">2</span>
-                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Access Roles &amp; Permissions</h4>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Access Roles &amp; Permissions <span class="text-[10px] font-normal text-slate-400 dark:text-slate-500 lowercase">(optional)</span></h4>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -375,12 +377,14 @@
                         <x-input label="Full Name" name="name" id="edit-name" required icon="bx-user" />
                     </div>
                     <x-input label="Email Address" name="email" id="edit-email" type="email" required icon="bx-envelope" />
-                    <x-input label="Staff ID" name="staff_id" id="edit-staff-id" icon="bx-id-card" />
-                    <x-input label="Phone Number" name="phone_number" id="edit-phone" icon="bx-phone" />
-                    <x-input label="Change Password (Optional)" name="password" type="password" placeholder="Leave empty to retain current" icon="bx-lock-alt" />
+                    <x-input label="Staff ID" name="staff_id" id="edit-staff-id" optional icon="bx-id-card" />
+                    <x-input label="Phone Number" name="phone_number" id="edit-phone" optional icon="bx-phone" />
+                    <x-input label="Change Password" name="password" type="password" optional placeholder="Leave empty to retain current" icon="bx-lock-alt" />
                     
                     <div class="sm:col-span-2">
-                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Account Status</label>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                            Account Status <span class="text-rose-500 font-bold">*</span>
+                        </label>
                         <div class="relative">
                             <select name="status" id="edit-status" class="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 p-2.5 text-slate-900 dark:text-white appearance-none pr-8">
                                 <option value="active">Active (Access Granted)</option>
@@ -399,7 +403,7 @@
             <div class="space-y-3">
                 <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
                     <span class="w-6 h-6 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs font-bold">2</span>
-                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Assigned Roles</h4>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Assigned Roles <span class="text-[10px] font-normal text-slate-400 dark:text-slate-500 lowercase">(optional)</span></h4>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="edit-roles-container">

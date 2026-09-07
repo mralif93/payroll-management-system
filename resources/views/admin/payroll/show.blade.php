@@ -188,9 +188,9 @@
                                     <span class="font-semibold text-indigo-600 dark:text-indigo-400">RM {{ number_format($item->epf_employer, 2) }}</span>
                                 </td>
 
-                                <!-- Col 5: SOCSO & SKBBK (EE / ER) -->
+                                <!-- Col 5: SOCSO (EE / ER) -->
                                 <td class="p-3.5 font-mono text-[11px]">
-                                    <span class="font-bold text-rose-600 dark:text-rose-400">RM {{ number_format($item->socso_employee + $item->skbbk_employee, 2) }}</span>
+                                    <span class="font-bold text-rose-600 dark:text-rose-400">RM {{ number_format($item->socso_employee, 2) }}</span>
                                     <span class="text-slate-400 font-normal"> / </span>
                                     <span class="font-semibold text-indigo-600 dark:text-indigo-400">RM {{ number_format($item->socso_employer, 2) }}</span>
                                 </td>
@@ -258,18 +258,18 @@
     <x-modal id="payslip-modal" title="Digital Payslip Statement" subtitle="Monthly Malaysian Statutory &amp; Net Disbursement Breakdown" icon="bx-receipt" size="xl">
         <div class="space-y-4 text-left text-xs">
             
-            <!-- Employee Header Card Banner -->
-            <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-800 flex items-center justify-between gap-3.5">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-500 text-white flex items-center justify-center text-sm font-extrabold shadow-sm shrink-0" id="ps-emp-avatar">
+            <!-- Identity & Period Banner -->
+            <div class="p-3.5 sm:p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 shadow-xs">
+                <div class="flex items-center gap-3 min-w-0 flex-1">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-indigo-500 text-white flex items-center justify-center text-base font-extrabold shadow-sm shrink-0 ring-4 ring-indigo-50 dark:ring-indigo-950/50" id="ps-emp-avatar">
                         EM
                     </div>
-                    <div class="min-w-0">
-                        <h3 class="text-sm font-extrabold text-slate-900 dark:text-white truncate" id="ps-emp-name">Employee Name</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 font-mono truncate" id="ps-emp-no">EMP-00101 • Designation</p>
+                    <div class="min-w-0 flex-1">
+                        <h3 class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white leading-tight break-words" id="ps-emp-name">Employee Name</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5 break-words" id="ps-emp-no">EMP-00101 • Designation</p>
                     </div>
                 </div>
-                <div class="text-right shrink-0">
+                <div class="self-end sm:self-center text-right shrink-0">
                     <span class="text-[10px] font-bold text-slate-400 block uppercase tracking-wider">Payroll Period</span>
                     <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 font-mono" id="ps-period">August 2026</span>
                 </div>
@@ -336,11 +336,20 @@
                             <!-- SOCSO -->
                             <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition">
                                 <td class="p-3 font-sans font-semibold text-slate-800 dark:text-slate-200">
-                                    PERKESO / SOCSO
+                                    PERKESO / SOCSO (Act 4)
                                 </td>
                                 <td class="p-3 text-right text-indigo-600 dark:text-indigo-400" id="ps-socso-er">RM 0.00</td>
                                 <td class="p-3 text-right text-rose-600 dark:text-rose-400 font-bold" id="ps-socso-ee">RM 0.00</td>
                                 <td class="p-3 text-right font-bold text-slate-900 dark:text-white" id="ps-socso-subtotal">RM 0.00</td>
+                            </tr>
+                            <!-- SKBBK -->
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition">
+                                <td class="p-3 font-sans font-semibold text-slate-800 dark:text-slate-200">
+                                    PERKESO SKBBK (Lindung 24 Jam)
+                                </td>
+                                <td class="p-3 text-right text-slate-400">—</td>
+                                <td class="p-3 text-right text-rose-600 dark:text-rose-400 font-bold" id="ps-skbbk-ee">—</td>
+                                <td class="p-3 text-right font-bold text-slate-900 dark:text-white" id="ps-skbbk-subtotal">—</td>
                             </tr>
                             <!-- EIS -->
                             <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition">
@@ -359,6 +368,15 @@
                                 <td class="p-3 text-right text-slate-400">—</td>
                                 <td class="p-3 text-right text-rose-600 dark:text-rose-400 font-bold" id="ps-pcb">RM 0.00</td>
                                 <td class="p-3 text-right font-bold text-slate-900 dark:text-white" id="ps-pcb-subtotal">RM 0.00</td>
+                            </tr>
+                            <!-- HRD Corp Levy -->
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition">
+                                <td class="p-3 font-sans font-semibold text-slate-800 dark:text-slate-200">
+                                    HRD Corp Levy (1%)
+                                </td>
+                                <td class="p-3 text-right text-indigo-600 dark:text-indigo-400" id="ps-hrd-er">RM 0.00</td>
+                                <td class="p-3 text-right text-slate-400">—</td>
+                                <td class="p-3 text-right font-bold text-slate-900 dark:text-white" id="ps-hrd-subtotal">RM 0.00</td>
                             </tr>
                             <!-- Totals Row -->
                             <tr class="bg-slate-50/90 dark:bg-slate-800/60 font-bold border-t-2 border-slate-200 dark:border-slate-700">
@@ -430,7 +448,7 @@
                 const epfEr = parseFloat(item.epf_employer || 0);
                 const epfSub = epfEe + epfEr;
 
-                const socsoEe = parseFloat(item.socso_employee || 0) + parseFloat(item.skbbk_employee || 0);
+                const socsoEe = parseFloat(item.socso_employee || 0);
                 const socsoEr = parseFloat(item.socso_employer || 0);
                 const socsoSub = socsoEe + socsoEr;
 
@@ -440,8 +458,10 @@
 
                 const pcb = parseFloat(item.pcb_amount || 0);
 
+                const hrdEr = parseFloat(item.hrd_levy_employer || (gross * 0.01));
+
                 const totalEe = epfEe + socsoEe + eisEe + pcb;
-                const totalEr = epfEr + socsoEr + eisEr;
+                const totalEr = epfEr + socsoEr + eisEr + hrdEr;
                 const grandTotal = totalEe + totalEr;
                 const net = parseFloat(item.net_salary || (gross - totalEe));
 
@@ -507,6 +527,16 @@
                 document.getElementById('ps-socso-ee').textContent = fmt(socsoEe);
                 document.getElementById('ps-socso-subtotal').textContent = fmt(socsoSub);
 
+                // SKBBK (Lindung 24 Jam)
+                const skbbkEe = parseFloat(item.skbbk_employee || 0);
+                if (skbbkEe > 0) {
+                    document.getElementById('ps-skbbk-ee').textContent = fmt(skbbkEe);
+                    document.getElementById('ps-skbbk-subtotal').textContent = fmt(skbbkEe);
+                } else {
+                    document.getElementById('ps-skbbk-ee').textContent = '—';
+                    document.getElementById('ps-skbbk-subtotal').textContent = '—';
+                }
+
                 // EIS
                 document.getElementById('ps-eis-er').textContent = fmt(eisEr);
                 document.getElementById('ps-eis-ee').textContent = fmt(eisEe);
@@ -515,6 +545,10 @@
                 // PCB
                 document.getElementById('ps-pcb').textContent = fmt(pcb);
                 document.getElementById('ps-pcb-subtotal').textContent = fmt(pcb);
+
+                // HRD Corp
+                document.getElementById('ps-hrd-er').textContent = fmt(hrdEr);
+                document.getElementById('ps-hrd-subtotal').textContent = fmt(hrdEr);
 
                 // Totals
                 document.getElementById('ps-matrix-total-er').textContent = fmt(totalEr);
