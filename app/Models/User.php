@@ -21,6 +21,11 @@ class User extends Authenticatable
         'password',
         'last_login_at',
         'last_login_ip',
+        'employee_code',
+        'phone',
+        'department',
+        'designation',
+        'avatar',
     ];
 
     protected $hidden = [
@@ -81,5 +86,15 @@ class User extends Authenticatable
     public function isActive(): bool
     {
         return $this->status === 'active';
+    }
+
+    public function getEmployeeCodeAttribute(): ?string
+    {
+        return $this->attributes['employee_code'] ?? $this->attributes['staff_id'] ?? null;
+    }
+
+    public function getPhoneAttribute(): ?string
+    {
+        return $this->attributes['phone'] ?? $this->attributes['phone_number'] ?? null;
     }
 }
