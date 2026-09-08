@@ -1,64 +1,131 @@
-<x-layouts.auth title="Staff Portal Sign In">
+<x-layouts.auth title="Admin Login">
     
-    <!-- Card Container -->
-    <div class="bg-white dark:bg-slate-900 rounded-[2.25rem] border border-slate-200/80 dark:border-slate-800 shadow-[0_25px_60px_-15px_rgba(99,102,241,0.18)] p-8 sm:p-10 transition-all text-center">
+    <!-- Auth Card Panel -->
+    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none p-6 sm:p-8 space-y-6">
         
-        <!-- Header Icon & Brand -->
-        <div class="flex flex-col items-center mb-6">
-            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-b from-indigo-500 via-indigo-600 to-blue-600 text-white shadow-[0_12px_24px_-4px_rgba(99,102,241,0.4)] mb-4">
-                <i class="bx bxs-wallet text-3xl"></i>
+        <!-- Header / Branding -->
+        <div class="text-center space-y-1.5">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 mb-2">
+                <i class="bx bxs-shield text-2xl"></i>
             </div>
-            <h1 class="text-2xl sm:text-[1.65rem] font-extrabold text-slate-900 dark:text-white tracking-tight">Staff Portal Sign In</h1>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 font-medium max-w-[280px] leading-relaxed">
-                Access your payroll runs, statutory filings, and administrative console
-            </p>
+            <h1 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Admin Console Login</h1>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Sign in with your registered administrator email</p>
         </div>
 
-        <!-- Dismissible Status / Error Alert Banner -->
+        <!-- Session Status / Flash Alert -->
         @if (session('status'))
-            <x-alert variant="success" icon="bx-check-circle" dismissible="true" class="mb-6 text-left">
+            <x-alert variant="success" icon="bx-check-circle" dismissible="true">
                 {{ session('status') }}
             </x-alert>
         @endif
 
         @if ($errors->any())
-            <x-alert variant="danger" icon="bx-error-circle" dismissible="true" class="mb-6 text-left">
+            <x-alert variant="danger" icon="bx-error-circle" dismissible="true">
                 {{ $errors->first() }}
             </x-alert>
         @endif
 
-        <!-- Info Container Card (Enterprise Identity Protection) -->
-        <div class="p-6 rounded-3xl bg-slate-50/80 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800/80 mb-6 text-center space-y-2">
-            <div class="inline-flex items-center justify-center w-10 h-10 rounded-2xl bg-indigo-100/70 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 mb-1">
-                <i class="bx bx-shield-quarter text-2xl"></i>
+        <!-- Login Form -->
+        <form method="POST" action="{{ route('login') }}" class="space-y-4">
+            @csrf
+
+            <!-- Email Address Input -->
+            <x-input 
+                id="email" 
+                name="email" 
+                type="email" 
+                label="Work Email Address" 
+                placeholder="officer@company.com.my" 
+                value="{{ old('email') }}" 
+                icon="bx-envelope" 
+                required 
+                autofocus
+            />
+
+            <!-- Password Input -->
+            <div class="space-y-1.5">
+                <div class="flex items-center justify-between">
+                    <label for="password" class="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                        Password
+                    </label>
+                    <a href="{{ route('password.request') }}" class="text-[11px] font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">
+                        Forgot Password?
+                    </a>
+                </div>
+                
+                <div class="relative rounded-lg">
+                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 dark:text-slate-500">
+                        <i class="bx bx-lock-alt text-base"></i>
+                    </div>
+                    <input 
+                        id="password" 
+                        name="password" 
+                        type="password" 
+                        placeholder="••••••••" 
+                        required 
+                        class="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white pl-9 pr-10 py-2.5 text-xs shadow-xs focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 transition"
+                    >
+                    <button 
+                        type="button" 
+                        onclick="togglePasswordVisibility('password', this)" 
+                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+                        title="Toggle password view"
+                    >
+                        <i class="bx bx-show text-base"></i>
+                    </button>
+                </div>
             </div>
-            <h2 class="text-xs font-bold text-slate-900 dark:text-white tracking-tight">
-                Enterprise Identity Protection Enforced
-            </h2>
-            <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed max-w-[280px] mx-auto font-normal">
-                Authentication for PayFlow MY is centrally managed by CentraFlow Identity Hub. Click below to sign in with your corporate credentials.
-            </p>
-        </div>
 
-        <!-- Sign in with CentraFlow SSO Button -->
-        <a href="{{ route('sso.login') }}" 
-           class="w-full inline-flex items-center justify-center gap-3 py-3.5 px-5 rounded-2xl text-sm font-bold text-white bg-gradient-to-r from-blue-600 via-indigo-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 shadow-[0_12px_28px_-6px_rgba(79,70,229,0.5)] active:scale-[0.99] transition-all cursor-pointer">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
-            </svg>
-            <span>Sign in with CentraFlow SSO</span>
-        </a>
+            <!-- Remember Me & Policy -->
+            <div class="flex items-center justify-between pt-1">
+                <label class="inline-flex items-center gap-2 cursor-pointer select-none">
+                    <input 
+                        type="checkbox" 
+                        name="remember" 
+                        id="remember" 
+                        class="w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-indigo-600 focus:ring-indigo-500 bg-white dark:bg-slate-800"
+                    >
+                    <span class="text-xs text-slate-600 dark:text-slate-400 font-medium">Keep me logged in</span>
+                </label>
 
-        <!-- Status Footer -->
-        <div class="pt-6 text-center">
-            <span class="text-[11px] text-slate-400 dark:text-slate-500 flex items-center justify-center gap-2 font-mono">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                CentraFlow OAuth 2.0 Server Active (:8004)
-            </span>
+                <span class="text-[10px] text-slate-400 dark:text-slate-500 flex items-center gap-1">
+                    <i class="bx bx-lock text-xs"></i> 256-Bit SSL
+                </span>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="pt-2">
+                <x-button type="submit" variant="primary" size="md" icon="bx-log-in-circle" class="w-full justify-center shadow-lg shadow-indigo-500/25">
+                    Sign In to Admin Portal
+                </x-button>
+            </div>
+        </form>
+
+        <!-- Quick Demo Credentials Hint (Helpful for pairs & testers) -->
+        <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700 text-[11px] text-slate-500 dark:text-slate-400 space-y-1">
+            <div class="font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                <i class="bx bx-info-circle text-indigo-500"></i> Default Test Admin Account:
+            </div>
+            <div class="font-mono text-[10px] text-slate-600 dark:text-slate-400 flex items-center justify-between">
+                <span>admin@payroll.my</span>
+                <span class="text-slate-400">/ password</span>
+            </div>
         </div>
 
     </div>
+
+    <!-- Toggle Password Visibility Script -->
+    <script>
+        function togglePasswordVisibility(fieldId, btn) {
+            const input = document.getElementById(fieldId);
+            const icon = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'bx bx-hide text-base text-indigo-600';
+            } else {
+                input.type = 'password';
+                icon.className = 'bx bx-show text-base';
+            }
+        }
+    </script>
 </x-layouts.auth>
-
-
-

@@ -1,3 +1,8 @@
+@props([
+    'title' => 'PayFlow MY - Enterprise Malaysian Payroll Management System',
+    'description' => 'Automated and 100% compliant Malaysian payroll management system with built-in statutory engines and bank autopay exports.',
+])
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full scroll-smooth">
 <head>
@@ -5,25 +10,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $title ?? 'Staff Portal Sign In' }} - PayFlow MY</title>
+    <title>{{ $title }}</title>
+    <meta name="description" content="{{ $description }}">
 
-    <!-- Google Fonts & Boxicons CDN -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 
-    <!-- Vite Assets -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    <!-- Dark Mode Init Script (No-Flicker) -->
+    <!-- Prevent FOUC for Dark Mode -->
     <script>
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         } else {
             document.documentElement.classList.remove('dark');
         }
     </script>
+
+    <!-- Styles / Scripts via Vite -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{ $head ?? '' }}
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased selection:bg-indigo-600 selection:text-white min-h-screen flex flex-col justify-between relative overflow-x-hidden transition-colors duration-300" style="font-family: 'Plus Jakarta Sans', sans-serif;">
 
@@ -54,18 +61,28 @@
             <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600 dark:text-slate-300">
                 <a href="/#features" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Statutory Modules</a>
                 <a href="/#compliance" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Compliance Map</a>
-                <a href="/#calculator-preview" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Simulator</a>
+                <a href="/#calculator-preview" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center gap-1.5">
+                    <span>Simulator</span>
+                    <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-400/30">Live</span>
+                </a>
                 <a href="/demo" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">UI Kit</a>
             </nav>
 
             <!-- Header Quick Actions -->
             <div class="flex items-center gap-2 sm:gap-3 shrink-0">
-                <x-theme-toggle id="auth-theme-toggle" />
-                
-                <a href="{{ route('login') }}" class="hidden sm:inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/30 border border-indigo-400/30 transition-all">
-                    <i class="bx bx-shield-quarter text-base sm:text-lg"></i>
-                    <span>Staff Login</span>
-                </a>
+                <x-theme-toggle id="public-theme-toggle" />
+
+                @auth
+                    <a href="{{ route('admin.dashboard') }}" class="hidden sm:inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-slate-900 dark:bg-indigo-600 hover:bg-slate-800 dark:hover:bg-indigo-500 text-white shadow-lg shadow-slate-900/20 dark:shadow-indigo-600/30 border border-slate-700 dark:border-indigo-400/30 transition-all">
+                        <i class="bx bxs-dashboard text-base sm:text-lg"></i>
+                        <span>Admin Console</span>
+                    </a>
+                @else
+                    <a href="{{ route('login') }}" class="hidden sm:inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/30 border border-indigo-400/30 transition-all">
+                        <i class="bx bx-shield-quarter text-base sm:text-lg"></i>
+                        <span>Staff Login</span>
+                    </a>
+                @endauth
 
                 <!-- Mobile Menu Button -->
                 <button
@@ -80,28 +97,31 @@
         </div>
 
         <!-- Mobile Navigation Drawer Dropdown -->
-        <div id="public-mobile-menu" class="hidden md:hidden border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-4 space-y-2 text-xs font-bold shadow-lg animate__animated animate__fadeIn">
+        <div id="public-mobile-menu" class="hidden md:hidden border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-4 space-y-2 text-xs font-bold shadow-lg">
             <a href="/#features" onclick="document.getElementById('public-mobile-menu').classList.add('hidden')" class="block px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Statutory Modules</a>
             <a href="/#compliance" onclick="document.getElementById('public-mobile-menu').classList.add('hidden')" class="block px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Compliance Map</a>
             <a href="/#calculator-preview" onclick="document.getElementById('public-mobile-menu').classList.add('hidden')" class="block px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Simulator</a>
             <a href="/demo" onclick="document.getElementById('public-mobile-menu').classList.add('hidden')" class="block px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">UI Kit Demo</a>
             
             <div class="pt-2 border-t border-slate-100 dark:border-slate-800">
-                <a href="{{ route('login') }}" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold bg-indigo-600 text-white shadow-md">
-                    <i class="bx bx-shield-quarter text-base"></i>
-                    <span>Staff Login</span>
-                </a>
+                @auth
+                    <a href="{{ route('admin.dashboard') }}" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold bg-slate-900 dark:bg-indigo-600 text-white shadow-md">
+                        <i class="bx bxs-dashboard text-base"></i>
+                        <span>Admin Console</span>
+                    </a>
+                @else
+                    <a href="{{ route('login') }}" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold bg-indigo-600 text-white shadow-md">
+                        <i class="bx bx-shield-quarter text-base"></i>
+                        <span>Staff Login</span>
+                    </a>
+                @endauth
             </div>
         </div>
     </header>
 
-    <!-- Main Content Slot -->
-    <main class="flex-grow">
-        <div class="min-h-[calc(100vh-14rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative">
-            <div class="w-full max-w-[440px] animate__animated animate__fadeInUp animate__faster">
-                {{ $slot }}
-            </div>
-        </div>
+    <!-- MAIN BODY CONTENT -->
+    <main class="flex-1 w-full">
+        {{ $slot }}
     </main>
 
     <!-- Footer (Mobile Optimized & Suite Standard) -->
@@ -126,7 +146,7 @@
         </div>
     </footer>
 
-    <!-- Global Theme Toggle Script -->
+    <!-- Global Theme Script -->
     <script>
         function toggleTheme() {
             if (document.documentElement.classList.contains('dark')) {
@@ -138,7 +158,7 @@
             }
         }
     </script>
+    {{ $scripts ?? '' }}
 </body>
 </html>
-
 

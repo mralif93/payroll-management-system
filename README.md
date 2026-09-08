@@ -28,18 +28,15 @@ Includes interactive client-side sandboxes for:
 
 ## 📋 System Overview & Architecture
 
-**PayFlow MY** is an enterprise-grade Malaysian Payroll Management System built on Laravel 11.x and Tailwind CSS v4. It automates employee compensation, statutory deductions, bank autopay batch disbursements, government filings, and year-end tax Form EA generation in compliance with Malaysian labor and tax legislation, fully integrated with the **CentraFlow Central Identity & SSO Hub**.
+**PayFlow MY** is an enterprise-grade Malaysian Payroll Management System built on Laravel 11.x and Tailwind CSS v4. It automates employee compensation, statutory deductions, bank autopay batch disbursements, government filings, and year-end tax Form EA generation in compliance with Malaysian labor and tax legislation.
 
 ```text
 +-----------------------------------------------------------------------------------+
-|                            CentraFlow SSO Hub (:8004)                             |
-|              OAuth 2.0 Authorization Server / Master User Registry                |
-+-----------------------------------------+-----------------------------------------+
-                                          | OAuth 2.0 Auth Code Grant (Port :8002)
-                                          v
-+-----------------------------------------------------------------------------------+
 |                            PayFlow MY Engine (:8002)                              |
 |                                                                                   |
+|  [Admin Console Login]         <--->  [User & Role Management (RBAC)]             |
+|               |                                |                                  |
+|               v                                v                                  |
 |  [Staff & Statutory Profiles]  <--->  [Monthly Payroll Runs]  <--->  [Tax Form EA] |
 |               |                                |                             |    |
 |               +--------------------------------+-----------------------------+    |
@@ -122,13 +119,6 @@ npm install
 cp .env.example .env
 php artisan key:generate
 
-# CentraFlow SSO Configuration (in .env)
-# CENTRAFLOW_HOST=http://localhost:8004
-# CENTRAFLOW_CLIENT_ID=9d12a101-0002-4000-8000-000000000002
-# CENTRAFLOW_CLIENT_SECRET=payroll_secret_centraflow_2026
-# CENTRAFLOW_REDIRECT_URI=http://localhost:8002/auth/callback
-# CENTRAFLOW_SCOPES="payroll:run payroll:read"
-
 # 4. Database migrations & seeders
 php artisan migrate --seed
 
@@ -137,15 +127,16 @@ npm run build
 php artisan serve --port=8002
 ```
 
-Authentication is centrally governed via **CentraFlow SSO** (`http://localhost:8004`). Pre-registered demo credentials on CentraFlow:
-- **HR & Payroll Manager:** `hr.manager@centraflow.local` / `password` (maps to Payroll Officer)
-- **Super Administrator:** `superadmin@centraflow.local` / `password` (maps to Super Administrator)
+Default seeded test administrative accounts:
+- **Super Administrator:** `zainyas@gmail.com` / `password`
+- **Payroll Officer:** `admin@payroll.my` / `password`
+- **Finance Director:** `finance@payroll.my` / `password`
+- **Internal Auditor:** `auditor@payroll.my` / `password`
 
 ---
 
 ## 📄 Documentation & Specifications
 - 📘 [Software Requirements Specification (SRS)](documentation/software-requirement-specifiction.md)
-- 🔐 [Sub-System Authentication Integration Manual (SSO with CentraFlow)](documentation/subsystem-auth-guide.md)
 - 🌐 [GitHub Pages Landing Page Showcase](https://mralif93.github.io/payroll-management-system/)
 - 🔗 [External Decoupled Human Resources Management System (PulseHR)](https://github.com/mralif93/human-resources-management-system)
 
