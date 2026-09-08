@@ -294,6 +294,17 @@
         <form method="POST" action="{{ route('admin.users.store') }}" class="space-y-6 text-left">
             @csrf
 
+            @if($errors->any())
+                <x-alert type="danger">
+                    <p class="font-bold mb-1">Please correct the following errors:</p>
+                    <ul class="list-disc list-inside space-y-0.5 text-[11px]">
+                        @foreach($errors->all() as $err)
+                            <li>{{ $err }}</li>
+                        @endforeach
+                    </ul>
+                </x-alert>
+            @endif
+
             <!-- Section 1: User Identity & Profile -->
             <div class="space-y-3">
                 <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
@@ -628,6 +639,11 @@
 
                 openModal('show-user-modal');
             }
+
+            @if($errors->any() && !old('_method'))
+                // If there were validation errors upon store, re-open create modal
+                openModal('create-user-modal');
+            @endif
         </script>
     </x-slot>
 

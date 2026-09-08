@@ -101,6 +101,26 @@ class UserController extends Controller
     }
 
     /**
+     * Display the specified administrator profile and access privileges.
+     */
+    public function show(Request $request, User $user)
+    {
+        $user->load('roles');
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'user' => $user,
+                'roles' => $user->roles,
+            ]);
+        }
+
+        // Return index view with modal auto-trigger or display data
+        $users = User::with('roles')->latest()->paginate(10)->withQueryString();
+        $roles = Role::orderBy('name')->get();
+        return view('admin.users.index', compact('users', 'roles', 'user'));
+    }
+
+    /**
      * Update user details, role assignments, or account status.
      */
     public function update(Request $request, User $user): RedirectResponse

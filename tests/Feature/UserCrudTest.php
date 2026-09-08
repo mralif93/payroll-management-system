@@ -111,6 +111,59 @@ class UserCrudTest extends TestCase
         $this->assertDatabaseHas('users', ['id' => $user->id, 'status' => 'suspended']);
     }
 
+    public function test_can_view_user_list(): void
+    {
+        $response = $this->actingAs($this->admin)->get(route('admin.users.index'));
+
+        $response->assertStatus(200);
+        $response->assertSee('System User Management');
+        $response->assertSee($this->admin->email);
+    }
+
+    public function test_can_show_user_as_html_or_json(): void
+    {
+        $user = User::create([
+            'name' => 'Sara Connor',
+            'email' => 'sara@test.my',
+            'password' => bcrypt('password123'),
+            'status' => 'active',
+            'staff_id' => 'ADM-002',
+        ]);
+        $user->roles()->attach($this->role);
+
+        // HTML response
+        $htmlResponse = $this->actingAs($this->admin)->get(route('admin.users.show', $user));
+        $htmlResponse->assertStatus(200);
+        $htmlResponse->assertSee('Sara Connor');
+
+        // JSON response
+        $jsonResponse = $this->actingAs($this->admin)
+            ->getJson(route('admin.users.show', $user));
+        $jsonResponse->assertStatus(200);
+        $jsonResponse->assertJsonFragment([
+            'email' => 'sara@test.my',
+            'staff_id' => 'ADM-002',
+        ]);
+    }
+
+    public function test_cannot_delete_own_logged_in_account(): void
+    {
+        $response = $this->actingAs($this->admin)->delete(route('admin.users.destroy', $this->admin));
+
+        $response->assertRedirect(route('admin.users.index'));
+        $response->assertSessionHas('error', 'You cannot delete your own logged-in account.');
+        $this->assertDatabaseHas('users', ['id' => $this->admin->id, 'deleted_at' => null]);
+    }
+
+    public function test_cannot_block_own_logged_in_account(): void
+    {
+        $response = $this->actingAs($this->admin)->post(route('admin.users.toggle-status', $this->admin));
+
+        $response->assertRedirect(route('admin.users.index'));
+        $response->assertSessionHas('error', 'You cannot block your own logged-in administrator account.');
+        $this->assertDatabaseHas('users', ['id' => $this->admin->id, 'status' => 'active']);
+    }
+
     public function test_can_delete_user(): void
     {
         $user = User::create([
