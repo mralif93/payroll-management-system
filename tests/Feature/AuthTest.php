@@ -15,7 +15,7 @@ class AuthTest extends TestCase
         $response = $this->get('/login');
 
         $response->assertStatus(200);
-        $response->assertSee('Admin Console Login');
+        $response->assertSee('Staff Portal Sign In');
     }
 
     public function test_forgot_password_screen_can_be_rendered(): void
@@ -23,7 +23,7 @@ class AuthTest extends TestCase
         $response = $this->get('/forgot-password');
 
         $response->assertStatus(200);
-        $response->assertSee('Reset Admin Password');
+        $response->assertSee('Recover Password');
     }
 
     public function test_unauthenticated_guests_are_redirected_to_login_when_accessing_admin(): void
